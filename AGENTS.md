@@ -6,15 +6,17 @@ This file is the durable, project-scoped context for future ChatGPT sessions wor
 
 - This repository checkout is MAIN / Competition Core.
 
-## Sibling worktrees
+## Parallel work
 
-- Expected sibling roles: strategy-scout, mechanics, meta-refresh, and agent-search.
-- Discover concrete local checkout paths with `git worktree list`; do not persist machine-specific absolute paths in tracked files.
+- Former mechanics, meta-refresh, and agent-search worktrees have been merged back into MAIN.
+- Do not recreate sibling worktrees unless a new parallel task explicitly needs isolation.
+- If new worktrees are created, discover concrete paths with `git worktree list`; do not persist machine-specific absolute paths in tracked files.
 
 ## Shared handoff root
 
-- A sibling handoff tree named `kaggriculture-parallel-handoffs` may contain role directories such as `strategy-scout`, `mechanics`, `meta-refresh`, `agent-search`, `submission-qa`, and `integration`.
-- Treat it as local coordination state and discover its concrete path from the approved workspace at runtime rather than recording absolute paths here.
+- Local parallel-agent handoffs live under `state/parallel-handoffs/`.
+- Role directories may include `strategy-scout`, `mechanics`, `meta-refresh`, `agent-search`, `submission-qa`, and `integration`.
+- Treat this tree as ignored local coordination state: read it when resuming work, but do not commit its contents.
 
 ## Mandatory skill rule
 
@@ -31,8 +33,8 @@ At the start of a new task in this project:
 1. Read this `AGENTS.md`.
 2. Read `HANDOFF.md`.
 3. Reconstruct repository state with `git status --short --branch`, recent log, and remotes before edits.
-4. Respect ownership boundaries between MAIN and sibling worktrees.
-5. Use the shared handoff directories for cross-agent deliverables.
+4. Check `state/parallel-handoffs/` for relevant cross-agent evidence before duplicating research or experiments.
+5. Respect ownership boundaries if new sibling worktrees are later created.
 6. Do not treat chat memory as authoritative when repository/live state can be checked.
 
 ## Scope

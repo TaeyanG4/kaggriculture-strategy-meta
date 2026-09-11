@@ -122,8 +122,21 @@
 - `baseline_v2`: goose/feed-chain experiment; vs Rancher Rita 2/10, mean margin -12,747.4
 - `baseline_v2` regression check vs Melon Mateo on ten fresh paired seeds: 16/20, mean margin +2,594.2, seat0/seat1 decided win rates both 0.8
 - `baseline_v3`: exact byte-preserving MIT Rancher Rita tier-5 backbone, retained with upstream SPDX attribution; SHA-256 matches the local reference source. A two-seed paired mirror check produced 1 win / 1 loss / 2 ties and mean margin 0, as expected for an identical policy.
-- Interpretation: the project now has a rights-clear tier-5-equivalent local backbone. V2 remains useful as an independent goose experiment, but V3 is the stronger competition-development baseline while fresh public/meta candidates are evaluated.
+- `baseline_v7`: independent animal-first capital sequencing agent derived from the project's own v4 cow economy and the official CC0 high-reward fingerprint evidence. Against Rancher Rita it won 12/12 in the pilot and 32/40 on a fresh 20-seed, seat-balanced confirmation set; mean margin +4,566.1 and seat0/seat1 win rates both 0.80.
+- Same-seed comparison on the 40-game confirmation set: `baseline_v4` won 26/40 with mean margin +1,183.6, confirming that v7's opening-capital sequencing materially improved the independent cow baseline on that sample.
+- `baseline_v5` and `baseline_v6` scale-up experiments failed their small gates and are archived only as ignored local experiment state; do not promote them without new evidence.
+- Tier-4 regression check for v4 was strong (18/20 vs Melon Mateo, mean margin +24,251.1). A fresh v7 tier-4 regression check is still required before submission selection.
+- Benchmark-only tiers 6-9 remain a much larger gap: v4 went 0/8 against each tested meta-line opponent, with mean margins roughly -99.6k to -114.8k. Do not copy their ambiguous field trace; use them only as opponents.
+- Interpretation: `baseline_v7` is the current independent competition-development champion. The next bottleneck is validating v7 against tier 4 and then closing the tier-6+ production/market-scale gap using rights-clear mechanics and official CC0 evidence.
 - Reference-agent code tiers 0-5 are covered by the local MIT notice. Tiers 6-9 contain an explicitly unlicensed/competition-derived shared field-plan component and should be used as benchmark opponents, not copied into the submission code without a separate rights decision.
+
+## Parallel worktree consolidation checkpoint
+- `mechanics-research`, `meta-refresh/daily-2026-09-11`, and `agent-search/optimizer-2026-09-11` have been consolidated back into `main`.
+- The meta-refresh branch contributed `src/kaggriculture_meta/meta_refresh.py`.
+- The agent-search branch contributed `src/kaggriculture_meta/optimizer.py`, `tests/test_optimizer.py`, and `agent/rancher_rita_land14.py`.
+- The mechanics branch was already an ancestor of `main`, so no additional merge content was needed.
+- Former sibling worktree directories were removed with Git worktree commands after confirming they were clean.
+- Cross-agent handoffs now live in ignored local state at `state/parallel-handoffs/`; check this directory before duplicating research or experiments.
 
 ## Kaggle
 - Competition: `kaggriculture`
@@ -160,4 +173,4 @@
 - The first action-threshold strategy classifier collapsed almost all seats into one bucket; do not restore it.
 
 ## Next action
-Continue from the rights-clear tier-5-equivalent `baseline_v3` backbone: benchmark it against benchmark-only tiers 6-9 and fresh public opponents, then improve the legal scheduler/market/production parameters without copying the ambiguous tiers 6-9 field trace. Consume strategy-scout/mechanics/agent-search handoffs as they arrive. Do not submit until a materially stronger locally validated candidate is selected. Keep Dataset/Notebook publication gated.
+Continue from independent champion `baseline_v7`: first run a fresh seat-balanced tier-4 regression benchmark, then use the merged optimizer/meta-refresh code plus `state/parallel-handoffs/` evidence to design rights-clear tier-6+ production/market experiments. Do not copy the ambiguous tiers 6-9 field trace and do not submit until a materially stronger, regression-safe candidate is selected. Keep Dataset/Notebook publication gated.
