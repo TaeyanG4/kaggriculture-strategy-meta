@@ -191,3 +191,28 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
 - Action taken: Decommissioned and removed all obsolete pre-adoption agents (`baseline_v0.py`, `baseline_v1.py`, `baseline_v2.py`, `baseline_v3.py`, `baseline_v7.py`, `rancher_rita_land14.py`, and `v25 Meta Reset`).
 - Sole active agent: `agent/public_v27_kaito.py` is the only active agent retained in `agent/`.
 - Submission artifact: Packaged directly as `submission/main.py`.
+
+## Top-tier (#1 Aimed) Improvement and Kaggle Submission Checkpoint
+- Date: 2026-09-12
+- New Champion Derivative: `agent/c95_feed_protect_split.py`
+- Opponent: `agent/public_v27_kaito.py` (parent champion)
+- Empirical benchmark across 40 games (20 paired seeds 1000-1019, 2 seats):
+  - Record: 30 wins / 10 losses (75.0% win rate decided)
+  - Wilson 95% CI: [59.81%, 85.81%]
+  - Mean margin: +2,211.5 coins
+  - Median margin: +2,829.0 coins
+  - Seat 0 win rate: 75.0% (15/20)
+  - Seat 1 win rate: 75.0% (15/20)
+  - Mean runtime: 3.97s, 0 aborts, 40/40 DONE
+- Key algorithmic improvements:
+  1. Opening feed protection (feed5): prioritized `BUY_PRODUCT WHEAT 5` to slot 0 on step 0 to prevent feed-denial starvation attacks.
+  2. Debt-tracked one-turn wheat and fertilizer sale anticipation (max 10 wheat, 5 fertilizer) to capture higher prices before competitor gluts.
+  3. Productive route weed repair: dynamically digging random weed intrusions that block productive tasks and resynchronizing at the next PASS.
+  4. Clone detection and front-running on premium lines (MELON, STRAWBERRY, MILK, WOOL).
+  5. Step 717+ terminal salvage: dynamic harvesting and liquidation of all shed stocks in price-priority order.
+- Kaggle Submission:
+  - Ref: `56168710`
+  - File: `submission/main.py`
+  - Message: `c95 feed-first opening + debt-tracked wheat/fertilizer sale anticipation + productive weed repair (75% win rate vs v27)`
+  - Status: PENDING (evaluated on live ladder)
+
