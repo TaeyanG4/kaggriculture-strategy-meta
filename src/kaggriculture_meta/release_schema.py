@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 
 
@@ -16,6 +16,9 @@ V1_FIELD_MAP = [
     ("engine_version", "engine_version"),
     ("turns", "turns"),
     ("final_reward", "final_reward"),
+    ("opponent_final_reward", "opponent_final_reward"),
+    ("reward_margin_vs_opponent", "reward_margin_vs_opponent"),
+    ("outcome", "outcome"),
     ("manifest_avg_score", "manifest_avg_score"),
     ("manifest_min_score", "manifest_min_score"),
     ("source_score_quantile", "sample_quantile"),
@@ -68,6 +71,9 @@ CORE_REQUIRED_FIELDS = {
     "engine_version",
     "turns",
     "final_reward",
+    "opponent_final_reward",
+    "reward_margin_vs_opponent",
+    "outcome",
     "manifest_avg_score",
     "manifest_min_score",
     "source_score_quantile",
@@ -139,6 +145,28 @@ def write_comparison(georgy_csv: Path, out_json: Path) -> dict:
 def build_v1_candidate(source_csv: Path, out_csv: Path, qa_json: Path) -> dict:
     with source_csv.open(encoding="utf-8", newline="") as f:
         source_rows = list(csv.DictReader(f))
+
+    by_episode: dict[str, list[dict]] = defaultdict(list)
+    for row in source_rows:
+        by_episode[str(row.get("episode_id") or "")].append(row)
+    for members in by_episode.values():
+        by_seat = {str(row.get("seat")): row for row in members}
+        if "0" not in by_seat or "1" not in by_seat:
+            continue
+        for seat, opponent_seat in (("0", "1"), ("1", "0")):
+            row = by_seat[seat]
+            opponent = by_seat[opponent_seat]
+            reward = row.get("final_reward")
+            opponent_reward = opponent.get("final_reward")
+            if reward in {None, ""} or opponent_reward in {None, ""}:
+                continue
+            reward_n = float(reward)
+            opponent_n = float(opponent_reward)
+            margin = reward_n - opponent_n
+            row["opponent_final_reward"] = opponent_n
+            row["reward_margin_vs_opponent"] = margin
+            row["outcome"] = "win" if margin > 0 else "loss" if margin < 0 else "tie"
+
     rows = [project_v1(row) for row in source_rows]
 
     out_csv.parent.mkdir(parents=True, exist_ok=True)

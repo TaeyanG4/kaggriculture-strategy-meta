@@ -19,10 +19,11 @@ Raw replay JSON is never part of the release.
 - `source_dataset`, `source_license`, `source_date`
 - `episode_id`, `episode_date`, `seat`
 - `engine_version`, `turns`
-- `final_reward`
+- `final_reward`, `opponent_final_reward`
+- `reward_margin_vs_opponent`, `outcome`
 - `manifest_avg_score`, `manifest_min_score`, `source_score_quantile`
 
-The manifest scores describe the episode in the official daily source. `source_score_quantile` records the deterministic sampling position within that daily manifest. None of these fields is presented as a full-ladder rating for the individual seat.
+`opponent_final_reward`, `reward_margin_vs_opponent`, and `outcome` are deterministic within-episode derivatives so winner/loser comparisons work without a self-join. The manifest scores describe the episode in the official daily source. `source_score_quantile` records the deterministic sampling position within that daily manifest. None of these fields is presented as a full-ladder rating for the individual seat.
 
 ### Economy checkpoints
 

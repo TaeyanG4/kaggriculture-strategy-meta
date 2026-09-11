@@ -62,14 +62,23 @@ class ReleaseSchemaTests(unittest.TestCase):
             ]:
                 row[name] = value
             row["team_id"] = "secret-ish"
+            opponent = dict(row)
+            opponent["seat"] = "1"
+            opponent["final_reward"] = "800"
             with source.open("w", encoding="utf-8", newline="") as f:
                 writer = csv.DictWriter(f, fieldnames=list(row))
                 writer.writeheader()
                 writer.writerow(row)
+                writer.writerow(opponent)
             qa = build_v1_candidate(source, out, qa_path)
             self.assertTrue(qa["passes_core_qa"])
             with out.open(encoding="utf-8") as f:
-                self.assertNotIn("team_id", next(csv.reader(f)))
+                reader = csv.DictReader(f)
+                rows = list(reader)
+                self.assertNotIn("team_id", reader.fieldnames)
+            self.assertEqual(rows[0]["outcome"], "win")
+            self.assertEqual(float(rows[0]["reward_margin_vs_opponent"]), 200.0)
+            self.assertEqual(rows[1]["outcome"], "loss")
             self.assertTrue(json.loads(qa_path.read_text(encoding="utf-8"))["passes_core_qa"])
 
 

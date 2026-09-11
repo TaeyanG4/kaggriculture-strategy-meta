@@ -1,5 +1,5 @@
 {
-  "candidate_columns": 46,
+  "candidate_columns": 49,
   "closest_alternative_episode_feature_columns": 32,
   "exact_name_overlap": [
     "engine_version",
