@@ -22,3 +22,6 @@ reports/pilot_episode_matchups.csv
 reports/expanded_pilot_selection.csv
 reports/expanded_pilot_features.csv
 reports/expanded_pilot_episode_matchups.csv
+reports/targeted_validation_selection.csv
+reports/targeted_validation_features.csv
+reports/targeted_validation_episode_matchups.csv

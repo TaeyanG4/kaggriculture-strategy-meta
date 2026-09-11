@@ -1,0 +1,49 @@
+{
+  "candidate_columns": 46,
+  "closest_alternative_episode_feature_columns": 32,
+  "exact_name_overlap": [
+    "engine_version",
+    "episode_id",
+    "seat"
+  ],
+  "semantic_overlap": {
+    "final_reward": "final_money",
+    "total_hires_actual": "total_hires",
+    "first_land_turn": "first_land_day"
+  },
+  "candidate_fingerprint_columns": [
+    "cash_t24",
+    "cash_t72",
+    "cash_t168",
+    "cash_t360",
+    "first_land_turn",
+    "first_hire_turn",
+    "first_plant_turn",
+    "first_sell_turn",
+    "first_animal_turn",
+    "early_hires_actual",
+    "early_plant_actions",
+    "early_seed_units",
+    "early_animal_units",
+    "early_sell_units",
+    "early_dominant_crop",
+    "early_dominant_crop_share",
+    "opening_hash_t24",
+    "opening_hash_t48",
+    "crop_carrot_share",
+    "crop_melon_share",
+    "crop_strawberry_share",
+    "crop_tomato_share",
+    "crop_wheat_share",
+    "animal_cow_share",
+    "animal_goose_share",
+    "animal_sheep_share",
+    "total_market_orders",
+    "total_unit_actions",
+    "market_buy_seed_units",
+    "market_buy_animal_units",
+    "market_sell_units"
+  ],
+  "candidate_fingerprint_column_count": 31,
+  "note": "The alternative also publishes a separate stream_hashes table, so exact opening hashes are conceptually overlapping even though they are not columns of episode_features.csv. The V1 differentiator is the single-row combination of timing, cash checkpoints, actual tile-turn resource shares, semantic action totals, provenance, and opening fingerprints."
+}

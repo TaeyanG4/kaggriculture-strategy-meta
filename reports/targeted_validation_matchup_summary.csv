@@ -1,0 +1,11 @@
+strategy_family_A,strategy_family_B,games,wins_A,wins_B,ties,decided_games,win_rate_A_decided,win_rate_A_wilson95_low,win_rate_A_wilson95_high,mean_margin_A,A_in_seat0_games,A_in_seat1_games,both_seat_orientations_observed,evidence
+cow+strawberry,cow+strawberry,34,13,21,0,34,0.3824,0.239,0.5496,-438.21,,,,same_family_control
+cow+strawberry,cow+tomato,1,1,0,0,1,1.0,0.2065,1.0,1302.0,1,0,False,pilot_only
+cow+strawberry,goose+carrot,1,0,1,0,1,0.0,0.0,0.7935,-11212.0,1,0,False,pilot_only
+cow+strawberry,goose+strawberry,1,0,1,0,1,0.0,0.0,0.7935,-3183.0,1,0,False,pilot_only
+cow+strawberry,goose+tomato,1,1,0,0,1,1.0,0.2065,1.0,5142.0,0,1,False,pilot_only
+cow+strawberry,sheep+carrot,1,0,1,0,1,0.0,0.0,0.7935,-4796.0,0,1,False,pilot_only
+cow+strawberry,sheep+strawberry,2,2,0,0,2,1.0,0.3424,1.0,25873.0,2,0,False,pilot_only
+sheep+carrot,sheep+strawberry,1,1,0,0,1,1.0,0.2065,1.0,11939.0,1,0,False,pilot_only
+sheep+strawberry,sheep+strawberry,5,1,4,0,5,0.2,0.0362,0.6245,-2141.6,,,,same_family_control
+sheep+strawberry,sheep+tomato,1,0,1,0,1,0.0,0.0,0.7935,-18254.0,1,0,False,pilot_only

@@ -1,0 +1,82 @@
+{
+  "generated_at_utc": "2026-09-11T06:14:45Z",
+  "source_days": [
+    "2026-09-09",
+    "2026-09-10"
+  ],
+  "samples_per_day": 24,
+  "selected_episodes": 48,
+  "parsed_episodes": 48,
+  "player_seats": 96,
+  "source_bytes": 1567299164,
+  "parsing_failures": [],
+  "engine_versions": {
+    "1.32.7": 48
+  },
+  "family_counts_by_day": {
+    "2026-09-09": {
+      "cow+strawberry": 38,
+      "sheep+strawberry": 8,
+      "goose+strawberry": 1,
+      "sheep+carrot": 1
+    },
+    "2026-09-10": {
+      "cow+strawberry": 37,
+      "sheep+strawberry": 6,
+      "goose+carrot": 1,
+      "goose+tomato": 1,
+      "sheep+tomato": 1,
+      "cow+tomato": 1,
+      "sheep+carrot": 1
+    }
+  },
+  "cow_strawberry_shift": {
+    "first_day": "2026-09-09",
+    "last_day": "2026-09-10",
+    "first_cow_strawberry_seats": 38,
+    "first_total_seats": 48,
+    "first_share": 0.7917,
+    "last_cow_strawberry_seats": 37,
+    "last_total_seats": 48,
+    "last_share": 0.7708,
+    "share_change_last_minus_first": -0.0208,
+    "fisher_two_sided_p": 1.0
+  },
+  "resource_share_mean_shift_last_minus_first": {
+    "crop_carrot_share": 0.002837,
+    "crop_melon_share": 0.005759,
+    "crop_strawberry_share": -0.030459,
+    "crop_tomato_share": 0.016962,
+    "crop_wheat_share": 0.004894,
+    "animal_cow_share": -0.013847,
+    "animal_goose_share": 0.035279,
+    "animal_sheep_share": -0.021435
+  },
+  "opening_diversity_by_day": {
+    "2026-09-09": {
+      "seats": 48,
+      "distinct_t24": 24,
+      "distinct_t48": 24
+    },
+    "2026-09-10": {
+      "seats": 48,
+      "distinct_t24": 23,
+      "distinct_t48": 26
+    }
+  },
+  "seat0_win_rate_by_day": {
+    "2026-09-09": {
+      "decided_games": 24,
+      "seat0_win_rate": 0.2917
+    },
+    "2026-09-10": {
+      "decided_games": 24,
+      "seat0_win_rate": 0.5
+    }
+  },
+  "matchup_pairs": 10,
+  "cross_family_pairs_with_5plus_games_and_both_seats": 0,
+  "runtime_seconds": 260.259,
+  "sampling_note": "Each source day is sampled at equally spaced quantile midpoints across the official daily manifest sorted by avg_score. This validates change within the published daily elite slice; it is not a random estimate of the full ladder population.",
+  "rights_note": "All replay payloads come from official Kaggle daily datasets reporting CC0-1.0. Raw and row-level targeted validation files remain local/ignored."
+}

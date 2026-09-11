@@ -1,0 +1,12 @@
+source_date,strategy_family,seats,share,group_seats
+2026-09-09,cow+strawberry,38,0.7917,48
+2026-09-09,sheep+strawberry,8,0.1667,48
+2026-09-09,goose+strawberry,1,0.0208,48
+2026-09-09,sheep+carrot,1,0.0208,48
+2026-09-10,cow+strawberry,37,0.7708,48
+2026-09-10,sheep+strawberry,6,0.125,48
+2026-09-10,goose+carrot,1,0.0208,48
+2026-09-10,goose+tomato,1,0.0208,48
+2026-09-10,sheep+tomato,1,0.0208,48
+2026-09-10,cow+tomato,1,0.0208,48
+2026-09-10,sheep+carrot,1,0.0208,48

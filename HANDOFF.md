@@ -5,7 +5,7 @@
 - Intended branch: `main`
 - GitHub target: `TaeyanG4/kaggriculture-strategy-meta`
 - Visibility during active competition: private until public-code and source-rights gates are satisfied
-- Tests: `python -m unittest discover -s tests -v` passes (4 tests)
+- Tests: `python -m unittest discover -s tests -v` passes (10 tests)
 
 ## Current phase
 - Phase 0 current state: complete for start gate
@@ -14,7 +14,7 @@
 - Phase 3 rights gate: source-scoped decision recorded
 - Phase 4 small pilot: first measured pilot complete
 - Phase 4 expanded official-CC0 pilot: complete
-- Overall decision: `NARROW`; full historical backfill is not authorized by the gate
+- Overall decision: `GO — NARROW V1 BUILD`; bounded current-meta collection is authorized, full historical backfill is not
 
 ## Pilot checkpoint
 - 13/13 episodes parsed; 26 seats; 0 failures
@@ -40,6 +40,27 @@
 - Aggregate checkpoint: `reports/expanded_pilot_summary.json`
 - Interpretation: `reports/expanded-pilot-findings-2026-09-11.md`
 - Row-level expanded reports and raw replay payloads remain local/ignored
+
+## Targeted validation checkpoint
+- Matched deterministic 24-quantile samples on 2026-09-09 and 2026-09-10
+- 48/48 episodes parsed; 96 seats; 0 failures; 1,567,299,164 replay bytes
+- Engine 1.32.7 for all 48 episodes
+- `cow+strawberry`: 38/48 seats (79.2%) on 09-09 vs 37/48 (77.1%) on 09-10; Fisher two-sided p=1.0
+- The earlier apparent 09-10 family collapse did not reproduce and is treated as a small-sample artifact
+- Continuous resource shifts remain descriptive; notable sample shifts include goose +3.53pp and strawberry -3.05pp
+- 0 cross-family matchup pairs reached >=5 games with both seat orientations; counter matrix remains gated out of core V1
+- Aggregate checkpoint: `reports/targeted_validation_summary.json`
+- Interpretation: `reports/targeted-validation-findings-2026-09-11.md`
+
+## V1 schema checkpoint
+- One file: `strategy_meta.csv`
+- Grain: one row per `(episode_id, seat)`
+- 46 columns including provenance, source score quantile, outcome, cash checkpoints, first-event timings, opening/labor features, tile-turn resource shares, broad action totals, opening hashes, and an explicitly experimental family label
+- Targeted 96-row candidate QA passes: 0 duplicate keys, 0 core missing values, 0 invalid shares, 0 excluded identity fields, 0 Unicode replacement cells
+- Candidate CSV size on targeted validation: 34,567 bytes
+- Schema: `docs/v1-schema.md`
+- Machine-readable QA: `reports/v1_schema_qa.json`
+- Alternative comparison: `reports/v1_schema_comparison.json`
 
 ## Kaggle
 - Competition: `kaggriculture`
@@ -76,4 +97,4 @@
 - The first action-threshold strategy classifier collapsed almost all seats into one bucket; do not restore it.
 
 ## Next action
-Run a targeted bounded validation of the apparent 2026-09-10 strategy diversification, then harden a public-V1 schema centered on continuous opening/economy/resource fingerprints. Keep `strategy_family_pilot` experimental and do not promote a counter matrix until several cross-family pairs have adequate seat-balanced support.
+Build the bounded current-meta V1 for 2026-09-04 through 2026-09-10 at 24 deterministic manifest quantiles per day. Keep raw/row-level artifacts local, generate one local `strategy_meta.csv` candidate plus aggregate QA/provenance, and do not publish yet. The scheduled 2026-09-11 official daily source can be appended when it becomes available.
