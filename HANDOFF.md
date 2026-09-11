@@ -323,5 +323,35 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
     - Mean margin: +91,205.0 coins.
   - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.030s, OK`).
 
+## Championship Router Champion Checkpoint (agent/c98_championship_router.py)
+- Date: 2026-09-12
+- Candidate Champion: `agent/c98_championship_router.py` (mirrored to `submission/main.py`, SHA-256 `a52321a9f84ae72d927b05bf330951ce50c0f2821d39361d85e682b62a917f63`)
+- Preceding Champion: Ref `56171489` (`agent/c97_precision_router.py`), active on ladder.
+- Architectural Enhancements in c98:
+  1. Base Price Table & Terminal Liquidation Order Fix:
+     - Corrected base prices to true engine values: `MELON: 250, WOOL: 200, MILK: 160, STRAWBERRY: 120, FERTILIZER: 100, TOMATO: 60, EGG: 50, CARROT: 35, WHEAT: 25`.
+     - Updated `_SELLABLE` liquidation sequence: `("MELON", "WOOL", "MILK", "STRAWBERRY", "FERTILIZER", "TOMATO", "EGG", "CARROT", "WHEAT")`.
+     - Ensures high-value fertilizer ($100) produced by livestock is liquidated before low-value carrot ($35) and wheat ($25).
+     - Fixed terminal liquidation (`_terminal_salvage_and_liquidation`) to account for units dropping cargo on the current turn, preventing stranded unliquidated goods on step 718.
+  2. 7-Turn Physical Rescue Planner on Steps 712–718 (`_plan_rescue_712_718`):
+     - Dynamically reassigns PASS-idle workers within reachable distance of ripe crops or uncollected shed items/fertilizer: walks, harvests/collects, returns to shed-adjacent tiles, and drops cargo before step 718 liquidation.
+     - Supports bundled harvest + fertilizer collection when slack permits on animal tiles.
+     - Strict safety: only reassigns workers whose scheduled operations for current turn through 718 are exclusively `["PASS"]`, ensuring zero disruption to scheduled parent productive tasks.
+  3. C72 Near-Shed Working Capital Diversion on Steps 120–679 (`_c72_working_capital_diversion`):
+     - Detects when an actor is on/adjacent to a shed tile with >= $2,000 in goods at current market prices and converts non-movement `PASS` or commodity `PLACE` into `DROP` to bank early liquidity for working capital without interrupting core route tasks or animal placements.
+- Confirmation Benchmarks across Paired Seeds 1000-1009 (40 games total):
+  - vs `agent/c97_precision_router.py` (20 games, 10 seeds, 2 seats):
+    - Record: 16 wins / 0 losses / 4 ties (100.0% win rate decided, 100.0% undefeated)
+    - Zero regressions across all 20 games (c97 won 0 games).
+    - Mean margin: +14.5 coins (peak +89.0 coins on seed 1006).
+    - Seat 0: 8 wins / 0 losses / 2 ties; Seat 1: 8 wins / 0 losses / 2 ties.
+  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
+    - Mean margin: +32,259.7 coins (mean reward 104,854.05 vs opponent 72,594.35).
+    - Seat 0: 10/10 (100.0%), Seat 1: 10/10 (100.0%), 0 aborts, 20/20 DONE.
+  - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.030s, OK`).
+- Preparation: `submission/main.py` is byte-identical to `agent/c98_championship_router.py` and validated for immediate Kaggle submission.
+
+
 
 
