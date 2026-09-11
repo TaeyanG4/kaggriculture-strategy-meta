@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Local research/raw material. Never commit competition/replay payloads.
+state/pilot/raw/
+state/pilot/source_index/
+state/research/
+state/competition/
+state/pilot/downloads/
+
+# Generated local scratch
+state/pilot/*.tmp
+# Pilot row-level outputs may contain episode/team/submission identifiers.
+# Keep local until regenerated exclusively from the reviewed public-source release path.
+reports/pilot_selection.csv
+reports/pilot_features.csv
+reports/pilot_episode_matchups.csv

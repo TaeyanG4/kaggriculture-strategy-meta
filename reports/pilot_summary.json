@@ -1,0 +1,24 @@
+{
+  "generated_at_utc": "2026-09-11T05:44:23Z",
+  "selection_episodes": 13,
+  "parsed_episodes": 13,
+  "player_seats": 26,
+  "source_bytes": 404705767,
+  "parsing_failures": [],
+  "engine_versions": {
+    "1.32.7": 13
+  },
+  "rating_min": 1285.751654570586,
+  "rating_max": 2758.545776139048,
+  "strategy_family_counts": {
+    "cow+strawberry": 18,
+    "sheep+strawberry": 7,
+    "sheep+melon": 1
+  },
+  "episode_matchups": 13,
+  "matchup_pairs": 4,
+  "derived_feature_bytes": 18031,
+  "runtime_seconds": 3.539,
+  "rights_note": "Raw replays remain local. Public release provenance must be source-scoped; official Kaggle daily episode datasets are CC0-1.0.",
+  "interpretation": "Pilot strategy labels are deterministic hypotheses only; matchup rows below five games are not strong evidence."
+}
