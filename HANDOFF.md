@@ -272,7 +272,28 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
   - Ref: `56169531`
   - File: `submission/main.py`
   - Message: `c96 adaptive router: 5-schedule replay routing (100% win rate vs c95/v27, +22.6k margin) + weed repair + unconstrained front-run + terminal salvage`
-  - Status: COMPLETE (initial baseline 600.0, actively matching in live ladder games)
+  - Status: COMPLETE (surged from baseline 600.0 to 1602.2 in <50 minutes, actively matching in live ladder games)
+
+## K320-Plus Pre-Assembly & Comparative Investigation Checkpoint (agent/k320_plus.py)
+- Date: 2026-09-12
+- Pre-assembled Candidate: `agent/k320_plus.py`
+- Architecture:
+  1. 5 Kawashigi macro-routes (including 4-quadrant SE expansion: `6c12s_4q_first_yarn` and `6c12s_4q_second_yarn`).
+  2. Slot-0 feed protection (`BUY_PRODUCT WHEAT 6` at turn 0).
+  3. C92 productive weed repair (`_weed_repair_productive_route`).
+  4. 1-turn front-running preemption.
+  5. Unfinishable seed trimming at turn >= 648 (Day 27+).
+  6. Terminal salvage & complete 9-product liquidation (turns 717-719).
+- Local Benchmark vs `agent/public_v27_kaito.py` (Seeds 1000-1009, 20 paired games):
+  - Record: 4 wins / 16 losses (20.0% win rate decided)
+  - Mean margin: -9,715.65 coins, median margin: -9,473.0 coins.
+- Root Cause Analysis (Why c96 crushes v27 while k320 loses to v27):
+  - Kawashigi's K320 routes rely purely on livestock (cows + sheep) and abandon cash crops in the mid-to-late game (0 melons sold turns 360-719).
+  - In contrast, `v27` and `c96` sell 84+ melons at base $250 each (~21,000+ coins pure revenue) into fruit/vegetable town shops.
+  - `c96_adaptive_router.py` correctly blends diversified cash crops (melons, strawberries, carrots) with livestock and dynamic shop adaptation, achieving 100% win rate over v27 (+32.3k margin) and rocketing on the Kaggle ladder.
+- Operational Decision:
+  - Keep `agent/c96_adaptive_router.py` as the active champion in `submission/main.py` and on Kaggle.
+  - DO NOT submit any new bot to Kaggle; continue uninterrupted ladder climb for `c96` (Ref `56169531`).
 
 
 
