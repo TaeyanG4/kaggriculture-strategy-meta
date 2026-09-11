@@ -184,3 +184,10 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
 - Terminal salvage and demand-alpha micro-tuning did not beat the parent. Keep the exact public parent as champion.
 - Live Kaggle readback: baseline_v7 ref 56166731 COMPLETE score 385.7; v27 ref 56167312 COMPLETE score 991.7 on 2026-09-11.
 - Next: only promote a separately named derivative that beats/ties the exact parent on fresh paired-seat current-meta gates while preserving tier-9 strength.
+
+## Decommissioning and retention checkpoint
+- Date: 2026-09-12
+- Tournament results: In a 40-game paired-seat tournament (seeds 3000-3004), `public_v27_kaito.py` scored 10-0 vs `v25 Meta Reset` (mean margin +15,124.6) and 10-0 vs `baseline_v7` (mean margin +87,923.6).
+- Action taken: Decommissioned and removed all obsolete pre-adoption agents (`baseline_v0.py`, `baseline_v1.py`, `baseline_v2.py`, `baseline_v3.py`, `baseline_v7.py`, `rancher_rita_land14.py`, and `v25 Meta Reset`).
+- Sole active agent: `agent/public_v27_kaito.py` is the only active agent retained in `agent/`.
+- Submission artifact: Packaged directly as `submission/main.py`.
