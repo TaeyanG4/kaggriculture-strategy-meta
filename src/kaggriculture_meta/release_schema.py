@@ -26,7 +26,6 @@ V1_FIELD_MAP = [
     ("cash_t72", "cash_t72"),
     ("cash_t168", "cash_t168"),
     ("cash_t360", "cash_t360"),
-    ("peak_cash", "peak_cash"),
     ("first_land_turn", "first_land_turn"),
     ("first_hire_turn", "first_hire_turn"),
     ("first_plant_turn", "first_plant_turn"),

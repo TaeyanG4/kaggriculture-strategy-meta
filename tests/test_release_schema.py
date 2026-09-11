@@ -16,6 +16,7 @@ from pathlib import Path
 class ReleaseSchemaTests(unittest.TestCase):
     def test_sensitive_identity_fields_are_not_in_v1(self):
         self.assertFalse(EXCLUDED_IDENTITY_FIELDS & set(V1_COLUMNS))
+        self.assertNotIn("peak_cash", V1_COLUMNS)
 
     def test_experimental_family_is_renamed(self):
         row = {"strategy_family_pilot": "sheep+strawberry"}

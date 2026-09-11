@@ -28,7 +28,6 @@ Raw replay JSON is never part of the release.
 ### Economy checkpoints
 
 - `cash_t24`, `cash_t72`, `cash_t168`, `cash_t360`
-- `peak_cash`
 
 These retain trajectory information that a single final-money value loses.
 
@@ -77,6 +76,7 @@ This is the deterministic resource-mix label currently called `strategy_family_p
 - `rating_after`
 - raw replay payloads
 - duplicated final-cash fields
+- `peak_cash` because it was exactly equal to `final_reward` in the bounded current-meta build and adds no information
 - shared market-price min/max columns already well covered by the closest existing episode-feature dataset
 
 The exclusions keep the release task-focused, reduce unnecessary identity coupling, and avoid presenting fields that are not consistently available from the official daily source path.
