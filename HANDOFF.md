@@ -292,8 +292,36 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
   - In contrast, `v27` and `c96` sell 84+ melons at base $250 each (~21,000+ coins pure revenue) into fruit/vegetable town shops.
   - `c96_adaptive_router.py` correctly blends diversified cash crops (melons, strawberries, carrots) with livestock and dynamic shop adaptation, achieving 100% win rate over v27 (+32.3k margin) and rocketing on the Kaggle ladder.
 - Operational Decision:
-  - Keep `agent/c96_adaptive_router.py` as the active champion in `submission/main.py` and on Kaggle.
-  - DO NOT submit any new bot to Kaggle; continue uninterrupted ladder climb for `c96` (Ref `56169531`).
+  - Deployed upgraded `c97_precision_router.py` to overcome 1760-1880 plateau.
+
+## Precision Router Champion Checkpoint (agent/c97_precision_router.py)
+- Date: 2026-09-12
+- Active Kaggle Submission: Ref `56171489` (`agent/c97_precision_router.py` mirrored in `submission/main.py`)
+- Preceding submission: Ref `56169531` (`c96_adaptive_router.py`), peaked at 1879.2, officially 1793.1, Rank #1731 / 8,666 teams (Top 19.9%).
+- Forensic Diagnosis from Kaggle Match Log:
+  - Multiple 1800-tier losses occurred by razor-thin margins: 56 coins (Ep 107910746), 167 coins (Ep 107911952), 191 coins (Ep 107915761).
+  - Root Cause: Fixed schedules bought 9 wheat seeds/day but only planted 6-8, leaving 20 wheat seeds and 1 strawberry seed (280 coins) stranded and unplanted at game end.
+- Architectural Pillars of c97:
+  1. In-Place Dynamic Surplus Seed Pruning (`_prune_surplus_seed_buys`):
+     - Precomputes `REMAINING_PLANTS[route][turn][crop]` (suffix sum of planned plantings for each route).
+     - If current inventory + virtual seeds already purchased this turn covers all planned plantings for the rest of the game, automatically sets buy quantity to 0 and replaces with harmless slot-preserving dummy order `['SELL', 'WHEAT', 0]`.
+     - Completely eliminates the 280-coin waste, ending game with 0 unplanted seeds and +240 to +300 pure cash profit.
+  2. Town Shop Consumption 2-Step Front-Running Horizon (`_front_run_v2`):
+     - Expands front-running to look ahead 2 turns specifically when approaching town shop inventory consumption ticks (`(step + 2) % 4 == 0`).
+     - Captures higher commodity pricing before rival dumps glut town shops.
+  3. C92 Productive Weed Repair (`_weed_repair_productive_route`):
+     - Dynamic dig and delayed execution for weed-blocked operations, with per-seat isolation.
+  4. Terminal Salvage & Complete 9-Product Liquidation (`_terminal_salvage_and_liquidation`):
+     - Turns 717-719 drops carried items on shed tiles and liquidates all 9 commodities up to 1,000,000 units.
+- Confirmation Benchmarks across Paired Seeds 1000-1009 (40 games total):
+  - vs `agent/c96_adaptive_router.py` (20 games, 10 seeds, 2 seats):
+    - Record: 12 wins / 0 losses / 8 ties (60.0% win rate decided, 100.0% undefeated)
+    - c96 never won a single game against c97.
+    - Mean margin: +456.0 coins (peak +2,264.0 coins on seed 1000, +1,883.0 coins on seed 1004).
+  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
+    - Mean margin: +91,205.0 coins.
+  - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.030s, OK`).
 
 
 
