@@ -1,0 +1,43 @@
+{
+  "generated_at_utc": "2026-09-11T06:37:28Z",
+  "builder_git_sha": "4448bda51b5bc623f454c2fc585a1dc086e1e3bb",
+  "source_days": [
+    "2026-09-04",
+    "2026-09-05",
+    "2026-09-06",
+    "2026-09-07",
+    "2026-09-08",
+    "2026-09-09",
+    "2026-09-10"
+  ],
+  "samples_per_day": 24,
+  "selected_episodes": 168,
+  "parsed_episodes": 168,
+  "player_seats": 336,
+  "source_bytes": 5456959047,
+  "parsing_failures": [],
+  "engine_versions": {
+    "1.32.7": 168
+  },
+  "reward_cash_exact_matches": 336,
+  "reward_cash_checked_seats": 336,
+  "strategy_family_counts": {
+    "cow+strawberry": 232,
+    "sheep+strawberry": 88,
+    "goose+strawberry": 3,
+    "cow+tomato": 3,
+    "sheep+carrot": 7,
+    "goose+carrot": 1,
+    "goose+tomato": 1,
+    "sheep+tomato": 1
+  },
+  "distinct_openings_t24": 115,
+  "distinct_openings_t48": 144,
+  "release_rows": 336,
+  "release_columns": 48,
+  "release_bytes": 122674,
+  "release_sha256": "7c4249d0fabbf186e059304ebf8a901471bf80ecf193b7b21125dab556f21744",
+  "passes_core_qa": true,
+  "runtime_seconds": 39.724,
+  "scope_note": "Bounded current-meta V1 only. Each daily official CC0 manifest is sampled at 24 equally spaced quantile midpoints after sorting by avg_score. This is not a full-ladder population sample."
+}

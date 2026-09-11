@@ -5,7 +5,7 @@
 - Intended branch: `main`
 - GitHub target: `TaeyanG4/kaggriculture-strategy-meta`
 - Visibility during active competition: private until public-code and source-rights gates are satisfied
-- Tests: `python -m unittest discover -s tests -v` passes (10 tests)
+- Tests: `python -m unittest discover -s tests -v` passes (15 tests)
 
 ## Current phase
 - Phase 0 current state: complete for start gate
@@ -14,6 +14,8 @@
 - Phase 3 rights gate: source-scoped decision recorded
 - Phase 4 small pilot: first measured pilot complete
 - Phase 4 expanded official-CC0 pilot: complete
+- Phase 5 bounded current-meta V1 build: complete locally
+- Phase 6 first-insight / product-hook validation: complete for V1 checkpoint
 - Overall decision: `GO — NARROW V1 BUILD`; bounded current-meta collection is authorized, full historical backfill is not
 
 ## Pilot checkpoint
@@ -55,12 +57,40 @@
 ## V1 schema checkpoint
 - One file: `strategy_meta.csv`
 - Grain: one row per `(episode_id, seat)`
-- 46 columns including provenance, source score quantile, outcome, cash checkpoints, first-event timings, opening/labor features, tile-turn resource shares, broad action totals, opening hashes, and an explicitly experimental family label
+- Final current schema: 48 columns including provenance, source score quantile, direct within-episode outcome fields, cash checkpoints, first-event timings, opening/labor features, tile-turn resource shares, broad action totals, opening hashes, and an explicitly experimental family label
 - Targeted 96-row candidate QA passes: 0 duplicate keys, 0 core missing values, 0 invalid shares, 0 excluded identity fields, 0 Unicode replacement cells
 - Candidate CSV size on targeted validation: 34,567 bytes
 - Schema: `docs/v1-schema.md`
 - Machine-readable QA: `reports/v1_schema_qa.json`
 - Alternative comparison: `reports/v1_schema_comparison.json`
+
+## Bounded current-meta V1 checkpoint
+- Official daily source window: 2026-09-04 through 2026-09-10
+- Selection: 24 deterministic manifest-score quantile midpoints/day = 168 episodes / 336 seats
+- Parse result: 168/168 episodes; 0 failures; 5,456,959,047 replay bytes processed
+- Engine 1.32.7 for all selected episodes
+- Replay rewards equal final observed cash for 336/336 seats
+- Local release candidate: 336 rows x 48 columns, 122,674 bytes
+- Builder Git SHA: `4448bda51b5bc623f454c2fc585a1dc086e1e3bb`
+- Release SHA-256: `7c4249d0fabbf186e059304ebf8a901471bf80ecf193b7b21125dab556f21744`
+- QA: 0 duplicate episode/seat keys; 0 core missing; CC0-1.0 for all 336 rows; 0 invalid shares; 0 excluded identity fields; 0 Unicode replacement cells
+- Outcomes: 168 win / 168 loss; outcome/margin sign consistent for 336/336 rows
+- Experimental families: 232 cow+strawberry, 88 sheep+strawberry, 16 other; still too concentrated for primary taxonomy
+- Opening diversity: 115 distinct t24 hashes; 144 distinct t48 hashes
+- `peak_cash` was removed from public V1 after proving exactly equal to `final_reward` for 336/336 rows
+- Aggregate QA: `reports/current_v1_qa.json`
+- Provenance: `reports/current_v1_provenance.json`
+- Daily readback: `reports/current_v1_daily_summary.csv`
+- Interpretation: `reports/current-v1-findings-2026-09-11.md`
+
+## First-insight checkpoint
+- Paired winner/loser comparison across 168 games and 29 non-outcome features
+- Exact paired sign tests + Benjamini-Hochberg correction + seat-direction consistency + |paired standardized effect|>=0.2
+- Robust exploratory signals: 0
+- Closest early signal: `first_land_turn`, winner-minus-loser mean -5.06 turns, effect -0.202, BH q~0.254, seat-consistent; exploratory only
+- Do not position V1 as a validated winner predictor or counter dataset
+- First showcase should emphasize temporal opening/resource/economy meta shifts
+- Insight summary: `reports/current_v1_insight_summary.json`
 
 ## Kaggle
 - Competition: `kaggriculture`
@@ -97,4 +127,4 @@
 - The first action-threshold strategy classifier collapsed almost all seats into one bucket; do not restore it.
 
 ## Next action
-Build the bounded current-meta V1 for 2026-09-04 through 2026-09-10 at 24 deterministic manifest quantiles per day. Keep raw/row-level artifacts local, generate one local `strategy_meta.csv` candidate plus aggregate QA/provenance, and do not publish yet. The scheduled 2026-09-11 official daily source can be appended when it becomes available.
+Prepare a private/local Kaggle release package and a current-meta quicklook notebook without publishing. When the scheduled 2026-09-11 official daily source becomes available, append it through the same 24-quantile rule, repeat QA/provenance, and then decide publication readiness. Keep GitHub private and do not create a Kaggle Dataset yet.

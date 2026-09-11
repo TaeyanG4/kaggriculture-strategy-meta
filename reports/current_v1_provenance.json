@@ -1,0 +1,79 @@
+{
+  "builder_git_sha": "4448bda51b5bc623f454c2fc585a1dc086e1e3bb",
+  "build_timestamp_utc": "2026-09-11T06:37:28Z",
+  "selection_rule": {
+    "sort_key": "avg_score ascending within each official daily manifest",
+    "samples_per_day": 24,
+    "quantile_formula": "q=(i+0.5)/samples_per_day for i=0..samples_per_day-1"
+  },
+  "source_manifests": [
+    {
+      "source_date": "2026-09-04",
+      "source_dataset": "kaggle/kaggriculture-episodes-2026-09-04",
+      "source_license": "CC0-1.0",
+      "manifest_rows": 668,
+      "manifest_sha256": "91b2037cdad455022cf90688d593b72cc93c84f767f7ad1be722d3eccd67c1a4"
+    },
+    {
+      "source_date": "2026-09-05",
+      "source_dataset": "kaggle/kaggriculture-episodes-2026-09-05",
+      "source_license": "CC0-1.0",
+      "manifest_rows": 664,
+      "manifest_sha256": "5d3681652186a2b8208f749c9986e817052a3325b3a674c4151a8f5068507751"
+    },
+    {
+      "source_date": "2026-09-06",
+      "source_dataset": "kaggle/kaggriculture-episodes-2026-09-06",
+      "source_license": "CC0-1.0",
+      "manifest_rows": 662,
+      "manifest_sha256": "e34eeb97b98c148f1037b8219ece4a1cdaaf820d8571256620cee34e1372d6a4"
+    },
+    {
+      "source_date": "2026-09-07",
+      "source_dataset": "kaggle/kaggriculture-episodes-2026-09-07",
+      "source_license": "CC0-1.0",
+      "manifest_rows": 663,
+      "manifest_sha256": "27313072834295f8658032ede9404a62860d644bc80f8321c80a2c3f627cffd2"
+    },
+    {
+      "source_date": "2026-09-08",
+      "source_dataset": "kaggle/kaggriculture-episodes-2026-09-08",
+      "source_license": "CC0-1.0",
+      "manifest_rows": 663,
+      "manifest_sha256": "013d8224b121756709774187213b805a83424d097ba0fcbc797e79446696ec76"
+    },
+    {
+      "source_date": "2026-09-09",
+      "source_dataset": "kaggle/kaggriculture-episodes-2026-09-09",
+      "source_license": "CC0-1.0",
+      "manifest_rows": 662,
+      "manifest_sha256": "9b54609466d901b2615cf6d08ae1bd7f13bfca4adfe4ecc22718de1003ce7bed"
+    },
+    {
+      "source_date": "2026-09-10",
+      "source_dataset": "kaggle/kaggriculture-episodes-2026-09-10",
+      "source_license": "CC0-1.0",
+      "manifest_rows": 657,
+      "manifest_sha256": "ca7b5e4563c7e9ba591669c87d971f23d6de6e91584782601236c8edb87bc1d0"
+    }
+  ],
+  "release_artifact": {
+    "filename": "strategy_meta.csv",
+    "rows": 336,
+    "columns": 48,
+    "bytes": 122674,
+    "sha256": "7c4249d0fabbf186e059304ebf8a901471bf80ecf193b7b21125dab556f21744"
+  },
+  "rights": {
+    "source_license_expected": "CC0-1.0",
+    "raw_replays_in_release": false,
+    "raw_replays_in_git": false
+  },
+  "qa": {
+    "passes_core_qa": true,
+    "duplicate_episode_seat_keys": 0,
+    "core_required_missing": {},
+    "invalid_share_values": 0,
+    "unicode_replacement_character_cells": 0
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "input_rows": 336,
+  "paired_games": 168,
+  "features_tested": 29,
+  "multiple_test_correction": "Benjamini-Hochberg over exact paired sign tests",
+  "robust_exploratory_signal_count": 0,
+  "robust_opening_or_early_signal_count": 0,
+  "robust_exploratory_features": [],
+  "robust_opening_or_early_features": [],
+  "interpretation_note": "Exploratory association only. A robust flag requires BH q<=0.05, paired standardized effect |d|>=0.2, and the mean winner-loser direction to agree when the winner is in seat 0 and when the winner is in seat 1. It does not establish causality."
+}
