@@ -204,6 +204,14 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
   - Seat 0 win rate: 75.0% (15/20)
   - Seat 1 win rate: 75.0% (15/20)
   - Mean runtime: 3.97s, 0 aborts, 40/40 DONE
+- Out-of-sample generalization benchmark (10 unseen paired seeds 1020-1029, 2 seats, 20 games):
+  - Record: 16 wins / 4 losses (80.0% win rate decided)
+  - Wilson 95% CI: [58.40%, 91.93%]
+  - Mean margin: +2,157.95 coins
+  - Median margin: +2,574.0 coins
+  - Seat 0 win rate: 80.0% (8/10)
+  - Seat 1 win rate: 80.0% (8/10)
+  - Combined 60-game overall record: 46 wins / 14 losses (76.67% win rate decided)
 - Key algorithmic improvements:
   1. Opening feed protection (feed5): prioritized `BUY_PRODUCT WHEAT 5` to slot 0 on step 0 to prevent feed-denial starvation attacks.
   2. Debt-tracked one-turn wheat and fertilizer sale anticipation (max 10 wheat, 5 fertilizer) to capture higher prices before competitor gluts.
@@ -214,5 +222,6 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
   - Ref: `56168710`
   - File: `submission/main.py`
   - Message: `c95 feed-first opening + debt-tracked wheat/fertilizer sale anticipation + productive weed repair (75% win rate vs v27)`
-  - Status: PENDING (evaluated on live ladder)
+  - Status: COMPLETE (initial baseline 600.0, actively matching in live ladder games)
+  - Preceding submission (v27, ref `56167312`): live ladder rating climbed past 1000 to 1016.6.
 
