@@ -1,6 +1,6 @@
 import unittest
 
-from src.kaggriculture_meta.pilot import classify_strategy, prefix_hash
+from src.kaggriculture_meta.pilot import classify_strategy, prefix_hash, wilson_interval
 
 
 class PilotTests(unittest.TestCase):
@@ -20,6 +20,11 @@ class PilotTests(unittest.TestCase):
         steps = [[{"action": {}}, {"action": {}}],
                  [{"action": {"market": [["BUY_SEED", "WHEAT", 1]]}}, {"action": {}}]]
         self.assertEqual(prefix_hash(steps, 0, 24), prefix_hash(steps, 0, 24))
+
+    def test_wilson_interval_contains_observed_rate(self):
+        low, high = wilson_interval(4, 5)
+        self.assertLess(low, 0.8)
+        self.assertGreater(high, 0.8)
 
 
 if __name__ == "__main__":

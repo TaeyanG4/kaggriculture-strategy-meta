@@ -4,7 +4,7 @@ Data-driven Kaggriculture competition research focused on interpretable strategy
 
 ## Current status
 
-**Gate: PILOT (2026-09-11).** Market demand is strong and the exact product is not yet duplicated, but the public niche already contains episode features, action fingerprints, replay benchmarks, opening clusters, and ladder summaries. The project must prove that reproducible strategy families and matchup/meta signals add material value before any broad collection or public Dataset release.
+**Gate: NARROW (2026-09-11).** A 42-episode / 84-seat official-CC0 expanded pilot parsed cleanly, but the current categorical resource family is dominated by `cow+strawberry` and only one real cross-family matchup reached five games. Public V1 should therefore lead with interpretable continuous strategy/opening fingerprints; family and matchup fields remain experimental until better supported.
 
 ## Rights posture
 
@@ -15,8 +15,8 @@ Data-driven Kaggriculture competition research focused on interpretable strategy
 
 See `docs/gate-2026-09-11.md` for the live gate evidence and stop-loss conditions.
 
-## Pilot goal
+## Current pilot result
 
-Use a small recent sample spanning low, middle, and high rating bands to test whether one episode/seat can be converted into useful structured features and whether a deterministic, interpretable opening family supports meaningful matchup analysis.
+The expanded pilot uses six fixed-quantile episodes per day from seven official Kaggle daily CC0 releases. It processed 42/42 episodes and 84 seats with no failures, all on engine 1.32.7. Replay rewards matched final observed cash for every seat.
 
-The raw pilot is intentionally local and excluded from Git.
+The raw pilot is intentionally local and excluded from Git. See `reports/expanded-pilot-findings-2026-09-11.md` for the measured gate update.

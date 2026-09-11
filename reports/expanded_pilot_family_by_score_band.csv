@@ -1,0 +1,14 @@
+score_band,strategy_family,seats,share,group_seats
+daily_high,cow+strawberry,19,0.6786,28
+daily_high,sheep+strawberry,6,0.2143,28
+daily_high,sheep+carrot,2,0.0714,28
+daily_high,cow+carrot,1,0.0357,28
+daily_low,cow+strawberry,19,0.6786,28
+daily_low,sheep+strawberry,7,0.25,28
+daily_low,sheep+carrot,1,0.0357,28
+daily_low,cow+tomato,1,0.0357,28
+daily_mid,cow+strawberry,22,0.7857,28
+daily_mid,sheep+strawberry,2,0.0714,28
+daily_mid,goose+strawberry,2,0.0714,28
+daily_mid,sheep+tomato,1,0.0357,28
+daily_mid,sheep+carrot,1,0.0357,28

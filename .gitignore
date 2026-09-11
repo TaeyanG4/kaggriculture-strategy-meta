@@ -10,6 +10,7 @@ state/pilot/source_index/
 state/research/
 state/competition/
 state/pilot/downloads/
+state/expanded_pilot/
 
 # Generated local scratch
 state/pilot/*.tmp
@@ -18,3 +19,6 @@ state/pilot/*.tmp
 reports/pilot_selection.csv
 reports/pilot_features.csv
 reports/pilot_episode_matchups.csv
+reports/expanded_pilot_selection.csv
+reports/expanded_pilot_features.csv
+reports/expanded_pilot_episode_matchups.csv

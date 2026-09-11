@@ -1,0 +1,52 @@
+{
+  "generated_at_utc": "2026-09-11T06:02:05Z",
+  "source_days": [
+    "2026-09-04",
+    "2026-09-05",
+    "2026-09-06",
+    "2026-09-07",
+    "2026-09-08",
+    "2026-09-09",
+    "2026-09-10"
+  ],
+  "selected_episodes": 42,
+  "parsed_episodes": 42,
+  "player_seats": 84,
+  "source_bytes": 1361712110,
+  "parsing_failures": [],
+  "engine_versions": {
+    "1.32.7": 42
+  },
+  "strategy_family_counts": {
+    "cow+strawberry": 60,
+    "sheep+strawberry": 15,
+    "sheep+carrot": 4,
+    "cow+tomato": 1,
+    "cow+carrot": 1,
+    "sheep+tomato": 1,
+    "goose+strawberry": 2
+  },
+  "distinct_strategy_families": 7,
+  "distinct_openings_t24": 50,
+  "distinct_openings_t48": 54,
+  "largest_opening_t24_share": 0.0952,
+  "largest_opening_t48_share": 0.0833,
+  "matchup_pairs": 9,
+  "matchup_pairs_with_5plus_games": 2,
+  "seat0_win_rate": 0.6429,
+  "same_family_seat0_win_rate": 0.7407,
+  "reward_cash_exact_matches": 84,
+  "reward_cash_checked_seats": 84,
+  "repeated_agent_family_stability": {
+    "named_agents": 48,
+    "repeated_agents": 20,
+    "repeated_agent_seats": 56,
+    "perfect_family_stability_agents": 12,
+    "perfect_family_stability_share": 0.6,
+    "mean_majority_family_share": 0.8342
+  },
+  "derived_feature_bytes": 62185,
+  "runtime_seconds": 10.469,
+  "sampling_note": "Each official daily CC0 manifest is sorted by avg_score and sampled at fixed 10/20, 45/55, and 80/90 percentiles. Bands are relative to Kaggle's published daily elite slice, not the full competition ladder.",
+  "rights_note": "All expanded-pilot replay payloads are downloaded through Kaggle CLI from official kaggle/kaggriculture-episodes-YYYY-MM-DD datasets reporting CC0-1.0. Raw replays remain local."
+}

@@ -5,7 +5,7 @@
 - Intended branch: `main`
 - GitHub target: `TaeyanG4/kaggriculture-strategy-meta`
 - Visibility during active competition: private until public-code and source-rights gates are satisfied
-- Tests: `python -m unittest discover -s tests -v` passes (2 tests)
+- Tests: `python -m unittest discover -s tests -v` passes (4 tests)
 
 ## Current phase
 - Phase 0 current state: complete for start gate
@@ -13,7 +13,8 @@
 - Phase 2 product hypothesis: preserved
 - Phase 3 rights gate: source-scoped decision recorded
 - Phase 4 small pilot: first measured pilot complete
-- Overall decision: `PILOT`; full historical backfill is not authorized by the gate yet
+- Phase 4 expanded official-CC0 pilot: complete
+- Overall decision: `NARROW`; full historical backfill is not authorized by the gate
 
 ## Pilot checkpoint
 - 13/13 episodes parsed; 26 seats; 0 failures
@@ -23,6 +24,22 @@
 - Row-level reports and replay payloads remain local/ignored
 - Aggregate checkpoint: `reports/pilot_summary.json`
 - Interpretation: `reports/pilot-findings-2026-09-11.md`
+
+## Expanded pilot checkpoint
+- Official Kaggle daily CC0 sources: 2026-09-04 through 2026-09-10
+- Fixed manifest quantile sample: 42 episodes / 84 seats
+- 42/42 parsed; 0 failures; 1,361,712,110 replay bytes processed
+- Engine 1.32.7 across all 42 episodes
+- Replay rewards equal final observed cash for 84/84 seats
+- Families: 60 cow+strawberry, 15 sheep+strawberry, 4 sheep+carrot, 5 other
+- 50 distinct t24 opening hashes; 54 distinct t48 opening hashes
+- 9 family matchup pairs; only one real cross-family pair has >=5 games
+- cow+strawberry vs sheep+strawberry: 6 games, cow 2 wins / sheep 4, cow Wilson95 0.097-0.700; both seat orientations represented 3/3
+- Overall seat0 win rate 0.643; same-family seat0 win rate 0.741, so future matchup claims must be seat-aware
+- Name-level repeat family proxy: 20 repeated agents, 60% perfectly stable, mean majority-family share 83.4%; do not treat names as exact submission identities
+- Aggregate checkpoint: `reports/expanded_pilot_summary.json`
+- Interpretation: `reports/expanded-pilot-findings-2026-09-11.md`
+- Row-level expanded reports and raw replay payloads remain local/ignored
 
 ## Kaggle
 - Competition: `kaggriculture`
@@ -59,4 +76,4 @@
 - The first action-threshold strategy classifier collapsed almost all seats into one bucket; do not restore it.
 
 ## Next action
-Run an expanded, still-bounded pilot sourced from the reviewed official CC0 daily datasets, then re-score strategy-family stability and matchup support before any full backfill.
+Run a targeted bounded validation of the apparent 2026-09-10 strategy diversification, then harden a public-V1 schema centered on continuous opening/economy/resource fingerprints. Keep `strategy_family_pilot` experimental and do not promote a counter matrix until several cross-family pairs have adequate seat-balanced support.

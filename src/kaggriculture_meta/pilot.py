@@ -6,6 +6,7 @@ import hashlib
 import json
 import time
 import urllib.request
+import math
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -128,6 +129,7 @@ def classify_strategy(features: dict) -> str:
 
 def extract_seat(episode_id: str, replay: dict, seat: int, meta: dict) -> dict:
     steps = replay["steps"]
+    rewards = replay.get("rewards") or []
     market_counts = Counter()
     market_units = Counter()
     market_item_units = Counter()
@@ -251,6 +253,7 @@ def extract_seat(episode_id: str, replay: dict, seat: int, meta: dict) -> dict:
         "engine_version": replay.get("module_version"),
         "turns": len(steps),
         "final_money_index": fnum(meta.get(f"bank_{seat}")),
+        "final_reward": fnum(rewards[seat]) if seat < len(rewards) else None,
         "starting_cash": cash_values[0] if cash_values else None,
         "ending_cash_observed": cash_values[-1] if cash_values else None,
         "peak_cash": max(cash_values) if cash_values else None,
@@ -322,17 +325,46 @@ def write_csv(path: Path, rows: list[dict]):
         writer.writerows(rows)
 
 
+def wilson_interval(successes: int, trials: int, z: float = 1.96) -> tuple[float | None, float | None]:
+    if trials <= 0:
+        return None, None
+    p = successes / trials
+    denom = 1 + z * z / trials
+    center = (p + z * z / (2 * trials)) / denom
+    half = z * math.sqrt((p * (1 - p) + z * z / (4 * trials)) / trials) / denom
+    return max(0.0, center - half), min(1.0, center + half)
+
+
 def build_matchups(feature_rows: list[dict]) -> tuple[list[dict], list[dict]]:
     by_episode = defaultdict(dict)
     for row in feature_rows:
         by_episode[row["episode_id"]][int(row["seat"])] = row
     episodes = []
-    grouped = defaultdict(lambda: {"games": 0, "wins_a": 0, "wins_b": 0, "ties": 0, "margins": []})
+    grouped = defaultdict(
+        lambda: {
+            "games": 0,
+            "wins_a": 0,
+            "wins_b": 0,
+            "ties": 0,
+            "margins": [],
+            "a_seat0": 0,
+            "a_seat1": 0,
+        }
+    )
     for eid, seats in sorted(by_episode.items()):
         if 0 not in seats or 1 not in seats:
             continue
         a, b = seats[0], seats[1]
-        bank_a, bank_b = a.get("final_money_index"), b.get("final_money_index")
+        bank_a = a.get("final_money_index")
+        bank_b = b.get("final_money_index")
+        if bank_a is None:
+            bank_a = a.get("final_reward")
+        if bank_b is None:
+            bank_b = b.get("final_reward")
+        if bank_a is None:
+            bank_a = a.get("ending_cash_observed")
+        if bank_b is None:
+            bank_b = b.get("ending_cash_observed")
         if bank_a is None or bank_b is None:
             winner = "unknown"
             margin = None
@@ -347,6 +379,7 @@ def build_matchups(feature_rows: list[dict]) -> tuple[list[dict], list[dict]]:
             margin = 0.0
         episodes.append({
             "episode_id": eid,
+            "source_date": a.get("source_date"),
             "rating_band": a.get("rating_band"),
             "engine_version": a.get("engine_version"),
             "family_0": a.get("strategy_family_pilot"),
@@ -366,6 +399,11 @@ def build_matchups(feature_rows: list[dict]) -> tuple[list[dict], list[dict]]:
             a_bank, b_bank = bank_b, bank_a
         g = grouped[(fam_a, fam_b)]
         g["games"] += 1
+        if fam_a != fam_b:
+            if fam0 == fam_a:
+                g["a_seat0"] += 1
+            else:
+                g["a_seat1"] += 1
         if a_bank is not None and b_bank is not None:
             g["margins"].append(a_bank - b_bank)
             if a_bank > b_bank:
@@ -379,6 +417,15 @@ def build_matchups(feature_rows: list[dict]) -> tuple[list[dict], list[dict]]:
     for (fam_a, fam_b), g in sorted(grouped.items()):
         games = g["games"]
         decided = g["wins_a"] + g["wins_b"]
+        ci_low, ci_high = wilson_interval(g["wins_a"], decided)
+        if fam_a == fam_b:
+            evidence = "same_family_control"
+        elif games < 5:
+            evidence = "pilot_only"
+        elif g["a_seat0"] >= 2 and g["a_seat1"] >= 2:
+            evidence = "small_sample_both_seats"
+        else:
+            evidence = "small_sample_seat_skewed"
         summary.append({
             "strategy_family_A": fam_a,
             "strategy_family_B": fam_b,
@@ -386,9 +433,15 @@ def build_matchups(feature_rows: list[dict]) -> tuple[list[dict], list[dict]]:
             "wins_A": g["wins_a"],
             "wins_B": g["wins_b"],
             "ties": g["ties"],
+            "decided_games": decided,
             "win_rate_A_decided": round(g["wins_a"] / decided, 4) if decided else None,
+            "win_rate_A_wilson95_low": round(ci_low, 4) if ci_low is not None else None,
+            "win_rate_A_wilson95_high": round(ci_high, 4) if ci_high is not None else None,
             "mean_margin_A": round(sum(g["margins"]) / len(g["margins"]), 2) if g["margins"] else None,
-            "evidence": "pilot_only" if games < 5 else "small_sample",
+            "A_in_seat0_games": g["a_seat0"] if fam_a != fam_b else None,
+            "A_in_seat1_games": g["a_seat1"] if fam_a != fam_b else None,
+            "both_seat_orientations_observed": (g["a_seat0"] > 0 and g["a_seat1"] > 0) if fam_a != fam_b else None,
+            "evidence": evidence,
         })
     return episodes, summary
 
