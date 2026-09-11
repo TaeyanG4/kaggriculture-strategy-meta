@@ -28,3 +28,6 @@ reports/expanded_pilot_episode_matchups.csv
 reports/targeted_validation_selection.csv
 reports/targeted_validation_features.csv
 reports/targeted_validation_episode_matchups.csv
+
+state/public_agent_adoption/
+.agents/

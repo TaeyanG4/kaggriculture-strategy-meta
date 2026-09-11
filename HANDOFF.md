@@ -174,3 +174,13 @@
 
 ## Next action
 Continue from independent champion `baseline_v7`: first run a fresh seat-balanced tier-4 regression benchmark, then use the merged optimizer/meta-refresh code plus `state/parallel-handoffs/` evidence to design rights-clear tier-6+ production/market experiments. Do not copy the ambiguous tiers 6-9 field trace and do not submit until a materially stronger, regression-safe candidate is selected. Keep Dataset/Notebook publication gated.
+
+## Public v27 adoption checkpoint
+
+- Primary champion: `agent/public_v27_kaito.py`; exact upstream SHA-256 `f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8`.
+- Source: Kaito Fukami public Kaggle v27 notebook, Apache 2.0. Preserve Ezzzzzekki observable-route attribution.
+- Local 1.32.7: tiers 5-8 cleared 12/12 each in the gate; tier 9 Closer Cleo 10/12, then 38/40 on fresh 20 seeds with mean margin +9343.2.
+- `optimize_project_performance` independently selected identical v27 bytes; direct 8-game cross-worktree match was 8 ties, mean margin 0.
+- Terminal salvage and demand-alpha micro-tuning did not beat the parent. Keep the exact public parent as champion.
+- Live Kaggle readback: baseline_v7 ref 56166731 COMPLETE score 385.7; v27 ref 56167312 COMPLETE score 991.7 on 2026-09-11.
+- Next: only promote a separately named derivative that beats/ties the exact parent on fresh paired-seat current-meta gates while preserving tier-9 strength.

@@ -40,3 +40,11 @@ At the start of a new task in this project:
 ## Scope
 
 These instructions apply only to this Kaggriculture project and its explicitly configured sibling worktrees/handoffs.
+
+## Current competition champion
+
+- Primary champion: `agent/public_v27_kaito.py`, byte-identical to Kaito Fukami's Apache-2.0 public v27 artifact.
+- Exact SHA-256: `f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8`.
+- Read `docs/public-v27-adoption.md` before agent optimization. Keep the parent immutable and create separately named derivatives.
+- Local 1.32.7 validation cleared tiers 5-8 and won 38/40 fresh paired-seat games against tier-9 Closer Cleo.
+- `baseline_v7` remains the strongest independently authored pre-adoption baseline, but is no longer primary.
