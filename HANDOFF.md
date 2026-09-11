@@ -121,7 +121,8 @@
 - `baseline_v1` vs authored tier-5 Rancher Rita: 0/10, mean margin -20,815.4
 - `baseline_v2`: goose/feed-chain experiment; vs Rancher Rita 2/10, mean margin -12,747.4
 - `baseline_v2` regression check vs Melon Mateo on ten fresh paired seeds: 16/20, mean margin +2,594.2, seat0/seat1 decided win rates both 0.8
-- Interpretation: the current local bottleneck is tier 5 livestock-scale economics, not tier 2-4 crop execution. V2 improves the tier-5 gap while retaining a positive tier-4 edge, but it is not yet a tier-5 champion.
+- `baseline_v3`: exact byte-preserving MIT Rancher Rita tier-5 backbone, retained with upstream SPDX attribution; SHA-256 matches the local reference source. A two-seed paired mirror check produced 1 win / 1 loss / 2 ties and mean margin 0, as expected for an identical policy.
+- Interpretation: the project now has a rights-clear tier-5-equivalent local backbone. V2 remains useful as an independent goose experiment, but V3 is the stronger competition-development baseline while fresh public/meta candidates are evaluated.
 - Reference-agent code tiers 0-5 are covered by the local MIT notice. Tiers 6-9 contain an explicitly unlicensed/competition-derived shared field-plan component and should be used as benchmark opponents, not copied into the submission code without a separate rights decision.
 
 ## Kaggle
@@ -159,4 +160,4 @@
 - The first action-threshold strategy classifier collapsed almost all seats into one bucket; do not restore it.
 
 ## Next action
-Create and push a coherent Competition Core checkpoint for the current benchmark harness and baseline agents, publish its SHA to the external integration handoff, then continue improving against tier-5 Rancher Rita and benchmark-only tiers 6-9 while consuming fresh public-strategy/mechanics handoffs. Do not submit until a materially stronger locally validated candidate is selected. Keep Dataset/Notebook publication gated.
+Continue from the rights-clear tier-5-equivalent `baseline_v3` backbone: benchmark it against benchmark-only tiers 6-9 and fresh public opponents, then improve the legal scheduler/market/production parameters without copying the ambiguous tiers 6-9 field trace. Consume strategy-scout/mechanics/agent-search handoffs as they arrive. Do not submit until a materially stronger locally validated candidate is selected. Keep Dataset/Notebook publication gated.
