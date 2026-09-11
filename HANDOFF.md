@@ -222,6 +222,57 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
   - Ref: `56168710`
   - File: `submission/main.py`
   - Message: `c95 feed-first opening + debt-tracked wheat/fertilizer sale anticipation + productive weed repair (75% win rate vs v27)`
+  - Status: COMPLETE (climbed to publicScore 1050.7 on live ladder)
+  - Preceding submission (v27, ref `56167312`): live ladder rating climbed past 1000 to 1020.8.
+
+## Adaptive Replay Router Champion Checkpoint (agent/c96_adaptive_router.py)
+- Date: 2026-09-12
+- New Active Champion: `agent/c96_adaptive_router.py` (exact mirror in `submission/main.py`)
+- Key Algorithmic Pillars:
+  1. Opening Wheat Bridge: Step 0 buys 13 wheat (raises feed market price, secures feed supply against denial attacks); Step 1 sells 8 wheat at peak price, hires 5 workers, and purchases 2 cows + 2 sheep.
+  2. 144-Turn Common Trunk: Turns 0-143 share a rock-solid opening trunk common to 36% of top replays.
+  3. Productive Route Weed Repair: C92 weed-repair engine dynamically checks `_WEED_BLOCKED_OPS` (`BUILD_PASTURE`, `BUILD_COOP`, `PLANT`, `PLACE`) against weed presence, issues `DIG`, delays scheduled operation, and catches up at the next `PASS` without disturbing the route. Includes per-seat isolation for self-play.
+  4. Turn 144 Dynamic Shop Routing: Public-information decision tree routes into 1 of 5 specialized production schedules based on town unlocked shops and market demand (Route 0: Pet Cafe/Bakery/Farmers Market carrots+dairy; Route 1: Yarn Store wool+sheep; Routes 2 & 4: Dairy/Smoothie/Ice Cream cows+berries; Route 3: tomatoes+carrots).
+  5. Unconstrained 1-Turn Front-Running: Looks ahead 1 step for planned premium sales (`MELON`, `STRAWBERRY`, `MILK`, `WOOL`) across active schedule and rival v27 tape, anticipating competitor gluts without fragile coordinate distance gates.
+  6. Terminal Salvage & Complete 9-Product Liquidation: Step 717-719 drops carried items on shed tiles and liquidates 100% of shed inventory across all 9 sellable products up to 1,000,000 units.
+- Confirmation Benchmarks across Paired Seeds 1000-1009 (40 games total):
+  - vs `agent/c95_feed_protect_split.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
+    - Wilson 95% CI: [83.89%, 100.0%]
+    - Mean margin: +22,644.8 coins
+    - Median margin: +22,497.0 coins
+    - Seat 0: 10/10 (100.0%), Seat 1: 10/10 (100.0%)
+    - Runtime: 4.26s mean, 0 aborts, 20/20 DONE
+  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
+    - Wilson 95% CI: [83.89%, 100.0%]
+    - Mean margin: +32,273.4 coins
+    - Median margin: +32,493.5 coins
+    - Seat 0: 10/10 (100.0%), Seat 1: 10/10 (100.0%)
+    - Runtime: 4.10s mean, 0 aborts, 20/20 DONE
+  - Out-of-Sample Generalization Benchmarks across Fresh Paired Seeds 2000-2009 (40 games total):
+    - vs `agent/c95_feed_protect_split.py` (20 games, 10 seeds, 2 seats):
+      - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
+      - Wilson 95% CI: [83.89%, 100.0%]
+      - Mean margin: +24,947.4 coins, median margin: +24,831.0 coins
+      - Seat 0: 10/10 (100.0%), Seat 1: 10/10 (100.0%), 0 aborts, 20/20 DONE
+    - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
+      - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
+      - Wilson 95% CI: [83.89%, 100.0%]
+      - Mean margin: +38,760.6 coins, median margin: +40,014.0 coins
+      - Seat 0: 10/10 (100.0%), Seat 1: 10/10 (100.0%), 0 aborts, 20/20 DONE
+  - Combined Benchmark Record across Seeds 1000-1009 and 2000-2009 (80 games total):
+    - Record: 80 wins / 0 losses / 0 ties (100.0% win rate decided)
+    - 0 aborts, 0 errors, 80/80 DONE.
+  - Review & Hardening:
+    - Fixed potential terminal salvage `IndexError` when farm hand count exceeds scheduled hand actions.
+    - Replaced dummy zero-quantity market orders during terminal liquidation to prevent blocking real shed liquidation.
+    - Wrapped `agent()` in a top-level fail-safe exception handler returning safe PASS actions upon any unexpected runtime anomaly.
+- Kaggle Submission:
+  - Ref: `56169531`
+  - File: `submission/main.py`
+  - Message: `c96 adaptive router: 5-schedule replay routing (100% win rate vs c95/v27, +22.6k margin) + weed repair + unconstrained front-run + terminal salvage`
   - Status: COMPLETE (initial baseline 600.0, actively matching in live ladder games)
-  - Preceding submission (v27, ref `56167312`): live ladder rating climbed past 1000 to 1016.6.
+
+
 
