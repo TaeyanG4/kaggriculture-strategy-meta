@@ -5,7 +5,9 @@
 - Intended branch: `main`
 - GitHub target: `TaeyanG4/kaggriculture-strategy-meta`
 - Visibility during active competition: private until public-code and source-rights gates are satisfied
-- Tests: `python -m unittest discover -s tests -v` passes (15 tests)
+- Tests: `python -m unittest discover -s tests -v` passes (17 tests)
+- Durable project/session context: `AGENTS.md`
+- Future sessions should read `AGENTS.md` first and apply the user-supplied `kaggle-dataset-ops` skill for relevant work.
 
 ## Current phase
 - Phase 0 current state: complete for start gate
@@ -109,13 +111,26 @@
 - No `kaggle datasets create`, Dataset version, or Kernel push has been executed for this project
 - Preparation report: `reports/release-prep-2026-09-11.md`
 
+## Competition core benchmark checkpoint
+- Local engine: `kaggle-environments==1.32.7`; deterministic 720-step, seed-paired, seat-balanced harness is implemented in `src/kaggriculture_meta/benchmark.py`
+- Harness checks completed: starter vs random and starter self-play symmetry
+- `baseline_v0`: compact mixed-crop starting-quadrant economy; beat built-in starter 40/40 in the initial baseline run
+- `baseline_v0` vs authored tier-2 Rotation Rosa: 20/20 wins, mean margin +3,571
+- `baseline_v1`: one extra quadrant with larger labor/seed scale; beat authored tier-3 Homestead Hana 20/20
+- `baseline_v1` vs authored tier-4 Melon Mateo: 8/10 on the first five paired seeds, then 20/20 on the next ten paired seeds
+- `baseline_v1` vs authored tier-5 Rancher Rita: 0/10, mean margin -20,815.4
+- `baseline_v2`: goose/feed-chain experiment; vs Rancher Rita 2/10, mean margin -12,747.4
+- `baseline_v2` regression check vs Melon Mateo on ten fresh paired seeds: 16/20, mean margin +2,594.2, seat0/seat1 decided win rates both 0.8
+- Interpretation: the current local bottleneck is tier 5 livestock-scale economics, not tier 2-4 crop execution. V2 improves the tier-5 gap while retaining a positive tier-4 edge, but it is not yet a tier-5 champion.
+- Reference-agent code tiers 0-5 are covered by the local MIT notice. Tiers 6-9 contain an explicitly unlicensed/competition-derived shared field-plan component and should be used as benchmark opponents, not copied into the submission code without a separate rights decision.
+
 ## Kaggle
 - Competition: `kaggriculture`
 - Deadline observed: 2026-09-30 23:59
 - Team count observed: 8,602
 - Joined: yes
 - Kaggle CLI: 2.2.4
-- Local `kaggle-environments`: not installed at this checkpoint
+- Local `kaggle-environments`: 1.32.7 installed in the project `.venv`
 - No Kaggle Dataset has been created for this project
 - No competition submission has been made by this project yet
 
@@ -144,4 +159,4 @@
 - The first action-threshold strategy classifier collapsed almost all seats into one bucket; do not restore it.
 
 ## Next action
-While the scheduled 2026-09-11 official daily source is pending, begin the competition-side baseline agent environment and reproducible local benchmark harness. Do not submit yet. When the daily source becomes available, append it through the same 24-quantile rule, repeat QA/provenance, refresh the already-prepared release package, and then decide Dataset publication readiness. Keep GitHub private.
+Create and push a coherent Competition Core checkpoint for the current benchmark harness and baseline agents, publish its SHA to the external integration handoff, then continue improving against tier-5 Rancher Rita and benchmark-only tiers 6-9 while consuming fresh public-strategy/mechanics handoffs. Do not submit until a materially stronger locally validated candidate is selected. Keep Dataset/Notebook publication gated.

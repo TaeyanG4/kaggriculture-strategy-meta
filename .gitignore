@@ -11,6 +11,7 @@ state/research/
 state/competition/
 state/pilot/downloads/
 state/expanded_pilot/
+state/agent_benchmark/
 
 # Generated local scratch
 state/pilot/*.tmp
