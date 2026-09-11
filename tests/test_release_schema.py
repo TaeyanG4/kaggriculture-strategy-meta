@@ -47,6 +47,9 @@ class ReleaseSchemaTests(unittest.TestCase):
                 "engine_version": "1.32.7",
                 "turns": "720",
                 "final_reward": "1000",
+                "manifest_avg_score": "3000",
+                "manifest_min_score": "2950",
+                "sample_quantile": "0.5",
                 "strategy_family_pilot": "cow+strawberry",
             })
             for name in [

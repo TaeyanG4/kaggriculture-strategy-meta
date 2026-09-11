@@ -68,6 +68,9 @@ CORE_REQUIRED_FIELDS = {
     "engine_version",
     "turns",
     "final_reward",
+    "manifest_avg_score",
+    "manifest_min_score",
+    "source_score_quantile",
 }
 
 SHARE_FIELDS = [
