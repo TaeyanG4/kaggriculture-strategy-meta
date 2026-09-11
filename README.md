@@ -16,6 +16,7 @@ Data-driven Kaggriculture competition research focused on interpretable strategy
 See `docs/gate-2026-09-11.md` for the live gate evidence and stop-loss conditions.
 See `docs/v1-schema.md` for the public schema candidate and `reports/targeted-validation-findings-2026-09-11.md` for the targeted validation.
 See `reports/current-v1-findings-2026-09-11.md` for the bounded V1 QA and first-insight readback.
+See `docs/data-dictionary.md` for the 48-column dictionary and `notebooks/01_current_meta_quicklook.py` for the private release-notebook draft.
 
 ## Current V1 result
 

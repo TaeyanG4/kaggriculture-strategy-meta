@@ -16,6 +16,7 @@
 - Phase 4 expanded official-CC0 pilot: complete
 - Phase 5 bounded current-meta V1 build: complete locally
 - Phase 6 first-insight / product-hook validation: complete for V1 checkpoint
+- Release package / quicklook preparation: complete locally; nothing published
 - Overall decision: `GO — NARROW V1 BUILD`; bounded current-meta collection is authorized, full historical backfill is not
 
 ## Pilot checkpoint
@@ -92,6 +93,22 @@
 - First showcase should emphasize temporal opening/resource/economy meta shifts
 - Insight summary: `reports/current_v1_insight_summary.json`
 
+## Release preparation checkpoint
+- Proposed Dataset: `taeyangg4/kaggriculture-current-meta-fingerprints`
+- Proposed title: `Kaggriculture Current Meta Fingerprints`
+- Proposed subtitle: `Openings, economy and resource allocation from official daily episodes`
+- Local package contains one data file: `strategy_meta.csv`
+- Package CSV SHA matches the validated release candidate SHA exactly
+- Proposed Dataset slug was not found in live Kaggle CLI search at this checkpoint
+- Data dictionary: `docs/data-dictionary.md`
+- Private quicklook source: `notebooks/01_current_meta_quicklook.py`
+- Proposed private Kernel: `taeyangg4/kaggriculture-current-meta-quicklook`
+- Proposed Kernel slug was not found in live Kaggle CLI search at this checkpoint
+- Quicklook smoke test passes locally against the 336-row / 48-column candidate
+- Kernel metadata prepared locally with Python script type, private=true, internet=false, GPU/TPU=false, and the proposed Dataset source
+- No `kaggle datasets create`, Dataset version, or Kernel push has been executed for this project
+- Preparation report: `reports/release-prep-2026-09-11.md`
+
 ## Kaggle
 - Competition: `kaggriculture`
 - Deadline observed: 2026-09-30 23:59
@@ -127,4 +144,4 @@
 - The first action-threshold strategy classifier collapsed almost all seats into one bucket; do not restore it.
 
 ## Next action
-Prepare a private/local Kaggle release package and a current-meta quicklook notebook without publishing. When the scheduled 2026-09-11 official daily source becomes available, append it through the same 24-quantile rule, repeat QA/provenance, and then decide publication readiness. Keep GitHub private and do not create a Kaggle Dataset yet.
+While the scheduled 2026-09-11 official daily source is pending, begin the competition-side baseline agent environment and reproducible local benchmark harness. Do not submit yet. When the daily source becomes available, append it through the same 24-quantile rule, repeat QA/provenance, refresh the already-prepared release package, and then decide Dataset publication readiness. Keep GitHub private.
