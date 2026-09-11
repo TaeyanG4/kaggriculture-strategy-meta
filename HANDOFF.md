@@ -352,6 +352,47 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
   - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.030s, OK`).
 - Preparation: `submission/main.py` is byte-identical to `agent/c98_championship_router.py` and validated for immediate Kaggle submission.
 
+## Apex Champion Checkpoint (agent/c99_apex_champion.py)
+- Date: 2026-09-12
+- Candidate Champion: `agent/c99_apex_champion.py` (mirrored to `submission/main.py`, SHA-256 `e29bb3f61ce7e2830b9574c92e1a7b86f4d23dfd7a4dbf8b9b9743d5197b6917`)
+- Preceding Champion: Ref `56171489` (`agent/c97_precision_router.py`), active on ladder; `agent/c98_championship_router.py` pre-assembled.
+- Architectural Pillars of c99 Apex Champion:
+  1. Dynamic Opponent-State Preemption (`_update_opponent_tracker` & `_front_run_v3`):
+     - Dynamically tracks rival cargo from tile yield drops when rival hands harvest livestock (wool, milk) or ripe crops (melon, strawberry).
+     - Detects when rival units carrying high-value cash goods (`MELON`, `WOOL`, `MILK`, `STRAWBERRY`) are within 2 steps of their shed.
+     - Gives 2.0x priority multiplier to dump our shed inventory of that commodity before the rival arrives at the shed, collapsing the market price right before the rival sells.
+     - Strictly excludes intermediate inputs (`FERTILIZER`, `WHEAT`) to protect scheduled farm fertilization and livestock feeding.
+  2. Extended 3-Step Town-Shop Consumption Lookahead:
+     - Expands the front-running horizon to 3 steps (`step + 1`, `step + 2`, `step + 3`, plus `step + 4` when aligned with town shop consumption ticks `(step + 4) % 4 == 0`).
+     - Front-runs scheduled sales 1-2 turns before rival 1-step lookahead agents (`c96`, `c97`, `c98`, `v27`), capturing maximum prices before market saturation.
+  3. Safe Slot-Preserving Dummy Order Replacement:
+     - Locates and replaces harmless dummy orders (`['SELL', 'WHEAT', 0]`) created by surplus seed pruning instead of blindly appending or inserting.
+     - Strictly guarantees that high-priority operational orders (`HIRE`, `BUY_LAND`, active `BUY_SEED`) are NEVER evicted or truncated past the 10-order limit.
+  4. Preserved Policy Decision-Tree Foundation:
+     - Maintains the ML decision-tree routing (`POLICY[block]`) without artificial overrides, avoiding Route 3 low-yield traps.
+  5. Inherited Championship Features:
+     - Corrected engine base prices and terminal liquidation order from c98.
+     - 7-turn physical rescue planner on steps 712–718 (`_plan_rescue_712_718`).
+     - C72 working capital near-shed drop diversion on steps 120–679 (`_c72_working_capital_diversion`).
+     - C92 productive weed repair (`_weed_repair_productive_route`).
+     - Dynamic surplus seed pruning (`_prune_surplus_seed_buys`).
+- Confirmation Benchmarks across Paired Seeds 1000–1009 (60 games total):
+  - vs `agent/c98_championship_router.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided, 100.0% undefeated)
+    - Zero regressions across all 20 games (c98 won 0 games).
+    - Mean margin: +742.70 coins (peak +1,922.0 coins on seed 1000, min +98.0 coins on seed 1006).
+    - Seat 0: 10 wins / 0 losses / 0 ties; Seat 1: 10 wins / 0 losses / 0 ties.
+  - vs `agent/c97_precision_router.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided, 100.0% undefeated)
+    - Zero regressions across all 20 games (c97 won 0 games).
+    - Mean margin: +751.50 coins (peak +1,922.0 coins on seed 1000, min +186.0 coins on seed 1006).
+    - Seat 0: 10 wins / 0 losses / 0 ties; Seat 1: 10 wins / 0 losses / 0 ties.
+  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
+    - Mean margin: +91,153.05 coins (peak +186,332.0 coins on seed 1004).
+  - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.019s, OK`).
+- Preparation: `submission/main.py` is byte-identical to `agent/c99_apex_champion.py` (SHA-256 `e29bb3f61ce7e2830b9574c92e1a7b86f4d23dfd7a4dbf8b9b9743d5197b6917`) and validated for immediate Kaggle ladder submission.
+
 
 
 
