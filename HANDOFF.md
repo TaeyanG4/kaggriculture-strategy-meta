@@ -393,6 +393,49 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
   - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.019s, OK`).
 - Preparation: `submission/main.py` is byte-identical to `agent/c99_apex_champion.py` (SHA-256 `e29bb3f61ce7e2830b9574c92e1a7b86f4d23dfd7a4dbf8b9b9743d5197b6917`) and validated for immediate Kaggle ladder submission.
 
+## Grandmaster Router Champion Checkpoint (agent/c100_grandmaster_router.py)
+- Date: 2026-09-12
+- Candidate Champion: `agent/c100_grandmaster_router.py` (mirrored to `submission/main.py`, SHA-256 `a4293d1d568915ea966d89b02944915844cbcf9367b4d31de830566fa04331d2`)
+- Preceding Champion: Ref `56171489` (`agent/c97_precision_router.py`), active on ladder; `agent/c99_apex_champion.py` pre-assembled.
+- Architectural Pillars of c100 Grandmaster Router:
+  1. Predictive Harvest Interception & Expanded Horizon Front-Running (`_front_run_v4`):
+     - Expands shed preemption proximity threshold from $d \le 2$ to $d \le 3$ for rival workers carrying high-value cash commodities (`MELON`, `WOOL`, `MILK`, `STRAWBERRY`), anticipating deliveries 1 full turn earlier.
+     - Adds Vector 1 Predictive Harvest Interception: Scans opponent farm tiles for ripe, high-value cash crops (`tile['yield_units'] > 0` and `tile['crop'] == 'MELON'`) located within shed delivery range ($d_{shed} \le 4$).
+     - When an opponent worker moves onto or adjacent to (`Manhattan distance <= 1`) such a ripe melon tile, flags `MELON` for immediate shed preemption 1 turn before the rival can harvest and begin walking to their shed.
+     - Front-runs the market price before rival harvest and deposit can execute, forcing opponent liquidation into a price-collapsed market while preserving our own high-margin sales.
+  2. Inherited Championship Features:
+     - 3-step and shop-aligned lookahead horizon for town shop consumption ticks (`(step + 4) % 4 == 0`).
+     - Safe dummy order (`['SELL', 'WHEAT', 0]`) replacement ensuring high-priority orders (`HIRE`, `BUY_LAND`, `BUY_SEED`) are never evicted.
+     - Dynamic surplus seed pruning (`_prune_surplus_seed_buys`).
+     - Corrected engine base prices and terminal liquidation sequence.
+     - 7-turn physical rescue planner on steps 712–718 (`_plan_rescue_712_718`).
+     - C72 working capital diversion on steps 120–679 (`_c72_working_capital_diversion`).
+     - C92 productive weed repair (`_weed_repair_productive_route`).
+- Confirmation Benchmarks across Paired Seeds 1000–1009 (60 games total):
+  - vs `agent/c99_apex_champion.py` (20 games, 10 seeds, 2 seats, Seeds 1000–1009):
+    - Record: 4 wins / 0 losses / 16 ties (100.0% win rate decided, 100.0% undefeated)
+    - Zero regressions across all 20 games (c99 won 0 games).
+    - Mean margin: +220.20 coins (peak +1,114.0 coins on seed 1000, +1,088.0 coins on seed 1004).
+    - Seat 0: 2 wins / 0 losses / 8 ties (100.0% decided); Seat 1: 2 wins / 0 losses / 8 ties (100.0% decided).
+  - vs `agent/c99_apex_champion.py` (20 games, 10 seeds, 2 seats, Seeds 2000–2009 generalization check):
+    - Record: 14 wins / 0 losses / 6 ties (100.0% win rate decided, 100.0% undefeated)
+    - Zero regressions across all 20 games (c99 won 0 games).
+    - Mean margin: +217.40 coins (peak +1,357.0 coins on seed 2005).
+    - Seat 0: 7 wins / 0 losses / 3 ties (100.0% decided); Seat 1: 7 wins / 0 losses / 3 ties (100.0% decided).
+    - Combined 40-game record vs c99: 18 wins / 0 losses / 22 ties (100.0% decided win rate, 0 losses).
+  - vs `agent/c98_championship_router.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided, 100.0% undefeated)
+    - Zero regressions across all 20 games (c98 won 0 games).
+    - Mean margin: +732.20 coins (peak +1,870.0 coins on seed 1000).
+    - Seat 0: 10 wins / 0 losses / 0 ties; Seat 1: 10 wins / 0 losses / 0 ties.
+  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
+    - Mean margin: +32,058.75 coins (mean reward 101,547.40 vs opponent 69,488.65).
+    - Seat 0: 10 wins / 0 losses / 0 ties; Seat 1: 10 wins / 0 losses / 0 ties.
+- Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.016s, OK`).
+- Preparation: `submission/main.py` is byte-identical to `agent/c100_grandmaster_router.py` (SHA-256 `a4293d1d568915ea966d89b02944915844cbcf9367b4d31de830566fa04331d2`) and validated for immediate Kaggle ladder submission.
+
+
 
 
 
