@@ -472,4 +472,4 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
 - Preparation & Submission:
   - Byte-identical mirroring: `agent/c101_titan_router.py` is byte-identical to `submission/main.py` (SHA-256 `06d565b4a8a88a906ed82a06cbb1e842d992ea79636b70cdad245fb917fd21bb`).
   - Submitted to Kaggle Simulation League on 2026-09-12 06:56:00 UTC (Submission Ref `56180600`).
-  - Validation: `SubmissionStatus.PENDING` -> entering live matchmaking ladder.
+  - Validation: `SubmissionStatus.COMPLETE` (initial score 600.0, actively matching in live ladder pool).
