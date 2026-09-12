@@ -469,6 +469,7 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
   - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
     - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided), mean margin +32,065.95 coins (candidate mean reward 101,551.8 vs opponent 69,485.9; peak cash rewards: 151,575 coins on seed 1001, 116,495 coins on seed 1002, 103,638 coins on seed 1004).
   - Unit Tests: 20/20 tests passing in 0.021s (`Ran 20 tests in 0.021s, OK`).
-- Preparation:
+- Preparation & Submission:
   - Byte-identical mirroring: `agent/c101_titan_router.py` is byte-identical to `submission/main.py` (SHA-256 `06d565b4a8a88a906ed82a06cbb1e842d992ea79636b70cdad245fb917fd21bb`).
-  - Ready for immediate Kaggle ladder submission.
+  - Submitted to Kaggle Simulation League on 2026-09-12 06:56:00 UTC (Submission Ref `56180600`).
+  - Validation: `SubmissionStatus.PENDING` -> entering live matchmaking ladder.
