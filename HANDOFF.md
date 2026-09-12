@@ -433,7 +433,10 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
     - Mean margin: +32,058.75 coins (mean reward 101,547.40 vs opponent 69,488.65).
     - Seat 0: 10 wins / 0 losses / 0 ties; Seat 1: 10 wins / 0 losses / 0 ties.
 - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.016s, OK`).
-- Preparation: `submission/main.py` is byte-identical to `agent/c100_grandmaster_router.py` (SHA-256 `a4293d1d568915ea966d89b02944915844cbcf9367b4d31de830566fa04331d2`) and validated for immediate Kaggle ladder submission.
+- Submission Checkpoint:
+  - Submitted to Kaggle Simulation League on 2026-09-12 00:45:04 UTC (Submission Ref `56175186`).
+  - Byte-identical to `agent/c100_grandmaster_router.py` (SHA-256 `a4293d1d568915ea966d89b02944915844cbcf9367b4d31de830566fa04331d2`).
+  - Active on Kaggle ladder, entering matchmaking at baseline 600.0 towards 2000+ frontier.
 
 
 
