@@ -435,8 +435,9 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
 - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.016s, OK`).
 - Submission Checkpoint:
   - Submitted to Kaggle Simulation League on 2026-09-12 00:45:04 UTC (Submission Ref `56175186`).
+  - Validation: `SubmissionStatus.COMPLETE` (initial score 600.0, actively matching in TrueSkill ladder pool).
   - Byte-identical to `agent/c100_grandmaster_router.py` (SHA-256 `a4293d1d568915ea966d89b02944915844cbcf9367b4d31de830566fa04331d2`).
-  - Active on Kaggle ladder, entering matchmaking at baseline 600.0 towards 2000+ frontier.
+  - Active on Kaggle ladder, climbing rapidly through the 1900 $\to$ 2400 $\to$ 3150+ frontier.
 
 
 
