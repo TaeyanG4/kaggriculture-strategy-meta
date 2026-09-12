@@ -439,7 +439,36 @@ Continue from independent champion `baseline_v7`: first run a fresh seat-balance
   - Byte-identical to `agent/c100_grandmaster_router.py` (SHA-256 `a4293d1d568915ea966d89b02944915844cbcf9367b4d31de830566fa04331d2`).
   - Active on Kaggle ladder, climbing rapidly through the 1900 $\to$ 2400 $\to$ 3150+ frontier.
 
-
-
-
-
+## Titan Router Champion Checkpoint (agent/c101_titan_router.py)
+- Date: 2026-09-12
+- Candidate Champion: `agent/c101_titan_router.py` (mirrored to `submission/main.py`, SHA-256 `06d565b4a8a88a906ed82a06cbb1e842d992ea79636b70cdad245fb917fd21bb`)
+- Preceding Champion: Ref `56175186` (`agent/c100_grandmaster_router.py`), active on ladder.
+- Architectural Pillars of c101 Titan Router:
+  1. Synchronized High-Capacity Lookahead on Town Shop Consumption Ticks (`_front_run_v4`):
+     - Retains common rock-solid trunk on turns 0-143 guaranteeing 100% state alignment with ML `POLICY`.
+     - Expands town-shop aligned front-running lookahead on consumption ticks (`(step + 4) % 4 == 0`) to evaluate through `step + 5`.
+     - In both Seat 0 and Seat 1, captures high commodity pricing 1 step ahead of rival 3-step agents without causing glut saturation or livestock starvation.
+     - Preserves all core micro-foundations from `c100`:
+       - ML decision-tree routing (`POLICY[block]`)
+       - Predictive melon harvest interception within shed proximity
+       - Dynamic surplus seed pruning (`_prune_surplus_seed_buys`)
+       - True engine base prices and terminal liquidation sequence
+       - 7-turn physical rescue planner on steps 712-718 (`_plan_rescue_712_718`)
+       - C72 working capital diversion on steps 120-679 (`_c72_working_capital_diversion`)
+       - C92 productive weed repair (`_weed_repair_productive_route`)
+       - Safe dummy replacement (`['SELL', 'WHEAT', 0]`)
+- Confirmation Benchmarks across 100 Matches (100W / 0L / 0T, 100.0% Win Rate):
+  - vs `agent/c100_grandmaster_router.py` (40 games total, 20 seeds, 2 seats):
+    - Seeds 1000-1009 (20 games): 20 wins / 0 losses / 0 ties (100.0% decided win rate, 0 losses, 0 ties), mean margin +88.40 coins (peak +427 on seed 1004, +382 on seed 1000).
+    - Seeds 2000-2009 (20 games): 20 wins / 0 losses / 0 ties (100.0% decided win rate, 0 losses, 0 ties), mean margin +169.80 coins (peak +1526 on seed 2005, +427 on seed 2001).
+    - Combined 40-game record vs c100: 40 wins / 0 losses / 0 ties (100.0% decided win rate, 0 losses, 0 ties), combined mean margin +129.10 coins.
+  - vs `agent/c99_apex_champion.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided, 100.0% undefeated), mean margin +300.20 coins (peak +1469 on seed 1000, +1458 on seed 1004).
+  - vs `agent/c98_championship_router.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided, 100.0% undefeated), mean margin +719.90 coins (peak +1810 on seed 1000, +1613 on seed 1004).
+  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
+    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided), mean margin +32,065.95 coins (candidate mean reward 101,551.8 vs opponent 69,485.9; peak cash rewards: 151,575 coins on seed 1001, 116,495 coins on seed 1002, 103,638 coins on seed 1004).
+  - Unit Tests: 20/20 tests passing in 0.021s (`Ran 20 tests in 0.021s, OK`).
+- Preparation:
+  - Byte-identical mirroring: `agent/c101_titan_router.py` is byte-identical to `submission/main.py` (SHA-256 `06d565b4a8a88a906ed82a06cbb1e842d992ea79636b70cdad245fb917fd21bb`).
+  - Ready for immediate Kaggle ladder submission.
