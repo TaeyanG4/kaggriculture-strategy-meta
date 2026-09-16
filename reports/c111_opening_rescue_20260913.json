@@ -1,0 +1,871 @@
+{
+  "recorded_at_utc": "2026-09-12T21:45:43.417947+00:00",
+  "selected_candidate": "agent/c111_opening_rescue.py",
+  "research_candidate": "probe_open10_repaired_v2",
+  "manifest": {
+    "source_sha256": "19ac51d5381462f5e5889aa35397d5078ca707b529184dc60b4321df6ed61ed2",
+    "source_bytes": 295641,
+    "archive_sha256": "eb5f18b706a7a01af3c62edd25371dcb56a9fcf597e3043c0061196befa96d6c",
+    "archive_bytes": 148756,
+    "archive_members": [
+      "main.py"
+    ],
+    "static_audit": {
+      "standard_library_imports": [
+        "__future__",
+        "base64",
+        "copy",
+        "itertools",
+        "json",
+        "math",
+        "time",
+        "zlib"
+      ],
+      "inspected_literal_exec_bodies": 2,
+      "note": "Static capability screen, not a security proof; official-loader matches are a separate gate"
+    }
+  },
+  "study": {
+    "status": "complete",
+    "user_executed": true,
+    "contracts": "passed",
+    "prefix_count": 16,
+    "prefix_valid": 16,
+    "new_native_games": 144,
+    "reused_control_games": 48,
+    "diagnostic_count": 27,
+    "diagnostic_valid": 27,
+    "selection_run": false,
+    "holdout_run": false,
+    "native": [
+      {
+        "candidate": {
+          "path": "state/agent_experiments/progress_audit_20260913/opening_sources/probe_open10_sell30.py",
+          "sha256": "8532168e269ec5bb8b7ccfbc2d65bb0bfee7ed969e3fb140f0bcc9e47caf1941",
+          "name": "probe_open10_sell30"
+        },
+        "summary": {
+          "games": 48,
+          "valid": 48,
+          "wins": 38,
+          "losses": 10,
+          "ties": 0,
+          "mean_margin": 7809.895833333333,
+          "worst_margin": -14628.0,
+          "cash_below_four_at_step24": 8,
+          "fewer_than_two_cows_at_step48": 0,
+          "max_action_seconds": 0.15254010003991425,
+          "over_one_second_calls": 0,
+          "internal_error_games": []
+        },
+        "by_opponent": {
+          "c101": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 11901.0,
+            "worst_margin": 5486.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.07537990005221218,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "probe_open13_only": {
+            "games": 8,
+            "valid": 8,
+            "wins": 7,
+            "losses": 1,
+            "ties": 0,
+            "mean_margin": 23.75,
+            "worst_margin": -2821.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.07618600002024323,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "probe_open14_equal": {
+            "games": 8,
+            "valid": 8,
+            "wins": 7,
+            "losses": 1,
+            "ties": 0,
+            "mean_margin": 31.75,
+            "worst_margin": -2813.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.08769149996805936,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "public_v37": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 38302.375,
+            "worst_margin": 25640.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.15254010003991425,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "stress_open20_sell30": {
+            "games": 8,
+            "valid": 8,
+            "wins": 7,
+            "losses": 1,
+            "ties": 0,
+            "mean_margin": 2397.25,
+            "worst_margin": -531.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.1260175999486819,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "stress_two_order_roundtrip": {
+            "games": 8,
+            "valid": 8,
+            "wins": 1,
+            "losses": 7,
+            "ties": 0,
+            "mean_margin": -5796.75,
+            "worst_margin": -14628.0,
+            "cash_below_four_at_step24": 8,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.11559009994380176,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          }
+        }
+      },
+      {
+        "candidate": {
+          "path": "state/agent_experiments/progress_audit_20260913/repair_sources_v2/probe_open10_budget_v2.py",
+          "sha256": "dea3a01f14d17e6e0f18c394ad0e000ebcad24cca7b7de0f9a01100e01de2d89",
+          "name": "probe_open10_budget_v2"
+        },
+        "summary": {
+          "games": 48,
+          "valid": 48,
+          "wins": 38,
+          "losses": 10,
+          "ties": 0,
+          "mean_margin": 8769.958333333334,
+          "worst_margin": -2849.0,
+          "cash_below_four_at_step24": 0,
+          "fewer_than_two_cows_at_step48": 0,
+          "max_action_seconds": 0.18404860002920032,
+          "over_one_second_calls": 0,
+          "internal_error_games": []
+        },
+        "by_opponent": {
+          "c101": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 11901.0,
+            "worst_margin": 5486.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.08452610007952899,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "probe_open13_only": {
+            "games": 8,
+            "valid": 8,
+            "wins": 7,
+            "losses": 1,
+            "ties": 0,
+            "mean_margin": 23.75,
+            "worst_margin": -2821.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.08567970001604408,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "probe_open14_equal": {
+            "games": 8,
+            "valid": 8,
+            "wins": 7,
+            "losses": 1,
+            "ties": 0,
+            "mean_margin": 31.75,
+            "worst_margin": -2813.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.10332220001146197,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "public_v37": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 38302.375,
+            "worst_margin": 25640.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.18404860002920032,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "stress_open20_sell30": {
+            "games": 8,
+            "valid": 8,
+            "wins": 7,
+            "losses": 1,
+            "ties": 0,
+            "mean_margin": 2397.25,
+            "worst_margin": -531.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.10828030004631728,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "stress_two_order_roundtrip": {
+            "games": 8,
+            "valid": 8,
+            "wins": 1,
+            "losses": 7,
+            "ties": 0,
+            "mean_margin": -36.375,
+            "worst_margin": -2849.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.09348319994751364,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          }
+        }
+      },
+      {
+        "candidate": {
+          "path": "state/agent_experiments/progress_audit_20260913/repair_sources_v2/probe_open10_cow_v2.py",
+          "sha256": "68d9eaa185fc8bda3bcce5320f0f40e4a4cd337f6fa2b77bb0f1d198c0daded1",
+          "name": "probe_open10_cow_v2"
+        },
+        "summary": {
+          "games": 48,
+          "valid": 48,
+          "wins": 41,
+          "losses": 7,
+          "ties": 0,
+          "mean_margin": 7890.958333333333,
+          "worst_margin": -14628.0,
+          "cash_below_four_at_step24": 8,
+          "fewer_than_two_cows_at_step48": 0,
+          "max_action_seconds": 0.24611279997043312,
+          "over_one_second_calls": 0,
+          "internal_error_games": []
+        },
+        "by_opponent": {
+          "c101": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 9634.25,
+            "worst_margin": 5486.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.09898440004326403,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "probe_open13_only": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 379.375,
+            "worst_margin": 23.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.08337040001060814,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "probe_open14_equal": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 387.375,
+            "worst_margin": 31.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.1213867999613285,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "public_v37": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 38975.875,
+            "worst_margin": 25640.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.24611279997043312,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "stress_open20_sell30": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 2695.5,
+            "worst_margin": 1854.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.12858829996548593,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "stress_two_order_roundtrip": {
+            "games": 8,
+            "valid": 8,
+            "wins": 1,
+            "losses": 7,
+            "ties": 0,
+            "mean_margin": -4726.625,
+            "worst_margin": -14628.0,
+            "cash_below_four_at_step24": 8,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.09356329997535795,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          }
+        }
+      },
+      {
+        "candidate": {
+          "path": "state/agent_experiments/progress_audit_20260913/repair_sources_v2/probe_open10_repaired_v2.py",
+          "sha256": "19ac51d5381462f5e5889aa35397d5078ca707b529184dc60b4321df6ed61ed2",
+          "name": "probe_open10_repaired_v2"
+        },
+        "summary": {
+          "games": 48,
+          "valid": 48,
+          "wins": 41,
+          "losses": 7,
+          "ties": 0,
+          "mean_margin": 8731.166666666666,
+          "worst_margin": -41.0,
+          "cash_below_four_at_step24": 0,
+          "fewer_than_two_cows_at_step48": 0,
+          "max_action_seconds": 0.22969300008844584,
+          "over_one_second_calls": 0,
+          "internal_error_games": []
+        },
+        "by_opponent": {
+          "c101": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 9634.25,
+            "worst_margin": 5486.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.16525900003034621,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "probe_open13_only": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 379.375,
+            "worst_margin": 23.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.16345970006659627,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "probe_open14_equal": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 387.375,
+            "worst_margin": 31.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.15738940006121993,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "public_v37": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 38975.875,
+            "worst_margin": 25640.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.22969300008844584,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "stress_open20_sell30": {
+            "games": 8,
+            "valid": 8,
+            "wins": 8,
+            "losses": 0,
+            "ties": 0,
+            "mean_margin": 2695.5,
+            "worst_margin": 1854.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.17887489998247474,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          },
+          "stress_two_order_roundtrip": {
+            "games": 8,
+            "valid": 8,
+            "wins": 1,
+            "losses": 7,
+            "ties": 0,
+            "mean_margin": 314.625,
+            "worst_margin": -41.0,
+            "cash_below_four_at_step24": 0,
+            "fewer_than_two_cows_at_step48": 0,
+            "max_action_seconds": 0.15268260007724166,
+            "over_one_second_calls": 0,
+            "internal_error_games": []
+          }
+        }
+      }
+    ],
+    "paired_comparisons": {
+      "probe_open10_budget_v2": {
+        "games": 48,
+        "mean_margin_delta": 960.0625,
+        "wins_to_losses": 0,
+        "losses_to_wins": 0
+      },
+      "probe_open10_cow_v2": {
+        "games": 48,
+        "mean_margin_delta": 81.0625,
+        "wins_to_losses": 0,
+        "losses_to_wins": 3
+      },
+      "probe_open10_repaired_v2": {
+        "games": 48,
+        "mean_margin_delta": 921.2708333333334,
+        "wins_to_losses": 0,
+        "losses_to_wins": 3
+      }
+    },
+    "diagnostics": [
+      {
+        "case_id": "combined_108206225",
+        "episode": 108206225,
+        "comparison_group": "combined_fixed",
+        "margin": 47841.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108211774",
+        "episode": 108211774,
+        "comparison_group": "combined_fixed",
+        "margin": 79063.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108206798",
+        "episode": 108206798,
+        "comparison_group": "combined_fixed",
+        "margin": 2154.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108205686",
+        "episode": 108205686,
+        "comparison_group": "combined_fixed",
+        "margin": -4231.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108218905",
+        "episode": 108218905,
+        "comparison_group": "combined_fixed",
+        "margin": 2043.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108219923",
+        "episode": 108219923,
+        "comparison_group": "combined_fixed",
+        "margin": 56130.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108222968",
+        "episode": 108222968,
+        "comparison_group": "combined_fixed",
+        "margin": 10799.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108221947",
+        "episode": 108221947,
+        "comparison_group": "combined_fixed",
+        "margin": 6285.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108229077",
+        "episode": 108229077,
+        "comparison_group": "combined_fixed",
+        "margin": 84503.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108225007",
+        "episode": 108225007,
+        "comparison_group": "combined_fixed",
+        "margin": 76735.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108223984",
+        "episode": 108223984,
+        "comparison_group": "combined_fixed",
+        "margin": -3648.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108226023",
+        "episode": 108226023,
+        "comparison_group": "combined_fixed",
+        "margin": 13177.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108235469",
+        "episode": 108235469,
+        "comparison_group": "combined_fixed",
+        "margin": 687.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108231104",
+        "episode": 108231104,
+        "comparison_group": "combined_fixed",
+        "margin": -908.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108236149",
+        "episode": 108236149,
+        "comparison_group": "combined_fixed",
+        "margin": 32.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108132813",
+        "episode": 108132813,
+        "comparison_group": "combined_fixed",
+        "margin": 6166.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108133157",
+        "episode": 108133157,
+        "comparison_group": "combined_fixed",
+        "margin": -9395.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108160613",
+        "episode": 108160613,
+        "comparison_group": "combined_fixed",
+        "margin": 2119.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108158107",
+        "episode": 108158107,
+        "comparison_group": "combined_fixed",
+        "margin": -6630.0,
+        "valid": true
+      },
+      {
+        "case_id": "combined_108145205",
+        "episode": 108145205,
+        "comparison_group": "combined_fixed",
+        "margin": -21918.0,
+        "valid": true
+      },
+      {
+        "case_id": "c110_control_108132813",
+        "episode": 108132813,
+        "comparison_group": "exact_control_repeat",
+        "margin": 73349.0,
+        "valid": true
+      },
+      {
+        "case_id": "c110_control_108133157",
+        "episode": 108133157,
+        "comparison_group": "exact_control_repeat",
+        "margin": -9397.0,
+        "valid": true
+      },
+      {
+        "case_id": "c110_control_108145205",
+        "episode": 108145205,
+        "comparison_group": "exact_control_repeat",
+        "margin": -21920.0,
+        "valid": true
+      },
+      {
+        "case_id": "c110_control_108158107",
+        "episode": 108158107,
+        "comparison_group": "exact_control_repeat",
+        "margin": -6632.0,
+        "valid": true
+      },
+      {
+        "case_id": "c110_control_108160613",
+        "episode": 108160613,
+        "comparison_group": "exact_control_repeat",
+        "margin": 5299.0,
+        "valid": true
+      },
+      {
+        "case_id": "probe10_control_108160613",
+        "episode": 108160613,
+        "comparison_group": "exact_control_repeat",
+        "margin": 2119.0,
+        "valid": true
+      },
+      {
+        "case_id": "probe10_control_108132813",
+        "episode": 108132813,
+        "comparison_group": "exact_control_repeat",
+        "margin": 6166.0,
+        "valid": true
+      }
+    ]
+  },
+  "live": {
+    "checked_at_utc": "2026-09-12T21:35:17.991406+00:00",
+    "submissions": [
+      {
+        "ref": "56190992",
+        "date": "2026-09-12 18:17:22.417000",
+        "description": "c111 opening rescue | 41W/7L local train (4 seed pairs, related public opponents); worst -41 | source 19ac51d53814",
+        "status": "SubmissionStatus.COMPLETE",
+        "public_score": "2350.6",
+        "private_score": "",
+        "file_name": "submission.tar.gz",
+        "error_description": ""
+      },
+      {
+        "ref": "56185728",
+        "date": "2026-09-12 12:47:32.097000",
+        "description": "c110 V37 reserve8 | 252/256 local holdout, 32 seed pairs, source 0f31fd48e64c",
+        "status": "SubmissionStatus.COMPLETE",
+        "public_score": "2809.7",
+        "private_score": "",
+        "file_name": "submission.tar.gz",
+        "error_description": ""
+      }
+    ],
+    "c111_entries": 1,
+    "episodes": [
+      {
+        "checked_at_utc": "2026-09-12T21:37:04.684633+00:00",
+        "summary": {
+          "submission_id": 56190992,
+          "listed_rows": 57,
+          "public_rows": 56,
+          "public_states": {
+            "EpisodeState.COMPLETED": 56
+          },
+          "public_own_agent_states": {
+            "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED": 56
+          },
+          "completed_scored_public_games": 56,
+          "wins": 53,
+          "losses": 3,
+          "ties": 0,
+          "by_seat": {
+            "0": {
+              "games": 27,
+              "wins": 26,
+              "losses": 1
+            },
+            "1": {
+              "games": 29,
+              "wins": 27,
+              "losses": 2
+            }
+          },
+          "worst": [
+            {
+              "id": "108308172",
+              "seat": 1,
+              "margin": -1685,
+              "opponent": "kyohei2106",
+              "own_state": "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED"
+            },
+            {
+              "id": "108285630",
+              "seat": 0,
+              "margin": -452,
+              "opponent": "Suliman Tadros",
+              "own_state": "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED"
+            },
+            {
+              "id": "108274758",
+              "seat": 1,
+              "margin": -17,
+              "opponent": "JZ",
+              "own_state": "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED"
+            },
+            {
+              "id": "108309170",
+              "seat": 1,
+              "margin": 570,
+              "opponent": "TS",
+              "own_state": "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED"
+            },
+            {
+              "id": "108286652",
+              "seat": 0,
+              "margin": 1533,
+              "opponent": "Andrew Bunn",
+              "own_state": "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED"
+            }
+          ]
+        }
+      },
+      {
+        "checked_at_utc": "2026-09-12T21:37:05.287179+00:00",
+        "summary": {
+          "submission_id": 56185728,
+          "listed_rows": 103,
+          "public_rows": 102,
+          "public_states": {
+            "EpisodeState.COMPLETED": 102
+          },
+          "public_own_agent_states": {
+            "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED": 102
+          },
+          "completed_scored_public_games": 102,
+          "wins": 74,
+          "losses": 27,
+          "ties": 1,
+          "by_seat": {
+            "0": {
+              "games": 46,
+              "wins": 38,
+              "losses": 7
+            },
+            "1": {
+              "games": 56,
+              "wins": 36,
+              "losses": 20
+            }
+          },
+          "worst": [
+            {
+              "id": "108221947",
+              "seat": 1,
+              "margin": -54248,
+              "opponent": "Evan Tobias",
+              "own_state": "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED"
+            },
+            {
+              "id": "108235469",
+              "seat": 1,
+              "margin": -54082,
+              "opponent": "Zhongyi Dai",
+              "own_state": "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED"
+            },
+            {
+              "id": "108218905",
+              "seat": 0,
+              "margin": -35051,
+              "opponent": "Evan Tobias",
+              "own_state": "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED"
+            },
+            {
+              "id": "108297224",
+              "seat": 0,
+              "margin": -27166,
+              "opponent": "Joseph Adamski",
+              "own_state": "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED"
+            },
+            {
+              "id": "108278047",
+              "seat": 0,
+              "margin": -19108,
+              "opponent": "Joseph Adamski",
+              "own_state": "EpisodeAgentState.EPISODE_AGENT_STATE_UNSPECIFIED"
+            }
+          ]
+        }
+      }
+    ],
+    "limits": {
+      "checked_at_utc": "2026-09-12T21:37:05.268033+00:00",
+      "num_today": 4,
+      "num_total": 9,
+      "num_allowed_now": 1,
+      "limited_by_total": false
+    },
+    "server_artifact_verification": {
+      "checked_at_utc": "2026-09-12T21:40:00.901205+00:00",
+      "submission_id": 56190992,
+      "download_bytes": 148756,
+      "download_sha256": "eb5f18b706a7a01af3c62edd25371dcb56a9fcf597e3043c0061196befa96d6c",
+      "archive_identical": true,
+      "archive_members": [
+        "main.py"
+      ],
+      "main_py_sha256": "19ac51d5381462f5e5889aa35397d5078ca707b529184dc60b4321df6ed61ed2",
+      "source_identical": true,
+      "outcome": "verified_exact_server_archive_and_source"
+    }
+  },
+  "boundaries": [
+    "No unobserved c111 selection/holdout was run.",
+    "Training opponents share public lineage.",
+    "Fixed replay diagnostics are not reacting private policies.",
+    "Live panels differ; current c111 score below c110 does not alone prove regression.",
+    "Rank one and global superiority remain unproven."
+  ]
+}

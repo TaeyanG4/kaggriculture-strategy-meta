@@ -1,0 +1,10 @@
+{
+ "shop-router-reactive-v5": "state/parallel-handoffs/collaboration-20260914/public-latest-live/shop-router-v5/extracted_main.py",
+ "v41-review-candidate": "state/parallel-handoffs/collaboration-20260914/public-latest-live/v41-review/extracted_main.py",
+ "dynamic-route-agent": "state/o_dev/public_pull/kaggriculture-dynamic-route-agent/extracted_main.py",
+ "c129-old-champion": "agent/c129_feed_liquidity.py",
+ "c146-old-champion": "agent/c146_carrot_sched3.py",
+ "alperen5252525-metacounter-r1": "state/parallel-handoffs/collaboration-20260914/public-latest-live/metacounter-r1-scored/kaggriculture-metacounter-r1-scored-agent.py",
+ "reyhanksatria-best-market-agent-high-strategy": "state/o_dev/public_pull/best-market-agent-high-strategy/extracted_main.py",
+ "prvsiyan-moon-counts-melons": "state/o_dev/public_pull/kaggriculture-frontier-the-moon-counts-melons/agent_source.py"
+}

@@ -1,0 +1,239 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 180,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "o162": {
+      "path": "agent/o162_goose_only.py",
+      "sha256": "26c7f8571e5b84ee8aec6511d8008aec4b3525306188572d4ab89cacfba51c1f"
+    },
+    "o178": {
+      "path": "agent/o178_goose4_day10.py",
+      "sha256": "9a3960aa0628d5585c7af2f5b30b062e3c4838e24072a1a22894ab61f79e010d"
+    },
+    "o181": {
+      "path": "agent/o181_combo.py",
+      "sha256": "5263f5d3c81a59934af470779dbf8a29ffab64c95278f7c446fba805b0224e18"
+    }
+  },
+  "opponents": {
+    "shop-router-reactive-v5": {
+      "path": "state/parallel-handoffs/collaboration-20260914/public-latest-live/shop-router-v5/extracted_main.py",
+      "sha256": "7c821bdf746ce1c0bb6c8c5f4af82b53232251e2e4edd51d36f265eab861e3ea",
+      "family": "related_public_router"
+    },
+    "farming-score-v4-20260915": {
+      "path": "state/o_dev/public_pull/farming-score-v4-a-better-shop-20260915/extracted_main.py",
+      "sha256": "950e9364acf25212982902fa5e3bf85d8094e24dab382a313e98157ab5c93674",
+      "family": "related_public_router"
+    },
+    "market-smart-20260915": {
+      "path": "state/o_dev/public_pull/market-smart-farming-kaggriculture-20260915/extracted_main.py",
+      "sha256": "ea4c28e64d77ddcdd5f08cb150b408de3c10f4bc9a18c6e681758b7da2e8f022",
+      "family": "related_public_router"
+    },
+    "shop-router-reactive-v4": {
+      "path": "state/o_dev/datasets/donor_agents/agents/aurax7-shop-router-reactive-v4.py",
+      "sha256": "3dd123c5b484b533eb5b6d50a4d549433d715c92efb79a7dbe8e1e324c3c32e8",
+      "family": "related_public_router"
+    },
+    "shop-router-0913": {
+      "path": "state/o_dev/datasets/donor_agents/agents/yhay81-shop-router-0913.py",
+      "sha256": "77cf67723a753be957cf70fdb8abbce7ef5c020299e8acd16ed8d2dc8b929dfa",
+      "family": "related_public_router"
+    },
+    "c129": {
+      "path": "agent/c129_feed_liquidity.py",
+      "sha256": "e9973586cbe2c0bbb034243f3d3e4c9fdcac4fcac432c0de32b0ba0e61f7ca61",
+      "family": "related_internal_router"
+    },
+    "c146": {
+      "path": "agent/c146_carrot_sched3.py",
+      "sha256": "5e51caad786dac00f98639e8eb8ef911a169904f86cff3d2fe777853cd89a928",
+      "family": "related_internal_router"
+    },
+    "c147": {
+      "path": "agent/c147_feed_commitment.py",
+      "sha256": "d055f46ce8340ed1e309b14d28f30521c424368c720cd45911952e7fbb89d3ea",
+      "family": "related_internal_router"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "o178",
+      "parent": "o162",
+      "primary": true
+    },
+    {
+      "candidate": "o181",
+      "parent": "o178",
+      "primary": true
+    },
+    {
+      "candidate": "o181",
+      "parent": "o162",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1918317714,
+        1813039817
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        934696340,
+        306070499,
+        433051622,
+        1903726093,
+        1735153672,
+        1087019975,
+        2000234106,
+        1368687505,
+        1720608700,
+        1348149227,
+        1035613262,
+        727232341,
+        1696118960,
+        1098282063,
+        495015266,
+        446125401,
+        936427236,
+        1650162931,
+        1654136246,
+        1086650781,
+        1647914584,
+        140860887,
+        922181962,
+        402415649,
+        1707473676,
+        1303345915,
+        467350558,
+        339905765,
+        173037824,
+        1996060767,
+        1851189810,
+        1460323305,
+        332053556,
+        1707817475,
+        187242374,
+        2029685037,
+        422893736,
+        987292647,
+        1708101658,
+        770547889,
+        1892655708,
+        212261387,
+        651913198,
+        1194987125,
+        1704021328,
+        1450033263,
+        629469954,
+        1479808633,
+        702107012,
+        54426387,
+        1350550870,
+        15875261,
+        996431608,
+        962997751,
+        1510912746,
+        592528705,
+        746610092,
+        1242709275,
+        995610558,
+        104346629,
+        109090208,
+        1765035135,
+        1660448722,
+        723275017
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        963736276,
+        296108067,
+        584656678,
+        1506088013,
+        1292675400,
+        965622791,
+        826395066,
+        642797009,
+        1189948668,
+        990028843,
+        1361931150,
+        1970666901,
+        2047029744,
+        351149199,
+        1977508002,
+        1124886425,
+        860367908,
+        1748207923,
+        1974615286,
+        785125341,
+        2008207256,
+        1427246615,
+        540398730,
+        324254305,
+        1198198860,
+        482938683,
+        1266236254,
+        728525605,
+        440279616,
+        729559199,
+        748930418,
+        160261673,
+        2014695444,
+        1851217475,
+        264767174,
+        1704996717,
+        1511770600,
+        435332135,
+        1123537754,
+        84183793,
+        1586431900,
+        1157004875,
+        1217937198,
+        1087667381,
+        1586914960,
+        2063567023,
+        620076610,
+        1852328121,
+        2126863044,
+        734177107,
+        1528267926,
+        773485309,
+        1481414712,
+        443612727,
+        1825883690,
+        1682685825,
+        908989164,
+        828109147,
+        1915188990,
+        1621570117,
+        733019872,
+        1574511807,
+        465627922,
+        2007371593
+      ],
+      "alpha": 0.025
+    }
+  }
+}

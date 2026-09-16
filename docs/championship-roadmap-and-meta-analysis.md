@@ -1,5 +1,13 @@
 # Kaggriculture Championship Strategy, Meta Forensics & Architectural Roadmap
 
+> **Superseded evidence, 2026-09-12:** this is a historical proposal, not the
+> current implementation record. Its fixed TrueSkill plateau math is unsupported;
+> official final evaluation uses Bradley–Terry after continued games. The claim
+> that c101 fixed weed serialization is false for the deployed bytes. Forcing
+> Route 4 to 0 or 2 lost the controlled head-to-head tests; do not implement that
+> proposal. See `reports/league-rebuild-2026-09-12.ko.md` and
+> `docs/simulation-league.md` for the verified replacement workflow and results.
+
 **Last Updated:** 2026-09-12 20:25 KST (11:25 UTC)  
 **Target Frontier:** Rank #1 `Majkel1337` (3,202.8 TrueSkill), Top 100 Elite Tier (2,775+), Active Ladder Breaking Tier (2,400+)
 

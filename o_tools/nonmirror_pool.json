@@ -1,0 +1,5 @@
+{
+ "moon-counts-melons": "state/o_dev/public_pull/kaggriculture-frontier-the-moon-counts-melons/agent_source.py",
+ "best-market-agent-high-strategy": "state/o_dev/public_pull/best-market-agent-high-strategy/extracted_main.py",
+ "metacounter-r1": "state/parallel-handoffs/collaboration-20260914/public-latest-live/metacounter-r1-scored/kaggriculture-metacounter-r1-scored-agent.py"
+}

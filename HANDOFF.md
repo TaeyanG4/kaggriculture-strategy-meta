@@ -1,515 +1,366 @@
-# Handoff
+# Kaggriculture Current Handoff
 
-## Repository
-- Workspace: current project root
-- Intended branch: `main`
-- GitHub target: `TaeyanG4/kaggriculture-strategy-meta`
-- Visibility during active competition: private until public-code and source-rights gates are satisfied
-- Tests: `python -m unittest discover -s tests -v` passes (17 tests)
-- Durable project/session context: `AGENTS.md`
-- Future sessions should read `AGENTS.md` first and apply the user-supplied `kaggle-dataset-ops` skill for relevant work.
+## Latest: c156~c171 candidates implemented; activation screen prepared (2026-09-15)
 
-## Current phase
-- Phase 0 current state: complete for start gate
-- Phase 1 market/duplication validation: complete for start gate
-- Phase 2 product hypothesis: preserved
-- Phase 3 rights gate: source-scoped decision recorded
-- Phase 4 small pilot: first measured pilot complete
-- Phase 4 expanded official-CC0 pilot: complete
-- Phase 5 bounded current-meta V1 build: complete locally
-- Phase 6 first-insight / product-hook validation: complete for V1 checkpoint
-- Release package / quicklook preparation: complete locally; nothing published
-- Overall decision: `GO — NARROW V1 BUILD`; bounded current-meta collection is authorized, full historical backfill is not
+- Candidate discovery is closed at c171 by user request. No c172 artifact was created.
+  The next action is the prepared 1,344-game screen after every other Kaggriculture
+  coordinator/worker tree has exited; do not overlap the currently observed o207 run.
+- Frozen local parent is `agent/o182_combo_overflow.py`, SHA-256
+  `ef9d2aade50ce2ce400a64791288ffb179eee7a6e60ea0d06085ac12fe02900b`.
+- Reacting-screen candidates built directly from that parent: c156 production-cap
+  harvest, c160 day-29 persistent harvest, c163 worthless-CARE fertilizer recovery,
+  c168 certified FERTILIZE-before-WATER, c170 exact-spawn fertilizer-tour assignment,
+  and c171 safe V42 non-YARN production routes.
+- c159 is an immutable conservative prototype superseded by c170: a static complete
+  search found that post-select safety filtering could reject the global maximum and
+  miss a safe improving runner-up. c170 applies every target's parent gain floor
+  inside the beam search.
+- c167/c169 are immutable intermediate V42 artifacts superseded by c171. c171 fixes
+  cold-start step-648 reopening, same-step telemetry reset, incomplete-map fallback,
+  and malformed shop types while keeping normal routes and all source hashes.
+- Combined contract suite: 78 passed. All dedicated builders reran byte-identically.
+  No reacting game or submission was performed; all promotion flags remain false.
+- Common v1 activation/health screen is prepared and checked at
+  `state/agent_experiments/c156_c171_activation_screen_20260915/`: 1,344 games =
+  7 models x 8 independent-family opponents x 12 fresh seeds x both seats, 8 workers.
+  Run only its `screen` stage. This is an activity/health filter, not promotion proof.
+- Detail and exact user-run command:
+  `reports/c156-c171-implementation-and-screen-2026-09-15.ko.md`.
 
-## Pilot checkpoint
-- 13/13 episodes parsed; 26 seats; 0 failures
-- 404,705,767 source bytes processed
-- Engine 1.32.7 across this pilot
-- Coarse resource-mix family counts: 18 cow+strawberry, 7 sheep+strawberry, 1 sheep+melon
-- Row-level reports and replay payloads remain local/ignored
-- Aggregate checkpoint: `reports/pilot_summary.json`
-- Interpretation: `reports/pilot-findings-2026-09-11.md`
+## Latest: c160 day-29 harvest screen prepared (2026-09-15)
 
-## Expanded pilot checkpoint
-- Official Kaggle daily CC0 sources: 2026-09-04 through 2026-09-10
-- Fixed manifest quantile sample: 42 episodes / 84 seats
-- 42/42 parsed; 0 failures; 1,361,712,110 replay bytes processed
-- Engine 1.32.7 across all 42 episodes
-- Replay rewards equal final observed cash for 84/84 seats
-- Families: 60 cow+strawberry, 15 sheep+strawberry, 4 sheep+carrot, 5 other
-- 50 distinct t24 opening hashes; 54 distinct t48 opening hashes
-- 9 family matchup pairs; only one real cross-family pair has >=5 games
-- cow+strawberry vs sheep+strawberry: 6 games, cow 2 wins / sheep 4, cow Wilson95 0.097-0.700; both seat orientations represented 3/3
-- Overall seat0 win rate 0.643; same-family seat0 win rate 0.741, so future matchup claims must be seat-aware
-- Name-level repeat family proxy: 20 repeated agents, 60% perfectly stable, mean majority-family share 83.4%; do not treat names as exact submission identities
-- Aggregate checkpoint: `reports/expanded_pilot_summary.json`
-- Interpretation: `reports/expanded-pilot-findings-2026-09-11.md`
-- Row-level expanded reports and raw replay payloads remain local/ignored
+- Built `agent/c160_day29_harvest.py` from exact `o182_combo_overflow.py` plus a
+  narrow overlay. SHA-256: `c3f5d1749665d173640c29271635de8cf5ea761f6dcc8bb82e0820c5a42776fc`.
+- Only at steps 696..711, replace a parent `WATER`/`FERTILIZE` with `HARVEST`
+  when that actor is standing on TOMATO/STRAWBERRY with existing yield. Market,
+  movement, purchases, hiring, planting, and the step-712 terminal planner stay intact.
+- Compile, last-callable, synthetic mechanism tests, reusable-runner 9-test suite,
+  frozen manifest check, and `git diff --check` passed. No game result exists yet;
+  `promotion=false`.
+- Frozen native-reacting screen is prepared at
+  `state/agent_experiments/c160_o182_long_screen_20260915/`: 4,096 games,
+  128 fresh seeds x 8 distinct-author/family opponents x 2 models x both seats,
+  8 workers. Config stages are disjoint and have no overlap with prior validation
+  configs. Run only the screen first; confirm/final remain unused.
+- Each game uses a fresh subprocess, immutable job/source hashes, and unique temp,
+  logs, and results. Parallel workers execute a frozen schedule and cannot adapt to
+  or read another worker's partial result. c159 fertilizer-tour work remains separate.
 
-## Targeted validation checkpoint
-- Matched deterministic 24-quantile samples on 2026-09-09 and 2026-09-10
-- 48/48 episodes parsed; 96 seats; 0 failures; 1,567,299,164 replay bytes
-- Engine 1.32.7 for all 48 episodes
-- `cow+strawberry`: 38/48 seats (79.2%) on 09-09 vs 37/48 (77.1%) on 09-10; Fisher two-sided p=1.0
-- The earlier apparent 09-10 family collapse did not reproduce and is treated as a small-sample artifact
-- Continuous resource shifts remain descriptive; notable sample shifts include goose +3.53pp and strawberry -3.05pp
-- 0 cross-family matchup pairs reached >=5 games with both seat orientations; counter matrix remains gated out of core V1
-- Aggregate checkpoint: `reports/targeted_validation_summary.json`
-- Interpretation: `reports/targeted-validation-findings-2026-09-11.md`
+## Latest: c155/o160 screen reviewed (2026-09-15)
 
-## V1 schema checkpoint
-- One file: `strategy_meta.csv`
-- Grain: one row per `(episode_id, seat)`
-- Final current schema: 48 columns including provenance, source score quantile, direct within-episode outcome fields, cash checkpoints, first-event timings, opening/labor features, tile-turn resource shares, broad action totals, opening hashes, and an explicitly experimental family label
-- Targeted 96-row candidate QA passes: 0 duplicate keys, 0 core missing values, 0 invalid shares, 0 excluded identity fields, 0 Unicode replacement cells
-- Candidate CSV size on targeted validation: 34,567 bytes
-- Schema: `docs/v1-schema.md`
-- Machine-readable QA: `reports/v1_schema_qa.json`
-- Alternative comparison: `reports/v1_schema_comparison.json`
+- 1152/1152 rows revalidated. W/L/T per 288: c150 157/51/80, c155 175/49/64,
+  o159b 243/45/0, o160 256/32/0. o160 is strongest on this panel, not qualified elite champion.
+- c155-c150 +3.47pp, approximate 97.5% CI +1.04..+6.60pp, win-to-loss 0.
+  o160-c150 +20.49pp but win-to-loss 8; o160-o159b +4.51pp, CI crosses zero,
+  win-to-loss 9 and worse loss tail. No promotion/submission.
+- Next implementation-only design: o161=c150+harvest-only; o162=o159b+goose-only
+  harvest (threshold3 unchanged). Separate feed/harvest interaction and species scope.
+- Review: `reports/c155-o160-screen-review-2026-09-15.ko.md`.
+  Copyable prompt: `reports/o161-o162-implementation-prompt-2026-09-15.ko.md`.
+  No candidates implemented or simulations launched; await user implementation report.
 
-## Bounded current-meta V1 checkpoint
-- Official daily source window: 2026-09-04 through 2026-09-10
-- Selection: 24 deterministic manifest-score quantile midpoints/day = 168 episodes / 336 seats
-- Parse result: 168/168 episodes; 0 failures; 5,456,959,047 replay bytes processed
-- Engine 1.32.7 for all selected episodes
-- Replay rewards equal final observed cash for 336/336 seats
-- Local release candidate: 336 rows x 48 columns, 122,674 bytes
-- Builder Git SHA: `4448bda51b5bc623f454c2fc585a1dc086e1e3bb`
-- Release SHA-256: `7c4249d0fabbf186e059304ebf8a901471bf80ecf193b7b21125dab556f21744`
-- QA: 0 duplicate episode/seat keys; 0 core missing; CC0-1.0 for all 336 rows; 0 invalid shares; 0 excluded identity fields; 0 Unicode replacement cells
-- Outcomes: 168 win / 168 loss; outcome/margin sign consistent for 336/336 rows
-- Experimental families: 232 cow+strawberry, 88 sheep+strawberry, 16 other; still too concentrated for primary taxonomy
-- Opening diversity: 115 distinct t24 hashes; 144 distinct t48 hashes
-- `peak_cash` was removed from public V1 after proving exactly equal to `final_reward` for 336/336 rows
-- Aggregate QA: `reports/current_v1_qa.json`
-- Provenance: `reports/current_v1_provenance.json`
-- Daily readback: `reports/current_v1_daily_summary.csv`
-- Interpretation: `reports/current-v1-findings-2026-09-11.md`
+## Latest: reusable validation v1 implemented (2026-09-15)
 
-## First-insight checkpoint
-- Paired winner/loser comparison across 168 games and 29 non-outcome features
-- Exact paired sign tests + Benjamini-Hochberg correction + seat-direction consistency + |paired standardized effect|>=0.2
-- Robust exploratory signals: 0
-- Closest early signal: `first_land_turn`, winner-minus-loser mean -5.06 turns, effect -0.202, BH q~0.254, seat-consistent; exploratory only
-- Do not position V1 as a validated winner predictor or counter dataset
-- First showcase should emphasize temporal opening/resource/economy meta shifts
-- Insight summary: `reports/current_v1_insight_summary.json`
+- All agents must reuse the framework rather than create candidate-specific tooling.
+  See AGENTS.md's REUSE FIRST rules; CLAUDE.md points Claude Code to the same rules.
 
-## Release preparation checkpoint
-- Proposed Dataset: `taeyangg4/kaggriculture-current-meta-fingerprints`
-- Proposed title: `Kaggriculture Current Meta Fingerprints`
-- Proposed subtitle: `Openings, economy and resource allocation from official daily episodes`
-- Local package contains one data file: `strategy_meta.csv`
-- Package CSV SHA matches the validated release candidate SHA exactly
-- Proposed Dataset slug was not found in live Kaggle CLI search at this checkpoint
-- Data dictionary: `docs/data-dictionary.md`
-- Private quicklook source: `notebooks/01_current_meta_quicklook.py`
-- Proposed private Kernel: `taeyangg4/kaggriculture-current-meta-quicklook`
-- Proposed Kernel slug was not found in live Kaggle CLI search at this checkpoint
-- Quicklook smoke test passes locally against the 336-row / 48-column candidate
-- Kernel metadata prepared locally with Python script type, private=true, internet=false, GPU/TPU=false, and the proposed Dataset source
-- No `kaggle datasets create`, Dataset version, or Kernel push has been executed for this project
-- Preparation report: `reports/release-prep-2026-09-11.md`
+- New experiments use `tools/run-validation.ps1` + `tools/validation_v1.py` +
+  `tools/validation_stats_v1.py`; change JSON config and output folder, not runner copies.
+- Example: `configs/validation/c155-o160-v1.example.json`. Read
+  `docs/reusable-validation.ko.md` for Prepare/Check/Run/Analyze and screen/confirm/final.
+- Existing o160 and c155/o160 campaigns remain immutable. The example is not a request
+  to rerun them. No games were launched for framework implementation.
+- User implements agents; this session designs validation and reviews user-run results.
+  Only the common framework implementation was explicitly delegated to this session.
+- All automatic outcomes remain promotion=false; statistical signals require review.
 
-## Competition core benchmark checkpoint
-- Local engine: `kaggle-environments==1.32.7`; deterministic 720-step, seed-paired, seat-balanced harness is implemented in `src/kaggriculture_meta/benchmark.py`
-- Harness checks completed: starter vs random and starter self-play symmetry
-- `baseline_v0`: compact mixed-crop starting-quadrant economy; beat built-in starter 40/40 in the initial baseline run
-- `baseline_v0` vs authored tier-2 Rotation Rosa: 20/20 wins, mean margin +3,571
-- `baseline_v1`: one extra quadrant with larger labor/seed scale; beat authored tier-3 Homestead Hana 20/20
-- `baseline_v1` vs authored tier-4 Melon Mateo: 8/10 on the first five paired seeds, then 20/20 on the next ten paired seeds
-- `baseline_v1` vs authored tier-5 Rancher Rita: 0/10, mean margin -20,815.4
-- `baseline_v2`: goose/feed-chain experiment; vs Rancher Rita 2/10, mean margin -12,747.4
-- `baseline_v2` regression check vs Melon Mateo on ten fresh paired seeds: 16/20, mean margin +2,594.2, seat0/seat1 decided win rates both 0.8
-- `baseline_v3`: exact byte-preserving MIT Rancher Rita tier-5 backbone, retained with upstream SPDX attribution; SHA-256 matches the local reference source. A two-seed paired mirror check produced 1 win / 1 loss / 2 ties and mean margin 0, as expected for an identical policy.
-- `baseline_v7`: independent animal-first capital sequencing agent derived from the project's own v4 cow economy and the official CC0 high-reward fingerprint evidence. Against Rancher Rita it won 12/12 in the pilot and 32/40 on a fresh 20-seed, seat-balanced confirmation set; mean margin +4,566.1 and seat0/seat1 win rates both 0.80.
-- Same-seed comparison on the 40-game confirmation set: `baseline_v4` won 26/40 with mean margin +1,183.6, confirming that v7's opening-capital sequencing materially improved the independent cow baseline on that sample.
-- `baseline_v5` and `baseline_v6` scale-up experiments failed their small gates and are archived only as ignored local experiment state; do not promote them without new evidence.
-- Tier-4 regression check for v4 was strong (18/20 vs Melon Mateo, mean margin +24,251.1). A fresh v7 tier-4 regression check is still required before submission selection.
-- Benchmark-only tiers 6-9 remain a much larger gap: v4 went 0/8 against each tested meta-line opponent, with mean margins roughly -99.6k to -114.8k. Do not copy their ambiguous field trace; use them only as opponents.
-- Interpretation: `baseline_v7` is the current independent competition-development champion. The next bottleneck is validating v7 against tier 4 and then closing the tier-6+ production/market-scale gap using rights-clear mechanics and official CC0 evidence.
-- Reference-agent code tiers 0-5 are covered by the local MIT notice. Tiers 6-9 contain an explicitly unlicensed/competition-derived shared field-plan component and should be used as benchmark opponents, not copied into the submission code without a separate rights decision.
+## Latest: long-validation isolation contract (2026-09-15)
 
-## Parallel worktree consolidation checkpoint
-- `mechanics-research`, `meta-refresh/daily-2026-09-11`, and `agent-search/optimizer-2026-09-11` have been consolidated back into `main`.
-- The meta-refresh branch contributed `src/kaggriculture_meta/meta_refresh.py`.
-- The agent-search branch contributed `src/kaggriculture_meta/optimizer.py`, `tests/test_optimizer.py`, and `agent/rancher_rita_land14.py`.
-- The mechanics branch was already an ancestor of `main`, so no additional merge content was needed.
-- Former sibling worktree directories were removed with Git worktree commands after confirming they were clean.
-- Cross-agent handoffs now live in ignored local state at `state/parallel-handoffs/`; check this directory before duplicating research or experiments.
+- The user accepts longer runs to reduce seed luck and allows up to the global cap of
+  8 workers. Do not start a second campaign while any Kaggriculture worker tree exists.
+- Every match must be a fresh Python subprocess with a unique immutable job JSON, log,
+  result file/output directory, explicit seed, candidate seat and frozen source hashes.
+  Do not use threaded in-process games or share imported agents, monkeypatches, module
+  globals, temporary paths, or RNG state between parallel work.
+- Baseline and candidate must use the same seed/opponent in both seats. Development,
+  selection, and final seeds stay disjoint. Parallel chunks may execute frozen jobs but
+  must not adapt from another chunk's partial results.
+- At this checkpoint an `o158` fixed-shop elite suite owns six worker branches under
+  `o_results/elite_suite/o158/`. Recheck its coordinator/child tree before preparing or
+  starting any new campaign; do not infer activity from lock files alone.
 
-## Kaggle
-- Competition: `kaggriculture`
-- Deadline observed: 2026-09-30 23:59
-- Team count observed: 8,602
-- Joined: yes
-- Kaggle CLI: 2.2.4
-- Local `kaggle-environments`: 1.32.7 installed in the project `.venv`
-- No Kaggle Dataset has been created for this project
-- No competition submission has been made by this project yet
+## Latest: c154 maintenance-feed rejected (2026-09-15)
 
-## Rights / release invariants
-- Direct Competition Data is not for redistribution to non-participants.
-- Official Kaggle daily episode datasets with CC0-1.0 metadata are the preferred public source path.
-- Raw replays never belong in the public release or Git history.
-- Eventual V1 should remain compact and source-scoped.
-- No credentials, tokens, authorization headers, cookies, or local secret paths may enter Git.
+- Read-only audit of the 12 latest c153 losses confirms the inherited c129 gap grows
+  mainly before the terminal seven turns. From steps 504..695, ours used 206 more
+  feed WHEAT while harvesting +170 MILK/+32 WOOL but -97 WHEAT and using 86 less
+  fertilizer. At step 712 the aggregate individually reachable harvest-value gap was
+  only -66; both sides ended with zero harvestable yield.
+- Built `agent/c154_maintenance_feed.py`, SHA-256
+  `c4121ea5ec69cc2d1a90272309711f927566ab2319b08f9a902484eb6a66712b`.
+  It retains c124's first low-margin feed skip, restoring only a second consecutive
+  c124-confirmed skip to prevent escape. This is distinct from rejected c137, which
+  restored every sheep feed.
+- Recorded-observation shadow: active in 3/12 latest losses, changing only PASS->FEED
+  at steps 603/608/612; c129/server mismatches 0. This proves scope/activity only.
+- The six-game fixed-opponent mechanism probe completed healthy but failed its gate.
+  Across the three paired episodes, c154 worsened margin by 69, 229 and 279
+  (total -577) and own cash by 79, 291 and 153 (total -523). Every episode was
+  worse and every candidate row reported `maintenance_feed_ambiguous=1`.
+- Reject c154. Do not advance it to reacting validation or tune this maintenance-feed
+  rule. The result reinforces that preserving low-value animals can cost more WHEAT
+  than it returns, even when only the second consecutive skipped feed is restored.
+- Evidence: `state/agent_experiments/c154_maintenance_feed_20260915/results.json`.
+  This is fixed-shop/frozen-opponent mechanism evidence, not a broad win-rate estimate.
+- Detail: `reports/c154-maintenance-feed-development-2026-09-15.ko.md`.
 
-## Authentication constraints
-- Kaggle CLI is already usable for current read/download operations.
-- `KAGGLE_MCP_TOKEN_FILE` was not set when checked.
-- Kaggle MCP has not been needed or initialized.
-- If MCP later becomes necessary and a user-authorized token file is available, use raw-token-file -> child environment -> `Authorization: Bearer` without printing/logging the KGAT value. Do not switch to OAuth merely because of a malformed header.
+## Latest: c153 direction audit (2026-09-15)
 
-## What worked
-- Kaggle CLI live competition/page/dataset reads
-- Official daily replay download
-- Direct public CDN pilot retrieval for internal analysis
-- Deterministic replay parsing and action hashing
-- State-based tile-turn feature extraction
+- c153 live snapshot 2383.3 / 59W12L among 71 scored returned games; c129 2820.3.
+  Different opponents/seeds/times prevent a causal rating comparison.
+- Downloaded all 12 returned c153 losses. On all 719 observations in every game,
+  c129 and c153 actions match each other and the actual submitted action exactly.
+  These defeats are inherited behavior, not observed c153-triggered regressions.
+- Prior c153 reacting gate was FALSE (0 changed conditions / 896); submitting it
+  as an improvement was not justified by generalization evidence. Keep c129 baseline.
+- Old c153 mechanism runner has unsafe in-process threaded engine monkeypatching.
+  Fresh 8-game subprocess audit reproduced +5947/+2997 in BOTH native/fixed modes,
+  all exact shop paths. Retract the old claim that candidate caused shop divergence.
+- Direction: evaluate executable late-harvest/cash-recovery bundles, then middle-game
+  production/reinvestment choices, with shared resource reservation. Require actual
+  activity before large evaluation; tune only after reacting improvement evidence.
+- See `reports/c153-regression-and-direction-audit-2026-09-15.ko.md` and
+  `state/agent_experiments/c153_direction_audit_20260915/`. No new submission this audit.
 
-## What failed / do not repeat unchanged
-- A PowerShell text patch once inserted literal backtick newline text into Python; it was repaired and tests pass. Use proper here-strings or structured edits for future patches.
-- The first action-threshold strategy classifier collapsed almost all seats into one bucket; do not restore it.
+## Latest: c153 validated and submitted (2026-09-14 night)
 
-## Next action
-Continue from independent champion `baseline_v7`: first run a fresh seat-balanced tier-4 regression benchmark, then use the merged optimizer/meta-refresh code plus `state/parallel-handoffs/` evidence to design rights-clear tier-6+ production/market experiments. Do not copy the ambiguous tiers 6-9 field trace and do not submit until a materially stronger, regression-safe candidate is selected. Keep Dataset/Notebook publication gated.
+- Submitted `agent/c153_urgent_feed_exact1.py` once, Kaggle ref `56232526`.
+  Server status is `COMPLETE` with initial rating 600.0; do not duplicate-submit it.
+- Source SHA-256: `b31bbbe2f7c0f8ab93dd773cfc441e40e65d23caaf30c29e6ae42c44e25ed383`.
+  Archive SHA-256: `3e7c482519a95468f271ba09941d3b52077bdec787e34075475cd4ebb418d4ca`.
+  Server-downloaded archive and sole `main.py` match the local package exactly.
+- Fresh reacting/public panel: 1,792/1,792 healthy games, 896 c129/c153 paired
+  conditions, zero action/point/margin/cash changes and zero regressions. The
+  mechanism was inactive, so this is non-regression evidence, not improvement.
+- Requested public opponents: both c129 and c153 scored 76W/52L against each of
+  shop-router-reactive-v5, V41 Review Candidate, and Dynamic Route Agent.
+- Fixed-opponent mechanism cases passed: episode 108609267 improved margin +5,947
+  and own cash +1,569; episode 108724215 improved margin +2,997 and own cash -305.
+  Both confirmed purchase/pickup/feed/survival for three animals with zero contract
+  failures. The former used native shops after its strict fixed-shop path diverged.
+- Keep c129 as confirmed live champion until c153 accumulates enough Kaggle matches;
+  the new-agent initial 600.0 is execution confirmation, not a performance comparison.
+  Receipt: `state/submission_artifacts/c153_urgent_feed_exact1_20260914/receipt.json`.
+  Detail: `reports/c153-autonomous-validation-submission-2026-09-14.ko.md`.
 
-## Public v27 adoption checkpoint
+## Latest: c151 failed; c152 expansion-only probe ready (2026-09-14 evening)
 
-- Primary champion: `agent/public_v27_kaito.py`; exact upstream SHA-256 `f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8`.
-- Source: Kaito Fukami public Kaggle v27 notebook, Apache 2.0. Preserve Ezzzzzekki observable-route attribution.
-- Local 1.32.7: tiers 5-8 cleared 12/12 each in the gate; tier 9 Closer Cleo 10/12, then 38/40 on fresh 20 seeds with mean margin +9343.2.
-- `optimize_project_performance` independently selected identical v27 bytes; direct 8-game cross-worktree match was 8 ties, mean margin 0.
-- Terminal salvage and demand-alpha micro-tuning did not beat the parent. Keep the exact public parent as champion.
-- Live Kaggle readback: baseline_v7 ref 56166731 COMPLETE score 385.7; v27 ref 56167312 COMPLETE score 991.7 on 2026-09-11.
-- Next: only promote a separately named derivative that beats/ties the exact parent on fresh paired-seat current-meta gates while preserving tier-9 strength.
+- c151 probe completed 128/128 healthy games. Versus paired c146 baselines:
+  point delta -3, margin -4,332, own cash -2,278, action changes 6, gate failed.
+  c151 evaluated 1,200 certificates and rejected all; it suppressed c146's profitable
+  seed 640603013 conversions. Do not submit or tune c151.
+- Built `agent/c152_shop_expansion.py` from hash-guarded c146. SHA-256
+  `785529ac46ca6731b8901836bab48a1eb647203e9a1b7c9395495a6f7c6ac2fa`.
+  c146's demand>=25 branch is exact; the forecast only expands into lower-demand shops.
+  Seven mechanism tests passed, including legacy behavior equality and fail-closed timing.
+- Prepared and checked 64 new c152 games against 64 exact frozen c146 outputs:
+  `& 'H:\dev\kaggle-data\kaggriculture-strategy-meta\state\agent_experiments\c152_shop_expansion_probe_20260914\run.ps1'`
+  Eight workers, progress/ETA/cache/resume/notification, roughly 2-5 minutes.
+- When complete, analyze `state/agent_experiments/c152_shop_expansion_probe_20260914/results.json`.
+  First require legacy seed 640603013 non-regression, then inspect low-demand expansion
+  requests, paired points/cash/margin, related/nagata subgroups and bottom tail.
+- Detail: `reports/c151-result-and-c152-expansion-2026-09-14.ko.md`.
 
-## Decommissioning and retention checkpoint
-- Date: 2026-09-12
-- Tournament results: In a 40-game paired-seat tournament (seeds 3000-3004), `public_v27_kaito.py` scored 10-0 vs `v25 Meta Reset` (mean margin +15,124.6) and 10-0 vs `baseline_v7` (mean margin +87,923.6).
-- Action taken: Decommissioned and removed all obsolete pre-adoption agents (`baseline_v0.py`, `baseline_v1.py`, `baseline_v2.py`, `baseline_v3.py`, `baseline_v7.py`, `rancher_rita_land14.py`, and `v25 Meta Reset`).
-- Sole active agent: `agent/public_v27_kaito.py` is the only active agent retained in `agent/`.
-- Submission artifact: Packaged directly as `submission/main.py`.
+## Latest: c151 shop-demand development probe (2026-09-14)
 
-## Top-tier (#1 Aimed) Improvement and Kaggle Submission Checkpoint
-- Date: 2026-09-12
-- New Champion Derivative: `agent/c95_feed_protect_split.py`
-- Opponent: `agent/public_v27_kaito.py` (parent champion)
-- Empirical benchmark across 40 games (20 paired seeds 1000-1019, 2 seats):
-  - Record: 30 wins / 10 losses (75.0% win rate decided)
-  - Wilson 95% CI: [59.81%, 85.81%]
-  - Mean margin: +2,211.5 coins
-  - Median margin: +2,829.0 coins
-  - Seat 0 win rate: 75.0% (15/20)
-  - Seat 1 win rate: 75.0% (15/20)
-  - Mean runtime: 3.97s, 0 aborts, 40/40 DONE
-- Out-of-sample generalization benchmark (10 unseen paired seeds 1020-1029, 2 seats, 20 games):
-  - Record: 16 wins / 4 losses (80.0% win rate decided)
-  - Wilson 95% CI: [58.40%, 91.93%]
-  - Mean margin: +2,157.95 coins
-  - Median margin: +2,574.0 coins
-  - Seat 0 win rate: 80.0% (8/10)
-  - Seat 1 win rate: 80.0% (8/10)
-  - Combined 60-game overall record: 46 wins / 14 losses (76.67% win rate decided)
-- Key algorithmic improvements:
-  1. Opening feed protection (feed5): prioritized `BUY_PRODUCT WHEAT 5` to slot 0 on step 0 to prevent feed-denial starvation attacks.
-  2. Debt-tracked one-turn wheat and fertilizer sale anticipation (max 10 wheat, 5 fertilizer) to capture higher prices before competitor gluts.
-  3. Productive route weed repair: dynamically digging random weed intrusions that block productive tasks and resynchronizing at the next PASS.
-  4. Clone detection and front-running on premium lines (MELON, STRAWBERRY, MILK, WOOL).
-  5. Step 717+ terminal salvage: dynamic harvesting and liquidation of all shed stocks in price-priority order.
-- Kaggle Submission:
-  - Ref: `56168710`
-  - File: `submission/main.py`
-  - Message: `c95 feed-first opening + debt-tracked wheat/fertilizer sale anticipation + productive weed repair (75% win rate vs v27)`
-  - Status: COMPLETE (climbed to publicScore 1050.7 on live ladder)
-  - Preceding submission (v27, ref `56167312`): live ladder rating climbed past 1000 to 1020.8.
+This checkpoint supersedes the older runtime/candidate notes below for the next action.
+Python 3.12.6 / kaggle-environments 1.32.7 is restored and exact engine identity verified.
+The user runs simulations; none were launched in this implementation turn.
 
-## Adaptive Replay Router Champion Checkpoint (agent/c96_adaptive_router.py)
-- Date: 2026-09-12
-- New Active Champion: `agent/c96_adaptive_router.py` (exact mirror in `submission/main.py`)
-- Key Algorithmic Pillars:
-  1. Opening Wheat Bridge: Step 0 buys 13 wheat (raises feed market price, secures feed supply against denial attacks); Step 1 sells 8 wheat at peak price, hires 5 workers, and purchases 2 cows + 2 sheep.
-  2. 144-Turn Common Trunk: Turns 0-143 share a rock-solid opening trunk common to 36% of top replays.
-  3. Productive Route Weed Repair: C92 weed-repair engine dynamically checks `_WEED_BLOCKED_OPS` (`BUILD_PASTURE`, `BUILD_COOP`, `PLANT`, `PLACE`) against weed presence, issues `DIG`, delays scheduled operation, and catches up at the next `PASS` without disturbing the route. Includes per-seat isolation for self-play.
-  4. Turn 144 Dynamic Shop Routing: Public-information decision tree routes into 1 of 5 specialized production schedules based on town unlocked shops and market demand (Route 0: Pet Cafe/Bakery/Farmers Market carrots+dairy; Route 1: Yarn Store wool+sheep; Routes 2 & 4: Dairy/Smoothie/Ice Cream cows+berries; Route 3: tomatoes+carrots).
-  5. Unconstrained 1-Turn Front-Running: Looks ahead 1 step for planned premium sales (`MELON`, `STRAWBERRY`, `MILK`, `WOOL`) across active schedule and rival v27 tape, anticipating competitor gluts without fragile coordinate distance gates.
-  6. Terminal Salvage & Complete 9-Product Liquidation: Step 717-719 drops carried items on shed tiles and liquidates 100% of shed inventory across all 9 sellable products up to 1,000,000 units.
-- Confirmation Benchmarks across Paired Seeds 1000-1009 (40 games total):
-  - vs `agent/c95_feed_protect_split.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
-    - Wilson 95% CI: [83.89%, 100.0%]
-    - Mean margin: +22,644.8 coins
-    - Median margin: +22,497.0 coins
-    - Seat 0: 10/10 (100.0%), Seat 1: 10/10 (100.0%)
-    - Runtime: 4.26s mean, 0 aborts, 20/20 DONE
-  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
-    - Wilson 95% CI: [83.89%, 100.0%]
-    - Mean margin: +32,273.4 coins
-    - Median margin: +32,493.5 coins
-    - Seat 0: 10/10 (100.0%), Seat 1: 10/10 (100.0%)
-    - Runtime: 4.10s mean, 0 aborts, 20/20 DONE
-  - Out-of-Sample Generalization Benchmarks across Fresh Paired Seeds 2000-2009 (40 games total):
-    - vs `agent/c95_feed_protect_split.py` (20 games, 10 seeds, 2 seats):
-      - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
-      - Wilson 95% CI: [83.89%, 100.0%]
-      - Mean margin: +24,947.4 coins, median margin: +24,831.0 coins
-      - Seat 0: 10/10 (100.0%), Seat 1: 10/10 (100.0%), 0 aborts, 20/20 DONE
-    - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
-      - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
-      - Wilson 95% CI: [83.89%, 100.0%]
-      - Mean margin: +38,760.6 coins, median margin: +40,014.0 coins
-      - Seat 0: 10/10 (100.0%), Seat 1: 10/10 (100.0%), 0 aborts, 20/20 DONE
-  - Combined Benchmark Record across Seeds 1000-1009 and 2000-2009 (80 games total):
-    - Record: 80 wins / 0 losses / 0 ties (100.0% win rate decided)
-    - 0 aborts, 0 errors, 80/80 DONE.
-  - Review & Hardening:
-    - Fixed potential terminal salvage `IndexError` when farm hand count exceeds scheduled hand actions.
-    - Replaced dummy zero-quantity market orders during terminal liquidation to prevent blocking real shed liquidation.
-    - Wrapped `agent()` in a top-level fail-safe exception handler returning safe PASS actions upon any unexpected runtime anomaly.
-- Kaggle Submission:
-  - Ref: `56169531`
-  - File: `submission/main.py`
-  - Message: `c96 adaptive router: 5-schedule replay routing (100% win rate vs c95/v27, +22.6k margin) + weed repair + unconstrained front-run + terminal salvage`
-  - Status: COMPLETE (surged from baseline 600.0 to 1602.2 in <50 minutes, actively matching in live ladder games)
+- Implemented `agent/c151_shop_forecast.py`, a c146 derivative, **not c150 + c146**.
+  SHA-256 `47c1ee52c03f07d79482ec8e3625abdadb2d542387203946803a1a607cd3cab1`.
+- Replaces fixed carrot shop threshold with exact known-shop consumption to harvest,
+  public crop supply, stock/commitment deduplication, and wheat scarcity opportunity cost.
+  Retains the 18-25 day window and physical purchase/plant/feed/harvest guards.
+- 12 mechanism tests + 3 summary tests passed; PowerShell parse and frozen plan check passed.
+  No reacting improvement, promotion, or rank-1 claim yet.
+- Ready user command: `& 'H:\dev\kaggle-data\kaggriculture-strategy-meta\state\agent_experiments\c151_shop_probe_20260914\run.ps1'`
+- 128 games = c146/c151 × 8 reused development seeds × c129/c150/c146/nagata × both seats;
+  8 workers, estimated 5-10 minutes, progress/ETA/cache/resume and audible notifications.
+  Sources/jobs/support/engine are frozen. Do not edit them; use a new experiment for changes.
+- Analyze `state/agent_experiments/c151_shop_probe_20260914/results.json` when user completes.
+  First check actual action changes and subgroup/tail regressions; do not tune inactive settings.
+- Detail: `reports/c151-shop-forecast-development-2026-09-14.ko.md`.
 
-## K320-Plus Pre-Assembly & Comparative Investigation Checkpoint (agent/k320_plus.py)
-- Date: 2026-09-12
-- Pre-assembled Candidate: `agent/k320_plus.py`
-- Architecture:
-  1. 5 Kawashigi macro-routes (including 4-quadrant SE expansion: `6c12s_4q_first_yarn` and `6c12s_4q_second_yarn`).
-  2. Slot-0 feed protection (`BUY_PRODUCT WHEAT 6` at turn 0).
-  3. C92 productive weed repair (`_weed_repair_productive_route`).
-  4. 1-turn front-running preemption.
-  5. Unfinishable seed trimming at turn >= 648 (Day 27+).
-  6. Terminal salvage & complete 9-product liquidation (turns 717-719).
-- Local Benchmark vs `agent/public_v27_kaito.py` (Seeds 1000-1009, 20 paired games):
-  - Record: 4 wins / 16 losses (20.0% win rate decided)
-  - Mean margin: -9,715.65 coins, median margin: -9,473.0 coins.
-- Root Cause Analysis (Why c96 crushes v27 while k320 loses to v27):
-  - Kawashigi's K320 routes rely purely on livestock (cows + sheep) and abandon cash crops in the mid-to-late game (0 melons sold turns 360-719).
-  - In contrast, `v27` and `c96` sell 84+ melons at base $250 each (~21,000+ coins pure revenue) into fruit/vegetable town shops.
-  - `c96_adaptive_router.py` correctly blends diversified cash crops (melons, strawberries, carrots) with livestock and dynamic shop adaptation, achieving 100% win rate over v27 (+32.3k margin) and rocketing on the Kaggle ladder.
-- Operational Decision:
-  - Deployed upgraded `c97_precision_router.py` to overcome 1760-1880 plateau.
+## Older context (some snapshot and blocker notes below are historical)
 
-## Precision Router Champion Checkpoint (agent/c97_precision_router.py)
-- Date: 2026-09-12
-- Active Kaggle Submission: Ref `56171489` (`agent/c97_precision_router.py` mirrored in `submission/main.py`)
-- Preceding submission: Ref `56169531` (`c96_adaptive_router.py`), peaked at 1879.2, officially 1793.1, Rank #1731 / 8,666 teams (Top 19.9%).
-- Forensic Diagnosis from Kaggle Match Log:
-  - Multiple 1800-tier losses occurred by razor-thin margins: 56 coins (Ep 107910746), 167 coins (Ep 107911952), 191 coins (Ep 107915761).
-  - Root Cause: Fixed schedules bought 9 wheat seeds/day but only planted 6-8, leaving 20 wheat seeds and 1 strawberry seed (280 coins) stranded and unplanted at game end.
-- Architectural Pillars of c97:
-  1. In-Place Dynamic Surplus Seed Pruning (`_prune_surplus_seed_buys`):
-     - Precomputes `REMAINING_PLANTS[route][turn][crop]` (suffix sum of planned plantings for each route).
-     - If current inventory + virtual seeds already purchased this turn covers all planned plantings for the rest of the game, automatically sets buy quantity to 0 and replaces with harmless slot-preserving dummy order `['SELL', 'WHEAT', 0]`.
-     - Completely eliminates the 280-coin waste, ending game with 0 unplanted seeds and +240 to +300 pure cash profit.
-  2. Town Shop Consumption 2-Step Front-Running Horizon (`_front_run_v2`):
-     - Expands front-running to look ahead 2 turns specifically when approaching town shop inventory consumption ticks (`(step + 2) % 4 == 0`).
-     - Captures higher commodity pricing before rival dumps glut town shops.
-  3. C92 Productive Weed Repair (`_weed_repair_productive_route`):
-     - Dynamic dig and delayed execution for weed-blocked operations, with per-seat isolation.
-  4. Terminal Salvage & Complete 9-Product Liquidation (`_terminal_salvage_and_liquidation`):
-     - Turns 717-719 drops carried items on shed tiles and liquidates all 9 commodities up to 1,000,000 units.
-- Confirmation Benchmarks across Paired Seeds 1000-1009 (40 games total):
-  - vs `agent/c96_adaptive_router.py` (20 games, 10 seeds, 2 seats):
-    - Record: 12 wins / 0 losses / 8 ties (60.0% win rate decided, 100.0% undefeated)
-    - c96 never won a single game against c97.
-    - Mean margin: +456.0 coins (peak +2,264.0 coins on seed 1000, +1,883.0 coins on seed 1004).
-  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
-    - Mean margin: +91,205.0 coins.
-  - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.030s, OK`).
+Updated 2026-09-14 KST. This is a current-state index, not a chronological log.
+Full pre-compaction files are preserved under
+`state/context-archive/20260914-121406/`.
 
-## Championship Router Champion Checkpoint (agent/c98_championship_router.py)
-- Date: 2026-09-12
-- Candidate Champion: `agent/c98_championship_router.py` (mirrored to `submission/main.py`, SHA-256 `a52321a9f84ae72d927b05bf330951ce50c0f2821d39361d85e682b62a917f63`)
-- Preceding Champion: Ref `56171489` (`agent/c97_precision_router.py`), active on ladder.
-- Architectural Enhancements in c98:
-  1. Base Price Table & Terminal Liquidation Order Fix:
-     - Corrected base prices to true engine values: `MELON: 250, WOOL: 200, MILK: 160, STRAWBERRY: 120, FERTILIZER: 100, TOMATO: 60, EGG: 50, CARROT: 35, WHEAT: 25`.
-     - Updated `_SELLABLE` liquidation sequence: `("MELON", "WOOL", "MILK", "STRAWBERRY", "FERTILIZER", "TOMATO", "EGG", "CARROT", "WHEAT")`.
-     - Ensures high-value fertilizer ($100) produced by livestock is liquidated before low-value carrot ($35) and wheat ($25).
-     - Fixed terminal liquidation (`_terminal_salvage_and_liquidation`) to account for units dropping cargo on the current turn, preventing stranded unliquidated goods on step 718.
-  2. 7-Turn Physical Rescue Planner on Steps 712–718 (`_plan_rescue_712_718`):
-     - Dynamically reassigns PASS-idle workers within reachable distance of ripe crops or uncollected shed items/fertilizer: walks, harvests/collects, returns to shed-adjacent tiles, and drops cargo before step 718 liquidation.
-     - Supports bundled harvest + fertilizer collection when slack permits on animal tiles.
-     - Strict safety: only reassigns workers whose scheduled operations for current turn through 718 are exclusively `["PASS"]`, ensuring zero disruption to scheduled parent productive tasks.
-  3. C72 Near-Shed Working Capital Diversion on Steps 120–679 (`_c72_working_capital_diversion`):
-     - Detects when an actor is on/adjacent to a shed tile with >= $2,000 in goods at current market prices and converts non-movement `PASS` or commodity `PLACE` into `DROP` to bank early liquidity for working capital without interrupting core route tasks or animal placements.
-- Confirmation Benchmarks across Paired Seeds 1000-1009 (40 games total):
-  - vs `agent/c97_precision_router.py` (20 games, 10 seeds, 2 seats):
-    - Record: 16 wins / 0 losses / 4 ties (100.0% win rate decided, 100.0% undefeated)
-    - Zero regressions across all 20 games (c97 won 0 games).
-    - Mean margin: +14.5 coins (peak +89.0 coins on seed 1006).
-    - Seat 0: 8 wins / 0 losses / 2 ties; Seat 1: 8 wins / 0 losses / 2 ties.
-  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
-    - Mean margin: +32,259.7 coins (mean reward 104,854.05 vs opponent 72,594.35).
-    - Seat 0: 10/10 (100.0%), Seat 1: 10/10 (100.0%), 0 aborts, 20/20 DONE.
-  - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.030s, OK`).
-- Preparation: `submission/main.py` is byte-identical to `agent/c98_championship_router.py` and validated for immediate Kaggle submission.
+## Champion and live evidence
 
-## Apex Champion Checkpoint (agent/c99_apex_champion.py)
-- Date: 2026-09-12
-- Candidate Champion: `agent/c99_apex_champion.py` (mirrored to `submission/main.py`, SHA-256 `e29bb3f61ce7e2830b9574c92e1a7b86f4d23dfd7a4dbf8b9b9743d5197b6917`)
-- Preceding Champion: Ref `56171489` (`agent/c97_precision_router.py`), active on ladder; `agent/c98_championship_router.py` pre-assembled.
-- Architectural Pillars of c99 Apex Champion:
-  1. Dynamic Opponent-State Preemption (`_update_opponent_tracker` & `_front_run_v3`):
-     - Dynamically tracks rival cargo from tile yield drops when rival hands harvest livestock (wool, milk) or ripe crops (melon, strawberry).
-     - Detects when rival units carrying high-value cash goods (`MELON`, `WOOL`, `MILK`, `STRAWBERRY`) are within 2 steps of their shed.
-     - Gives 2.0x priority multiplier to dump our shed inventory of that commodity before the rival arrives at the shed, collapsing the market price right before the rival sells.
-     - Strictly excludes intermediate inputs (`FERTILIZER`, `WHEAT`) to protect scheduled farm fertilization and livestock feeding.
-  2. Extended 3-Step Town-Shop Consumption Lookahead:
-     - Expands the front-running horizon to 3 steps (`step + 1`, `step + 2`, `step + 3`, plus `step + 4` when aligned with town shop consumption ticks `(step + 4) % 4 == 0`).
-     - Front-runs scheduled sales 1-2 turns before rival 1-step lookahead agents (`c96`, `c97`, `c98`, `v27`), capturing maximum prices before market saturation.
-  3. Safe Slot-Preserving Dummy Order Replacement:
-     - Locates and replaces harmless dummy orders (`['SELL', 'WHEAT', 0]`) created by surplus seed pruning instead of blindly appending or inserting.
-     - Strictly guarantees that high-priority operational orders (`HIRE`, `BUY_LAND`, active `BUY_SEED`) are NEVER evicted or truncated past the 10-order limit.
-  4. Preserved Policy Decision-Tree Foundation:
-     - Maintains the ML decision-tree routing (`POLICY[block]`) without artificial overrides, avoiding Route 3 low-yield traps.
-  5. Inherited Championship Features:
-     - Corrected engine base prices and terminal liquidation order from c98.
-     - 7-turn physical rescue planner on steps 712–718 (`_plan_rescue_712_718`).
-     - C72 working capital near-shed drop diversion on steps 120–679 (`_c72_working_capital_diversion`).
-     - C92 productive weed repair (`_weed_repair_productive_route`).
-     - Dynamic surplus seed pruning (`_prune_surplus_seed_buys`).
-- Confirmation Benchmarks across Paired Seeds 1000–1009 (60 games total):
-  - vs `agent/c98_championship_router.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided, 100.0% undefeated)
-    - Zero regressions across all 20 games (c98 won 0 games).
-    - Mean margin: +742.70 coins (peak +1,922.0 coins on seed 1000, min +98.0 coins on seed 1006).
-    - Seat 0: 10 wins / 0 losses / 0 ties; Seat 1: 10 wins / 0 losses / 0 ties.
-  - vs `agent/c97_precision_router.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided, 100.0% undefeated)
-    - Zero regressions across all 20 games (c97 won 0 games).
-    - Mean margin: +751.50 coins (peak +1,922.0 coins on seed 1000, min +186.0 coins on seed 1006).
-    - Seat 0: 10 wins / 0 losses / 0 ties; Seat 1: 10 wins / 0 losses / 0 ties.
-  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
-    - Mean margin: +91,153.05 coins (peak +186,332.0 coins on seed 1004).
-  - Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.019s, OK`).
-- Preparation: `submission/main.py` is byte-identical to `agent/c99_apex_champion.py` (SHA-256 `e29bb3f61ce7e2830b9574c92e1a7b86f4d23dfd7a4dbf8b9b9743d5197b6917`) and validated for immediate Kaggle ladder submission.
+- Submitted champion: `agent/c129_feed_liquidity.py`.
+- Kaggle submission ref: `56209242`; prior readback was COMPLETE with empty error and
+  server archive/source match.
+- SHA-256: `e9973586cbe2c0bbb034243f3d3e4c9fdcac4fcac432c0de32b0ba0e61f7ca61`.
+- Its final pre-submission 64-seed/1024-game paired confirmation improved direct
+  points 50% to 53.125% with no common win-to-loss. This was a small tested-pool
+  gain, not proof of rank 1.
+- Latest downloaded snapshot is
+  `state/agent_experiments/c125_followup_20260913/snapshots/20260914T015403531994Z/`:
+  c125 score 2833.6, 97W/43L/1T in 141 games; c129 score 2810.8,
+  83W/36L in 119 games. Panels and times differ, so scores are not a paired model
+  comparison.
 
-## Grandmaster Router Champion Checkpoint (agent/c100_grandmaster_router.py)
-- Date: 2026-09-12
-- Candidate Champion: `agent/c100_grandmaster_router.py` (mirrored to `submission/main.py`, SHA-256 `a4293d1d568915ea966d89b02944915844cbcf9367b4d31de830566fa04331d2`)
-- Preceding Champion: Ref `56171489` (`agent/c97_precision_router.py`), active on ladder; `agent/c99_apex_champion.py` pre-assembled.
-- Architectural Pillars of c100 Grandmaster Router:
-  1. Predictive Harvest Interception & Expanded Horizon Front-Running (`_front_run_v4`):
-     - Expands shed preemption proximity threshold from $d \le 2$ to $d \le 3$ for rival workers carrying high-value cash commodities (`MELON`, `WOOL`, `MILK`, `STRAWBERRY`), anticipating deliveries 1 full turn earlier.
-     - Adds Vector 1 Predictive Harvest Interception: Scans opponent farm tiles for ripe, high-value cash crops (`tile['yield_units'] > 0` and `tile['crop'] == 'MELON'`) located within shed delivery range ($d_{shed} \le 4$).
-     - When an opponent worker moves onto or adjacent to (`Manhattan distance <= 1`) such a ripe melon tile, flags `MELON` for immediate shed preemption 1 turn before the rival can harvest and begin walking to their shed.
-     - Front-runs the market price before rival harvest and deposit can execute, forcing opponent liquidation into a price-collapsed market while preserving our own high-margin sales.
-  2. Inherited Championship Features:
-     - 3-step and shop-aligned lookahead horizon for town shop consumption ticks (`(step + 4) % 4 == 0`).
-     - Safe dummy order (`['SELL', 'WHEAT', 0]`) replacement ensuring high-priority orders (`HIRE`, `BUY_LAND`, `BUY_SEED`) are never evicted.
-     - Dynamic surplus seed pruning (`_prune_surplus_seed_buys`).
-     - Corrected engine base prices and terminal liquidation sequence.
-     - 7-turn physical rescue planner on steps 712–718 (`_plan_rescue_712_718`).
-     - C72 working capital diversion on steps 120–679 (`_c72_working_capital_diversion`).
-     - C92 productive weed repair (`_weed_repair_productive_route`).
-- Confirmation Benchmarks across Paired Seeds 1000–1009 (60 games total):
-  - vs `agent/c99_apex_champion.py` (20 games, 10 seeds, 2 seats, Seeds 1000–1009):
-    - Record: 4 wins / 0 losses / 16 ties (100.0% win rate decided, 100.0% undefeated)
-    - Zero regressions across all 20 games (c99 won 0 games).
-    - Mean margin: +220.20 coins (peak +1,114.0 coins on seed 1000, +1,088.0 coins on seed 1004).
-    - Seat 0: 2 wins / 0 losses / 8 ties (100.0% decided); Seat 1: 2 wins / 0 losses / 8 ties (100.0% decided).
-  - vs `agent/c99_apex_champion.py` (20 games, 10 seeds, 2 seats, Seeds 2000–2009 generalization check):
-    - Record: 14 wins / 0 losses / 6 ties (100.0% win rate decided, 100.0% undefeated)
-    - Zero regressions across all 20 games (c99 won 0 games).
-    - Mean margin: +217.40 coins (peak +1,357.0 coins on seed 2005).
-    - Seat 0: 7 wins / 0 losses / 3 ties (100.0% decided); Seat 1: 7 wins / 0 losses / 3 ties (100.0% decided).
-    - Combined 40-game record vs c99: 18 wins / 0 losses / 22 ties (100.0% decided win rate, 0 losses).
-  - vs `agent/c98_championship_router.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided, 100.0% undefeated)
-    - Zero regressions across all 20 games (c98 won 0 games).
-    - Mean margin: +732.20 coins (peak +1,870.0 coins on seed 1000).
-    - Seat 0: 10 wins / 0 losses / 0 ties; Seat 1: 10 wins / 0 losses / 0 ties.
-  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided)
-    - Mean margin: +32,058.75 coins (mean reward 101,547.40 vs opponent 69,488.65).
-    - Seat 0: 10 wins / 0 losses / 0 ties; Seat 1: 10 wins / 0 losses / 0 ties.
-- Unit Tests: 20/20 tests passing (`Ran 20 tests in 0.016s, OK`).
-- Submission Checkpoint:
-  - Submitted to Kaggle Simulation League on 2026-09-12 00:45:04 UTC (Submission Ref `56175186`).
-  - Validation: `SubmissionStatus.COMPLETE` (initial score 600.0, actively matching in TrueSkill ladder pool).
-  - Byte-identical to `agent/c100_grandmaster_router.py` (SHA-256 `a4293d1d568915ea966d89b02944915844cbcf9367b4d31de830566fa04331d2`).
-  - Active on Kaggle ladder, climbing rapidly through the 1900 $\to$ 2400 $\to$ 3150+ frontier.
+## Loss evidence: 79 recorded defeats
 
-## Titan Router Champion Checkpoint (agent/c101_titan_router.py)
-- Date: 2026-09-12
-- Candidate Champion: `agent/c101_titan_router.py` (mirrored to `submission/main.py`, SHA-256 `06d565b4a8a88a906ed82a06cbb1e842d992ea79636b70cdad245fb917fd21bb`)
-- Preceding Champion: Ref `56175186` (`agent/c100_grandmaster_router.py`), active on ladder.
-- Architectural Pillars of c101 Titan Router:
-  1. Synchronized High-Capacity Lookahead on Town Shop Consumption Ticks (`_front_run_v4`):
-     - Retains common rock-solid trunk on turns 0-143 guaranteeing 100% state alignment with ML `POLICY`.
-     - Expands town-shop aligned front-running lookahead on consumption ticks (`(step + 4) % 4 == 0`) to evaluate through `step + 5`.
-     - In both Seat 0 and Seat 1, captures high commodity pricing 1 step ahead of rival 3-step agents without causing glut saturation or livestock starvation.
-     - Preserves all core micro-foundations from `c100`:
-       - ML decision-tree routing (`POLICY[block]`)
-       - Predictive melon harvest interception within shed proximity
-       - Dynamic surplus seed pruning (`_prune_surplus_seed_buys`)
-       - True engine base prices and terminal liquidation sequence
-       - 7-turn physical rescue planner on steps 712-718 (`_plan_rescue_712_718`)
-       - C72 working capital diversion on steps 120-679 (`_c72_working_capital_diversion`)
-       - C92 productive weed repair (`_weed_repair_productive_route`)
-       - Safe dummy replacement (`['SELL', 'WHEAT', 0]`)
-- Confirmation Benchmarks across 100 Matches (100W / 0L / 0T, 100.0% Win Rate):
-  - vs `agent/c100_grandmaster_router.py` (40 games total, 20 seeds, 2 seats):
-    - Seeds 1000-1009 (20 games): 20 wins / 0 losses / 0 ties (100.0% decided win rate, 0 losses, 0 ties), mean margin +88.40 coins (peak +427 on seed 1004, +382 on seed 1000).
-    - Seeds 2000-2009 (20 games): 20 wins / 0 losses / 0 ties (100.0% decided win rate, 0 losses, 0 ties), mean margin +169.80 coins (peak +1526 on seed 2005, +427 on seed 2001).
-    - Combined 40-game record vs c100: 40 wins / 0 losses / 0 ties (100.0% decided win rate, 0 losses, 0 ties), combined mean margin +129.10 coins.
-  - vs `agent/c99_apex_champion.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided, 100.0% undefeated), mean margin +300.20 coins (peak +1469 on seed 1000, +1458 on seed 1004).
-  - vs `agent/c98_championship_router.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided, 100.0% undefeated), mean margin +719.90 coins (peak +1810 on seed 1000, +1613 on seed 1004).
-  - vs `agent/public_v27_kaito.py` (20 games, 10 seeds, 2 seats):
-    - Record: 20 wins / 0 losses / 0 ties (100.0% win rate decided), mean margin +32,065.95 coins (candidate mean reward 101,551.8 vs opponent 69,485.9; peak cash rewards: 151,575 coins on seed 1001, 116,495 coins on seed 1002, 103,638 coins on seed 1004).
-  - Unit Tests: 20/20 tests passing in 0.021s (`Ran 20 tests in 0.021s, OK`).
-- Preparation & Submission:
-  - Byte-identical mirroring: `agent/c101_titan_router.py` is byte-identical to `submission/main.py` (SHA-256 `06d565b4a8a88a906ed82a06cbb1e842d992ea79636b70cdad245fb917fd21bb`).
-  - Submitted to Kaggle Simulation League on 2026-09-12 06:56:00 UTC (Submission Ref `56180600`).
-  - Validation: `SubmissionStatus.COMPLETE` (initial score 600.0, actively matching in live ladder pool; achieved 1823.5 across 71 matches, 50W-20L-0T, 70.4% win rate).
+The latest snapshot adds 32 losses to the earlier 47: c125 adds 17 and c129 adds
+15. All 79 replay files exist locally. The read-only audit is:
 
-## Live Match Forensics, TrueSkill 1800-Tier Plateau Diagnosis & c102 Apex Predator Roadmap
-- Date: 2026-09-12
-- Investigation Scope: Comprehensive audit of 345 live Kaggle ladder matches across `c96` (95 matches), `c97` (106 matches), `c100` (73 matches), and `c101` (71 matches).
-- Current Active Leaderboard State (8,694 teams):
-  - Rank #1 `Majkel1337`: 3,202.8 (Global frontier)
-  - Top 100 threshold: 2,775.9
-  - Top 500 threshold: 2,533.0
-  - Top 1000 threshold: 2,264.6
-  - Our active best: `c96` at 1897.2 (Rank #1589, Top 18.2%); `c101` at 1823.5 (50W-20L, 70.4% win rate).
-- Root Cause Diagnostics of the 1800-Tier Plateau:
-  1. TrueSkill ($\mu - 3\sigma$) Equilibrium Math:
-     - As $\sigma \to 2.0$ (mature phase, 70+ games), a win against 1800-tier yields only +4 to +6.5 rating points, while a loss penalizes -10 to -14 points.
-     - With a 70.4% win rate (50W-20L), net rating change over 10 matches is approximately $7 \times (+5.5) - 3 \times (-12.5) \approx +1.0$ point.
-     - Plateau equilibrium: 1820–1897. Reaching 2400~3000+ mathematically requires eliminating unforced losses and driving win rate to 85%–92%+.
-  2. The "Route 4 (Pet Cafe / Carrot) Low-Yield Trap" (62.5% of All Losses):
-     - Real loss seeds extracted directly from Kaggle API: `148746817` (-7,862), `1327216544` (-6,101, 48k collapse), `227526935` (-5,207), `550593052` (-3,671), `1576385155` (-3,491).
-     - Engine replay proved that in 62.5% of losses, `POLICY` routed into Route 4 due to Pet Cafe detection.
-     - Carrot base price is only $35 (vs Melon $250, Wool $200, Milk $160). Farming carrots collapses total revenue to 48k–70k, guaranteeing blowout defeat.
-  3. Multi-Shop Inelasticity on Non-Yarn Draws (37.5% of All Losses):
-     - Real loss seeds: `1223016865` (-13,009 coins, 2 Pizza Shops), `1443811695` (-4,824 coins, 2 Ice Cream + Smoothie), `957524012` (-4,824 coins, 3 Pizza Shops).
-     - Non-yarn high-value draws (Pizza Shop tomato/wheat demand, Ice Cream dairy demand) leave Route 0 unchanged, whereas top opponents tailor cultivation to shop demands.
-  4. Intrinsic Capacity Reality:
-     - Single-player / non-competitive simulations proved our farm intrinsically generates 146,000 to 162,000 coins (Seed 1001: 162,215 coins; Seed 1000: 147,812 coins).
-     - The 70k–95k live match compression is caused by shared central market cannibalization (both agents flooding same goods, crashing market to $1 floor).
-- Engineering Specifications for `agent/c102_apex_predator.py`:
-  1. Route 4 (Carrot) Low-Yield Trap Pruning / Override:
-     - Intercept Route 4 output from `POLICY` and force Route 0 (cow/melon/strawberry) or high-yield livestock.
-     - Immediately converts ~10 historical loss seeds into wins, raising ladder win rate from 70% to ~85%+.
-  2. Realistic Competitive Ladder Benchmark Suite:
-     - Stress-test against extracted real Kaggle loss seeds (`1223016865`, `148746817`, `1327216544`, `227526935`, `1443811695`, `957524012`, `1089950972`, `550593052`, `1576385155`) across both seats.
-  3. Full Retention of Proven Micro-Foundations:
-     - Synchronized 5-step shop consumption lookahead (`step + 5`) neutralizing Seat-1 mirror disadvantage.
-     - Predictive melon harvest preemption (`_front_run_v4`, $d \le 4$).
-     - In-place dynamic surplus seed pruning (+280 coins).
-     - Corrected engine base prices (Fertilizer $100).
-     - 7-turn physical rescue planner on steps 712–718 (`_plan_rescue_712_718`).
-     - C72 working capital diversion on steps 120–679.
-     - C92 engine weed detection serialization fix (`tile.get("kind") == "WEED"`).
+- `state/agent_experiments/structural_loss_audit79_20260914/analyze_recorded.py`
+- `state/agent_experiments/structural_loss_audit79_20260914/summary.json`
+- `state/agent_experiments/structural_loss_audit79_20260914/results.json`
 
+The script imports neither an agent nor the engine. It verifies 720 states and the
+snapshot/replay margin, then records action/state transitions. Results are diagnostic,
+not causal counterfactuals.
+
+Key all-79 observations:
+
+- Severity: 11 losses under 500, 55 from 500 to 4,999, and 13 at 5,000 or worse.
+- 32 games were ahead at step 504 and still lost; 34 lost at least 2,000 cash from
+  step 504 to the end. Aggregate late swing was -248,105.
+- Opponent used less feed in 64/79 and more fertilizer in 60/79. Opponent recorded
+  more successful harvested units in 34/79.
+- Our traces contain 765 failed FEED transitions, 23 failed wheat pickups,
+  6 failed animal placements, and 184 animal disappearances. These counts include
+  repeated scheduled attempts and do not individually prove avoidable lost profit.
+- New 32 are consistent with the inherited weakness: 15 late reversals, 15 late
+  decays of at least 2,000, opponent less feed in 25, more fertilizer in 22, and
+  our failed wheat pickups 16 versus rival 3.
+- Repeated opponent submissions form useful clusters; see `repeated_opponent_submissions`
+  in the summary. Do not count their games as independent families.
+
+Current diagnosis: c125 and c129 share a production-allocation and execution-chain
+weakness. The recurring path is market choice plus `HIRE -> BUILD -> PLACE -> FEED ->
+HARVEST/SELL`, with wheat, feed, fertilizer, and late conversion competing for the
+same labor and cash. Small timing losses and large structural losses require separate
+objectives.
+
+## Candidate state
+
+### c145
+
+`agent/c145_carrot_min3.py` passed the old 47 fixed-tape development gate:
+3 improved, 44 same, 0 worse; margin +4,130 and own cash +932. Its 192 reacting
+games were all inactive and identical to c129. It showed no broad effect and is not
+a promotion candidate.
+
+### c146 — strongest current diagnostic improvement
+
+- Source: `agent/c146_carrot_sched3.py`
+- SHA-256: `5e51caad786dac00f98639e8eb8ef911a169904f86cff3d2fe777853cd89a928`
+- Result: `state/agent_experiments/c146_carrot_sched3_20260914/results.json`
+- Old 47 tapes: 4 improved, 43 same, 0 worse; total margin +6,352; own cash
+  +1,569; 11 conversions and 11 confirmed plants.
+- This is the largest clean improvement among current unsubmitted fixed-tape
+  candidates. It has no reacting qualification and is not champion.
+- A 12-game realized-economics trace was prepared at
+  `state/agent_experiments/c146_realized_trace_20260914/`, but its runner must use
+  the exact restored runtime before execution.
+
+### c147 — isolated feed commitment repair
+
+- Source: `agent/c147_feed_commitment.py`
+- SHA-256: `d055f46ce8340ed1e309b14d28f30521c424368c720cd45911952e7fbb89d3ea`
+- It only buys a bounded wheat shortfall when the parent is already picking up a
+  demanded cow/sheep and the route proves next-turn wheat pickup, placement, and
+  first feed. Episode 108609267 should request exactly 2 wheat for 2 sheep.
+- Static candidate build passed. No simulation result exists and no promotion claim
+  is allowed.
+
+### Rejected or limited directions
+
+- c137 blanket late-sheep rescue worsened 14 of 15 activations; do not revive it.
+- c139 improved synthetic opening stress but was inactive on the broad reacting
+  panel and had a shared-seed regression cluster; do not promote it.
+- c140/c141/c142 opening variants gained points in related pools but had major margin
+  tails or win-to-loss regressions; keep as stress evidence.
+- c143/c144 improved only one old tape while reducing own cash; their gates failed.
+
+## Runtime blocker
+
+The project `.venv` points to removed Python 3.12.6:
+`C:/Users/Taeyang/AppData/Local/Programs/Python/Python312/python.exe`.
+Bundled Python 3.12.14 can import `kaggle-environments==1.32.7` through the old
+site-packages, but strict `engine_identity()` correctly rejects the Python version
+change. Do not relax this check.
+
+An attempt to install Python 3.12.6 inside `state/runtime/python` with `uv` could not
+download under the restricted network. The escalated retry was unavailable because
+automatic approval review had no active account. No runtime was changed.
+
+Preferred recovery: install exact 3.12.6 into the project-local runtime and point
+the wrappers at it, preserving existing identity. Alternative: freeze a new 3.12.14
+engine contract and rerun every parent/candidate baseline on identical jobs; never
+mix those results with 3.12.6 rows.
+
+## Practical tuning space
+
+The strongest current base for tuning is c146, while c147 must first pass its isolated
+mechanism preflight.
+
+Ten useful c146 knobs are: active day window, market-hour cutoff, conversion cap,
+demand threshold, visible/competing carrot supply buffer, wheat shadow-inventory
+shift, grain quote premium, value cushion, cash reserve, and shed-capacity headroom.
+With three values each, a full grid is `3^10 = 59,049` configurations.
+
+Seven useful c147 knobs are: active window, market-hour cutoff, wheat price ceiling,
+benefit/cost ratio, route lookahead, maximum funded deficit, and combined cash/capacity
+reserve policy. With three values each, this is `3^7 = 2,187`. A naive joint grid is
+`3^17 = 129,140,163` configurations. Dormant c146 feed-topup thresholds are excluded
+because that mechanism activated zero times in the old tape set.
+
+Recommended search budget after runtime recovery:
+
+1. One-factor screen for c146: baseline plus low/high alternatives for ten knobs =
+   21 configurations on discovery conditions.
+2. Keep the four knobs with stable subgroup effects; run their 3-level interaction
+   grid = 81 configurations.
+3. Advance at most six configurations to paired reacting development; reject any
+   subgroup point regression, common win-to-loss, or worse loss tail.
+4. Test c147 separately. Combine it with c146 only if its physical purchase/pickup/
+   placement/feed contract and reacting gates pass.
+5. Use untouched final seeds once for the last one or two candidates.
+
+This is 102 discovery configurations before reacting qualification instead of 59,049
+or 129 million. Do not tune directly for total margin over the observed 79 losses.
+Use separate close-loss, structural-loss, late-reversal, and opponent-family slices.
+
+## Execution rules and next actions
+
+- The user currently runs simulations; do not launch a new campaign autonomously.
+- Maximum 8 total workers, with no overlapping Kaggriculture campaign.
+- Commands require progress bar, completed/total, percent, elapsed, cached-aware ETA,
+  desktop notification, and sound.
+- First recover exact Python 3.12.6 or deliberately establish a wholly new paired
+  engine contract.
+- Then run c147's three sequential preflights and the c146 realized trace.
+- Expand the loss diagnostic contract from old 47 to all 79 before using the new
+  32 as evidence for a candidate.
+- Only after mechanism gates pass, run both seats against independent reacting
+  opponents plus related regression controls. Preserve unused final conditions.
+- No new submission or simulation was made during this handoff update.
+
+## Current evidence index
+
+- `reports/c145-resume-and-top2-review-2026-09-14.ko.md`
+- `state/parallel-handoffs/collaboration-20260914/loss-forensics-47/report.md`
+- `state/parallel-handoffs/collaboration-20260914/c146-trace/report.md`
+- `state/parallel-handoffs/collaboration-20260914/validation-audit/report.md`
+- `state/parallel-handoffs/collaboration-20260914/public-opponents/report.md`
+- `docs/agent-validation-protocol.ko.md`
+
+## o-series handoff (Claude, 2026-09-16)
+Read `docs/o-handoff-2026-09-16.ko.md` first: current best agent (o227, submission 56264950), the six validation gates (incl. the weed-synced frozen-Majkel proxy and the pinned-world A/B harness), today's confirmed facts (market absorption, mirror externality, top cluster = planners, V44 race arm and the stealth response), the rejected-candidate table (o220–o237), the planner-proxy project status, data assets and the prioritized next steps. Ledger: `o_experiments.jsonl`; chronological log: `reports/o-worklog.md`.

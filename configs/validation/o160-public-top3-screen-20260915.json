@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 180,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "o159b": {
+      "path": "agent/o159b_feed_margin06.py",
+      "sha256": "cbcc866ce8f710d62c3f6673c743c714643f6aab32b81beba201b9085f3f887a"
+    },
+    "o160": {
+      "path": "agent/o160_feed_goose.py",
+      "sha256": "aa7b2ebd41aec42dca13a9cead862280c72756575c4cc40c2593b169f993a5ba"
+    }
+  },
+  "opponents": {
+    "shop-router-reactive-v5": {
+      "path": "state/parallel-handoffs/collaboration-20260914/public-latest-live/shop-router-v5/extracted_main.py",
+      "sha256": "7c821bdf746ce1c0bb6c8c5f4af82b53232251e2e4edd51d36f265eab861e3ea",
+      "family": "related-public-shop-router"
+    },
+    "v41-review-candidate": {
+      "path": "state/parallel-handoffs/collaboration-20260914/public-latest-live/v41-review/extracted_main.py",
+      "sha256": "5f822797de60929bd88ba1f4719e782add81bff11ab5581fc8445a4d5f5655b6",
+      "family": "related-public-shop-router"
+    },
+    "farming-score-v4-better-shop": {
+      "path": "state/o_dev/datasets/donor_agents/agents/lynnsakurai-farming-score-v4-a-better-shop.py",
+      "sha256": "110134e6eb14e60e26e5967d5ac955a0c4e6a6748946ea450df6d9fa6be170d6",
+      "family": "related-public-shop-router"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "o160",
+      "parent": "o159b",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1625539473,
+        1586028097,
+        2090999193,
+        1272922664,
+        580849671,
+        362472315,
+        1615351505,
+        371762023,
+        1000042050,
+        1994067836,
+        2050499842,
+        247358301,
+        1510547617,
+        1947389970,
+        992929310,
+        980329645,
+        188715143,
+        871180085,
+        943832320,
+        1014400926,
+        660772056,
+        280123421,
+        940764637,
+        1596963362,
+        36441497,
+        1936313177,
+        1382149642,
+        44142014,
+        1635627691,
+        1447631165,
+        1316054357,
+        1229589118,
+        1840497351,
+        536205308,
+        1908004691,
+        16962039,
+        1661560478,
+        1581502441,
+        2042065583,
+        1883240320,
+        1570103617,
+        891190207,
+        1480351407,
+        1290716484,
+        413692189,
+        1805824178,
+        255396500,
+        1919909882
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [702876884, 1924998340],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [8268434, 615685618],
+      "alpha": 0.025
+    }
+  }
+}

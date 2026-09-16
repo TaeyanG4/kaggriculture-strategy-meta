@@ -1,0 +1,12 @@
+{
+ "aurax7-shop-router-reactive-v5": "state/parallel-handoffs/collaboration-20260914/public-latest-live/shop-router-v5/extracted_main.py",
+ "lynnsakurai-farming-score-v4-a-better-shop": "state/o_dev/public_pull/farming-score-v4-a-better-shop-20260915/extracted_main.py",
+ "tetsutani-market-smart-farming": "state/o_dev/public_pull/market-smart-farming-kaggriculture-20260915/extracted_main.py",
+ "ahmedberatozer-v43-recovering-lost-harvests": "state/o_dev/public_pull/kaggriculture-v43-recovering-lost-harvests/extracted_main.py",
+ "lynnsakurai-farming-score-v5-timing-optimized": "state/o_dev/public_pull/farming-score-v5-timing-optimized/extracted_main.py",
+ "own-c129": "agent/c129_feed_liquidity.py",
+ "own-c152": "agent/c152_shop_expansion.py",
+ "yhay81-shop-router-0913": "state/o_dev/datasets/donor_agents/agents\\yhay81-shop-router-0913.py",
+ "tschinkel-router-v55": "state/o_dev/datasets/donor_agents/agents\\tschinkel-router-v55.py",
+ "ahmedberatozer-v40-plans-that-fit-the-shops": "state/o_dev/datasets/donor_agents/agents\\ahmedberatozer-v40-plans-that-fit-the-shops.py"
+}

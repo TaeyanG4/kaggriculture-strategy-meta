@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "candidate": "c176_structural_tomato_tail",
+  "status": "implemented_unvalidated",
+  "parent": {
+    "path": "agent/o199c_carrot_price2.py",
+    "sha256": "1429673c3c1057c07f0a644124a4fd497b111b1646451bac1de852e5c035a41d"
+  },
+  "overlay": {
+    "path": "agent/overlays/c176_structural_tomato_tail.py",
+    "sha256": "e3a5250def05d279323faa0c6cb6424e60bc5747a7b4af2b7602ba80f8e3ae45"
+  },
+  "hypothesis": "At the day-18 boundary, replace a bounded set of already-unlocked late WHEAT plantings with a coherent TOMATO suffix (seed, maintenance labor, near-term wheat reserve, harvest, delivery, sale) instead of V219's southeast-land buy.",
+  "contracts": {
+    "immutable_parent": true,
+    "adds_buy_land": false,
+    "default_auto_gate": "day18; >=2 PIZZA_SHOP/FARMERS_MARKET; TOMATO>=70; carrot not hot",
+    "auto_size": "8 tiles for 2 tomato-demand shops; 10 for >=3",
+    "force_env": "KAGG_C176_FORCE=KEEP|REALLOC; KAGG_C176_SIZE=1..10",
+    "plant_window": "days18-20 actual parent PLANT WHEAT on empty unlocked tiles",
+    "feed_contract": "48-step native WHEAT pickup reserve, max 12-unit top-up/day",
+    "promotion": false,
+    "submission": false
+  },
+  "output": {
+    "path": "agent/c176_structural_tomato_tail.py",
+    "sha256": "d84c22fa626641be79a8cdcc81f2f2b9a02c010aaf2f74b1da8d37aaa87f1860",
+    "bytes": 421415
+  },
+  "promotion": false
+}

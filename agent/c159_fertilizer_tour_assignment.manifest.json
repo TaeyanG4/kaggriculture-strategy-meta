@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "candidate": "c159_fertilizer_tour_assignment",
+  "status": "implemented_unvalidated",
+  "parent": {
+    "path": "agent/o182_combo_overflow.py",
+    "sha256": "ef9d2aade50ce2ce400a64791288ffb179eee7a6e60ea0d06085ac12fe02900b"
+  },
+  "overlay": {
+    "path": "agent/overlays/c159_fertilizer_tour_assignment.py",
+    "sha256": "efd9dbfc3edcf698472581fe21a4b42e1a99a6f0ce0b7085398708b16cf78285"
+  },
+  "output": {
+    "path": "agent/c159_fertilizer_tour_assignment.py",
+    "sha256": "ff32b305669956b1b63cc112c85ecbe0cf093acd57510cb215ac1baea54fd64a",
+    "bytes": 409731
+  },
+  "contract": {
+    "parent_action_unchanged": true,
+    "target_multiset_unchanged": true,
+    "worker_count_unchanged": true,
+    "worker_quantities_unchanged": true,
+    "fertilizer_purchase_unchanged": true,
+    "exact_spawn_after_current_moves": true,
+    "first_route_action_step_offset": 2,
+    "per_target_gain_non_regression": true,
+    "strict_gain_required": true,
+    "beam_width": 128
+  },
+  "promotion": false
+}

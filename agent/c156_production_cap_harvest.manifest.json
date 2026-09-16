@@ -1,0 +1,11 @@
+{
+  "candidate": "c156",
+  "parent": "agent/o182_combo_overflow.py",
+  "parent_sha256": "ef9d2aade50ce2ce400a64791288ffb179eee7a6e60ea0d06085ac12fe02900b",
+  "overlay": "agent/overlays/c156_production_cap_harvest.py",
+  "overlay_sha256": "4dd9bd495c207d01b2dd03fa0d50b62ec8b522865536a807ad027a1eef7b6bd1",
+  "target": "agent/c156_production_cap_harvest.py",
+  "target_sha256": "a8510eb530a1d9f6eaee82a2888c8047bb3887d8735ce07f072ba3ed4fc93c8b",
+  "bytes": 407089,
+  "status": "implemented_unvalidated"
+}

@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "candidate": "c179_early_tomato_plus_v219",
+  "status": "implemented_unvalidated",
+  "parent": {
+    "path": "agent/o199c_carrot_price2.py",
+    "sha256": "1429673c3c1057c07f0a644124a4fd497b111b1646451bac1de852e5c035a41d"
+  },
+  "overlays": [
+    {
+      "path": "agent/overlays/c177_tomato_strawberry_lane.py",
+      "sha256": "1cde780634105c5063f06fa1190ca41785a9381e3500908999fe3ccd15b8bafd"
+    },
+    {
+      "path": "agent/overlays/c179_early_tomato_plus_v219.py",
+      "sha256": "b2b1c5d1ea04ea6af21a33f1d0a1bd973aab1f9b22ad45d7c2de2540e65e3d52"
+    }
+  ],
+  "hypothesis": "A small early existing-land tomato tranche can add value before the frozen V219 day18 investment without retuning the rest of o199c.",
+  "force_env": "KAGG_C177_FORCE=TOMATO; KAGG_C177_SIZE=1..13",
+  "promotion": false,
+  "output": {
+    "path": "agent/c179_early_tomato_plus_v219.py",
+    "sha256": "eee7ecb1d87a4ab51c3c0d9d600f9c5106243101b8fc2cff3fa20ca468935a71",
+    "bytes": 409291
+  }
+}

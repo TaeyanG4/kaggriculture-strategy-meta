@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "candidate": "c160_day29_harvest",
+  "status": "built_static_only",
+  "parent": {
+    "path": "agent/o182_combo_overflow.py",
+    "sha256": "ef9d2aade50ce2ce400a64791288ffb179eee7a6e60ea0d06085ac12fe02900b"
+  },
+  "overlay": {
+    "path": "agent/overlays/c160_day29_harvest.py",
+    "sha256": "c52090afb48b8c6213cc62bd0a822b6903ec88e886eaee53418a75e7c14b754e"
+  },
+  "output": {
+    "path": "agent/c160_day29_harvest.py",
+    "sha256": "c3f5d1749665d173640c29271635de8cf5ea761f6dcc8bb82e0820c5a42776fc"
+  },
+  "builder": {
+    "path": "o_tools/build_overlay.py",
+    "sha256": "f0a816ec451440ede4ed92a9525b848511b9c8afc2ea63f8b20d514091ec4313"
+  },
+  "scope": "steps 696..711 only; replace parent WATER/FERTILIZE with HARVEST only on occupied TOMATO/STRAWBERRY tiles with yield_units > 0",
+  "validation": {
+    "compile": true,
+    "last_callable_is_agent": true,
+    "synthetic_mechanism_tests": true,
+    "saved_trajectory_activation": false,
+    "reacting_games": 0,
+    "promotion": false
+  }
+}

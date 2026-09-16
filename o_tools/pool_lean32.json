@@ -1,0 +1,23 @@
+{
+ "aurax7-shop-router-reactive-v4": "state/o_dev/datasets/donor_agents/agents\\aurax7-shop-router-reactive-v4.py",
+ "lynnsakurai-farming-score-v4-a-better-shop": "state/o_dev/public_pull/farming-score-v4-a-better-shop-20260915/extracted_main.py",
+ "own-c147": "agent/c147_feed_commitment.py",
+ "tschinkel-router-v55": "state/o_dev/datasets/donor_agents/agents\\tschinkel-router-v55.py",
+ "ahmedberatozer-v35-reactive-sales-sheep-expansion": "state/o_dev/datasets/donor_agents/agents\\ahmedberatozer-v35-reactive-sales-sheep-expansion.py",
+ "own-c125": "agent/c125_livestock_margin_terminal.py",
+ "ahmedberatozer-v34-observed-market-timing": "state/o_dev/datasets/donor_agents/agents\\ahmedberatozer-v34-observed-market-timing.py",
+ "ahmedberatozer-v39-ready-before-the-rush": "state/o_dev/datasets/donor_agents/agents\\ahmedberatozer-v39-ready-before-the-rush.py",
+ "ahmedberatozer-v38-smarter-feed-stronger-margins": "state/o_dev/datasets/donor_agents/agents\\ahmedberatozer-v38-smarter-feed-stronger-margins.py",
+ "own-c146": "agent/c146_carrot_sched3.py",
+ "tetsutani-market-smart-farming": "state/o_dev/public_pull/market-smart-farming-kaggriculture-20260915/extracted_main.py",
+ "own-c129": "agent/c129_feed_liquidity.py",
+ "lucifer19-harvest-nocturne-v2-a-lighter-start": "state/o_dev/datasets/donor_agents/agents\\lucifer19-harvest-nocturne-v2-a-lighter-start\\main.py",
+ "ahmedberatozer-v40-plans-that-fit-the-shops": "state/o_dev/datasets/donor_agents/agents\\ahmedberatozer-v40-plans-that-fit-the-shops.py",
+ "dmitriigluzdov-a-smaller-market-shock": "state/o_dev/datasets/donor_agents/agents\\dmitriigluzdov-a-smaller-market-shock\\main.py",
+ "yhay81-shop-router-0913": "state/o_dev/datasets/donor_agents/agents\\yhay81-shop-router-0913.py",
+ "own-c152": "agent/c152_shop_expansion.py",
+ "tschinkel-router-v5": "state/o_dev/datasets/donor_agents/agents\\tschinkel-router-v5.py",
+ "ahmedberatozer-v36-guarded-four-turn-sales": "state/o_dev/datasets/donor_agents/agents\\ahmedberatozer-v36-guarded-four-turn-sales.py",
+ "yhay81-shop-router-0911-simple": "state/o_dev/datasets/donor_agents/agents\\yhay81-shop-router-0911-simple.py",
+ "aurax7-shop-router-reactive-v5": "state/parallel-handoffs/collaboration-20260914/public-latest-live/shop-router-v5/extracted_main.py"
+}

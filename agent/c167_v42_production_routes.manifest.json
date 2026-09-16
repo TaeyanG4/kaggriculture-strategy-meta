@@ -1,0 +1,143 @@
+{
+  "schema": 1,
+  "candidate": "c167_v42_production_routes",
+  "status": "implemented_unvalidated",
+  "parent": {
+    "path": "agent/o182_combo_overflow.py",
+    "sha256": "ef9d2aade50ce2ce400a64791288ffb179eee7a6e60ea0d06085ac12fe02900b"
+  },
+  "overlay": {
+    "path": "agent/overlays/c167_v42_production_routes.py",
+    "sha256": "00a908fa0cbb411f15d16612fcfe81d7d0f1c5379c7ec008077555edefde66ba"
+  },
+  "output": {
+    "path": "agent/c167_v42_production_routes.py",
+    "sha256": "9180a9f52e3ef23459ff7a87ee5542cc1f688b9f783d56646df70766553fc136",
+    "bytes": 574487
+  },
+  "source": {
+    "notebook": {
+      "path": "state/research/c156_rules_20260915/public_v42/kaggriculture-v42-production-that-fits-the-marke.ipynb",
+      "sha256": "d7ff530e896a855e514274a09d662fc9c905379754cb6fdfa349b6ed6cf271aa"
+    },
+    "extracted": {
+      "path": "state/research/c156_rules_20260915/public_v42/main_extracted.py",
+      "sha256": "728fdfb4405ba313f8b14ffb3e0f8eceaddcaa0de49e4835928d89aaf71467e9"
+    },
+    "metadata": {
+      "path": "state/research/c156_rules_20260915/public_v42/kernel-metadata.json",
+      "sha256": "22ae4b8341527a4d4899424d53f555159f0753135fbcf047c2ff025576682f23"
+    },
+    "comparison": {
+      "path": "state/research/c156_rules_20260915/v42_route_comparison.json",
+      "sha256": "adb0041eef134ebccbc67b327793e16aeb2cba4d5343ebf7a9d5154017285e85"
+    },
+    "license": "Apache-2.0"
+  },
+  "route_contract": {
+    "legacy_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "new_ids": [
+      100,
+      101,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128
+    ],
+    "no_yarn_pairs": 49,
+    "shop_map_sha256": "70df74275dfb5f58dddf20c539870febadd2c5bb23ae25496f75a667139134c4",
+    "normalized_route_sha256": {
+      "100": "34190a01d909257d28822129f1a79e4ed89f9eed6acaf155052ccbe35c65fa34",
+      "101": "1b848c2f58b63df8ed559d337b72692b8f4ea38700d62c93069fdbbb49f6b29a",
+      "103": "80117f1cfd021cc72ca30b7bf6df2d829ca2cd858eb7d1cf5773e660a9532fda",
+      "104": "49f14a2f0660272ddb45e2040837ad75c13cd356556dcb1cdb8a4c331ff74be1",
+      "105": "0bbbbc86a7372289a08966a1cb05f893208724c3e0a7b9575a694b360144b774",
+      "106": "82d6ef40e1177f63e6ca84b614871fd3fdd5a04a53fd05afa9a7267fbd110100",
+      "107": "466f42ce2689da013aa126da9afed8731a8ee947d33efea5848bec5afe11c57d",
+      "108": "cd5b8c981bc2fac485e1a72fd9eb7eaf31da76c8c0bb13cfb358a16342c23410",
+      "109": "3e516e4c659ebcba564f48b04d2a0fa9fc631e97c760d27b0597f2288adad48f",
+      "110": "90a6a88a7856355224b5ebdaa151c17f2d1ec6bd410651ed3475ee2c35f00dff",
+      "111": "d40ee31cd1eb06722da15cf3b60c50ef425f8489ded01f60144b57ea540fac16",
+      "112": "6ca2978e77aca2d5272972a9d7b758145f06b6e9ad84b1481922e617179a2972",
+      "113": "a5e7d8b91fa6749200950c0b0ca0988a7340e981b540d846a7d9df30e7590b1d",
+      "114": "1add8e27440adf38e138fdba48d4581f5ee1d6b3f808f2c5c7c9cd2b37bc6600",
+      "115": "843bd11854ec8909d00aa6ccf5958b8c86ac95955e7b91800ef814867af3483e",
+      "116": "b0cafe2dc18ef70eda431c4196d2631f121ca288d641550eecc43f357f90fb74",
+      "117": "c73be22a0322eb3d6e10f72eb1e389e513b8a9005ce612f826d57cc765537277",
+      "118": "9cb779ca57285aeb890dca8d91a9ccec8d44c57d2854e0ad38158db1b00b5304",
+      "119": "1b848c2f58b63df8ed559d337b72692b8f4ea38700d62c93069fdbbb49f6b29a",
+      "120": "736b3a4c20d0adeca29ea21f70fa7dc09ee4cabb9d8cd81f06bb5663d419baf2",
+      "121": "0dc80c9b39d2bebf4c58c1dbd8e87b632ff085a6077f8f832305bf1f78e31b4d",
+      "122": "5ac0199f98033bc3a3402f0f945de55d2fc167db91a8bccaefc4dd73a1d7a33d",
+      "123": "81d65d06c118aa31606c017b2bb608903e9325ede097fc223b031c8a3ceebfc4",
+      "124": "bcca555a7ee7b9ccd231e4734f461241548f031d3d8b4e6dc9bd0b2bfc8601fa",
+      "125": "0bbbbc86a7372289a08966a1cb05f893208724c3e0a7b9575a694b360144b774",
+      "126": "84285d9d8986fadbe65f059b81e03e9c2554ffc4078930139ede9d1a95f3dada",
+      "127": "3e516e4c659ebcba564f48b04d2a0fa9fc631e97c760d27b0597f2288adad48f",
+      "128": "06d534b247fe645ec0b65653b07343931858bdf3d2c6737166105f8bb58b370b"
+    },
+    "opening": [
+      [
+        "BUY_PRODUCT",
+        "WHEAT",
+        13
+      ],
+      [
+        "BUY_PRODUCT",
+        "WHEAT",
+        10
+      ],
+      [
+        "SELL",
+        "WHEAT",
+        30
+      ]
+    ],
+    "day6_step": 144,
+    "day27_step": 648,
+    "day27_route": 2
+  },
+  "isolation": {
+    "yarn_worlds_keep_o182": true,
+    "o171_o170_disabled_for_new_routes": true,
+    "runtime_notebook_access": false,
+    "parent_calls_per_turn": 1
+  },
+  "promotion": false
+}

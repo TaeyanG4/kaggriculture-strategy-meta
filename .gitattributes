@@ -1,1 +1,13 @@
 agent/public_v27_kaito.py whitespace=-blank-at-eof
+
+# Byte-exact public sources and validated submission derivative.
+agent/public_v37_more_yield.py -text
+agent/public_master_engine_v2.py -text
+agent/c110_reserve8.py -text
+
+# Keep source fingerprints and deterministic builds stable across checkouts.
+src/kaggriculture_meta/league.py text eol=lf
+src/kaggriculture_meta/build_candidate.py text eol=lf
+src/kaggriculture_meta/package_agent.py text eol=lf
+src/kaggriculture_meta/replay_lab.py text eol=lf
+agent/overlays/*.py text eol=lf

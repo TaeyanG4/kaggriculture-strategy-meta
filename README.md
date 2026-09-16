@@ -4,6 +4,22 @@ Data-driven Kaggriculture competition research focused on interpretable strategy
 
 ## Current status
 
+**Latest submission, 2026-09-13:** `agent/c111_opening_rescue.py`, ref56190992,
+passed Kaggle server validation and an exact server download check. The dated live
+snapshot has53W/3L in56 public games,score2350.6; c110 remains highest-rated
+observed baseline at2809.7. See [c111 evidence and limitations](reports/c111-opening-rescue-2026-09-13.ko.md).
+Its local41W/7L is training evidence; fresh selection/holdout remain unrun.
+
+**Competition development, 2026-09-12:** the simulation league has been rebuilt
+with fresh match processes, official source loading, source/engine fingerprints,
+separate train/selection/holdout seeds, and controlled replay diagnostics.
+`agent/c110_reserve8.py` is the selected V37 derivative; the old v27 and c101
+sources remain intact. Read [the implementation evidence](reports/league-rebuild-2026-09-12.ko.md)
+and [the simulation guide](docs/simulation-league.md). Local wins do not establish
+first place or a particular Kaggle rating.
+
+The dataset checkpoint below describes the separate dataset workstream.
+
 **Gate: GO — NARROW V1, LOCAL CANDIDATE READY (2026-09-11).** The bounded current-meta build now covers 168 official-CC0 episodes / 336 seats from 2026-09-04 through 2026-09-10. The 48-column one-table `strategy_meta.csv` candidate passes core QA and is 122,674 bytes. The product centers on continuous/interpretable opening, economy, resource, and action fingerprints. The family label remains experimental, the counter matrix is not a core release claim, and public publication is still gated.
 
 ## Rights posture

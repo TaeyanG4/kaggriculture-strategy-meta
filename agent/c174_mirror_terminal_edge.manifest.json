@@ -1,0 +1,20 @@
+{
+    "schema":  1,
+    "candidate":  "c174_mirror_terminal_edge",
+    "status":  "implemented_unvalidated",
+    "parent":  {
+                   "path":  "agent/o199c_carrot_price2.py",
+                   "sha256":  "1429673c3c1057c07f0a644124a4fd497b111b1646451bac1de852e5c035a41d"
+               },
+    "overlays":  [
+                     "agent/overlays/c172_mirror_net_edge.py",
+                     "agent/overlays/c174_terminal_config.py"
+                 ],
+    "intent":  "terminal high-confidence all-SELL net-edge permutation",
+    "output":  {
+                   "path":  "agent/c174_mirror_terminal_edge.py",
+                   "sha256":  "9d9142e3384a30a9e9e057b6fe22057c1c09257dcf0e8695d3d0c440aa01f631",
+                   "bytes":  412111
+               },
+    "promotion":  false
+}

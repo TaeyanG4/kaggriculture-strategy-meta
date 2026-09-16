@@ -1,0 +1,277 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 180,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c150": {
+      "path": "agent/c150.py",
+      "sha256": "9713af1538ccc8e4e0e8a7ff72ae8a614ba9e7dcb3eb9d53c3074aabec137d6b"
+    },
+    "o159b": {
+      "path": "agent/o159b_feed_margin06.py",
+      "sha256": "cbcc866ce8f710d62c3f6673c743c714643f6aab32b81beba201b9085f3f887a"
+    },
+    "o160": {
+      "path": "agent/o160_feed_goose.py",
+      "sha256": "aa7b2ebd41aec42dca13a9cead862280c72756575c4cc40c2593b169f993a5ba"
+    },
+    "o161": {
+      "path": "agent/o161_harvest_only.py",
+      "sha256": "49e1e9d5ae809baaaa6c28a676c8a648dc3cb98d80d34ede809365636c187410"
+    },
+    "o162": {
+      "path": "agent/o162_goose_only.py",
+      "sha256": "26c7f8571e5b84ee8aec6511d8008aec4b3525306188572d4ab89cacfba51c1f"
+    }
+  },
+  "opponents": {
+    "nagata": {
+      "path": "state/agent_experiments/championship_p0_20260913/opponents/nagata/output/main.py",
+      "sha256": "dc7ca1d50af10c4aa5be494fdaf03b09729bf365982f027bee3b6bdce44ae7a8",
+      "family": "nagata_scheduler"
+    },
+    "shop-router-reactive-v5": {
+      "path": "state/parallel-handoffs/collaboration-20260914/public-latest-live/shop-router-v5/extracted_main.py",
+      "sha256": "7c821bdf746ce1c0bb6c8c5f4af82b53232251e2e4edd51d36f265eab861e3ea",
+      "family": "related_public_router"
+    },
+    "c129": {
+      "path": "agent/c129_feed_liquidity.py",
+      "sha256": "e9973586cbe2c0bbb034243f3d3e4c9fdcac4fcac432c0de32b0ba0e61f7ca61",
+      "family": "related_router"
+    },
+    "v41-review-candidate": {
+      "path": "state/parallel-handoffs/collaboration-20260914/public-latest-live/v41-review/extracted_main.py",
+      "sha256": "5f822797de60929bd88ba1f4719e782add81bff11ab5581fc8445a4d5f5655b6",
+      "family": "related_public_router"
+    },
+    "farming-score-v4-better-shop": {
+      "path": "state/o_dev/datasets/donor_agents/agents/lynnsakurai-farming-score-v4-a-better-shop.py",
+      "sha256": "110134e6eb14e60e26e5967d5ac955a0c4e6a6748946ea450df6d9fa6be170d6",
+      "family": "related_public_router"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "o161",
+      "parent": "c150",
+      "primary": true
+    },
+    {
+      "candidate": "o162",
+      "parent": "o160",
+      "primary": true
+    },
+    {
+      "candidate": "o162",
+      "parent": "o159b",
+      "primary": true
+    },
+    {
+      "candidate": "o160",
+      "parent": "o159b",
+      "primary": false
+    },
+    {
+      "candidate": "o159b",
+      "parent": "c150",
+      "primary": false
+    },
+    {
+      "candidate": "o160",
+      "parent": "c150",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1808459064,
+        1871243063,
+        115448618,
+        550539393,
+        489861100,
+        405138011,
+        1956584446,
+        1232638789,
+        1677257696,
+        116272575,
+        1952997394,
+        499449929,
+        1152257300,
+        1500484963,
+        1397357414,
+        2119261069,
+        30394248,
+        432293191,
+        49267194,
+        1531930897,
+        1174212412,
+        456565099,
+        637061070,
+        1288383701,
+        2003441712,
+        1864715727,
+        1468752098,
+        758049497,
+        680810084,
+        1445408371,
+        1109991734,
+        973547293
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1513520600,
+        1366255447,
+        1505942730,
+        2131142049,
+        41714316,
+        946953339,
+        1292674974,
+        256535141,
+        225941632,
+        1992602079,
+        34723250,
+        1356708201,
+        1255289780,
+        1447644035,
+        839449350,
+        1585321645,
+        2093221928,
+        2039172455,
+        2020076442,
+        1134511665,
+        2084964828,
+        1785142155,
+        1765260142,
+        380586997,
+        646343888,
+        1626167791,
+        44613250,
+        899312633,
+        127706372,
+        646376595,
+        233212118,
+        680471101,
+        1987929720,
+        962131831,
+        1126952554,
+        1862421185,
+        372155692,
+        334028443,
+        1159136062,
+        988991877,
+        1882952992,
+        1023428095,
+        1195187026,
+        1584267913,
+        476621396,
+        64033187,
+        1946077862,
+        1867735501,
+        698849480,
+        207185287,
+        1704715578,
+        1700311889,
+        1011569788,
+        268936619,
+        1183285006,
+        911080213,
+        360452464,
+        1990096399,
+        1828449314,
+        882998553,
+        2011906980,
+        727235251,
+        97435766,
+        874757469
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        499621656,
+        1380816791,
+        579129354,
+        957054945,
+        871438284,
+        1108635835,
+        1051078366,
+        892979365,
+        242016704,
+        1705568799,
+        273821938,
+        398318505,
+        169439476,
+        1787750339,
+        940796486,
+        848903405,
+        1336047976,
+        1597410727,
+        603172570,
+        985903217,
+        1807019804,
+        631259083,
+        969937582,
+        1718565429,
+        1886586384,
+        1581294127,
+        485288386,
+        1837899321,
+        338178628,
+        790927571,
+        583649302,
+        1888280701,
+        20785080,
+        190138295,
+        1261797802,
+        157959425,
+        1265359468,
+        1585189595,
+        1336027774,
+        182931397,
+        1043562080,
+        1086758463,
+        498669202,
+        840254665,
+        2022475668,
+        386584035,
+        1362024934,
+        1310173197,
+        165456392,
+        1126876615,
+        14108794,
+        573062545,
+        69917116,
+        1220078059,
+        1928951374,
+        98240853,
+        932399792,
+        165404239,
+        216250210,
+        128077657,
+        184250596,
+        7505651,
+        297770934,
+        361927581
+      ],
+      "alpha": 0.025
+    }
+  }
+}

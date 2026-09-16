@@ -1,0 +1,11 @@
+{
+  "candidate": "c163",
+  "parent": "agent/o182_combo_overflow.py",
+  "parent_sha256": "ef9d2aade50ce2ce400a64791288ffb179eee7a6e60ea0d06085ac12fe02900b",
+  "overlay": "agent/overlays/c163_worthless_care_fertilizer.py",
+  "overlay_sha256": "997cbedc73ae30946a998449e7b160ee5f51fd8781ca50f21807095c234b12e7",
+  "target": "agent/c163_worthless_care_fertilizer.py",
+  "target_sha256": "9d2989e20189613b7d1469bcf2e8a5b828bab369f7ee8ccfaf8e6562695f2452",
+  "bytes": 404974,
+  "status": "implemented_unvalidated"
+}

@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "candidate": "c178_tomato_lane_no_se",
+  "status": "implemented_unvalidated",
+  "parent": {
+    "path": "agent/o199c_carrot_price2.py",
+    "sha256": "1429673c3c1057c07f0a644124a4fd497b111b1646451bac1de852e5c035a41d"
+  },
+  "overlays": [
+    {
+      "path": "agent/overlays/c177_tomato_strawberry_lane.py",
+      "sha256": "1cde780634105c5063f06fa1190ca41785a9381e3500908999fe3ccd15b8bafd"
+    },
+    {
+      "path": "agent/overlays/c178_tomato_lane_no_se.py",
+      "sha256": "64611a88ad63f2b660db8fd7fc61b46edd505ab1e7229336db214654e657469f"
+    }
+  ],
+  "hypothesis": "Use o199c native strawberry labor slots for tomato and treat them as a replacement for, not an addition to, V219 southeast-land tomato.",
+  "contracts": {
+    "adds_buy_land": false,
+    "adds_hire": false,
+    "promotion": false,
+    "submission": false
+  },
+  "output": {
+    "path": "agent/c178_tomato_lane_no_se.py",
+    "sha256": "9858583f7e7d00d904d6c85722af9b688e8539def81a1525d2c9b72e68bea1ec",
+    "bytes": 408278
+  },
+  "promotion": false
+}

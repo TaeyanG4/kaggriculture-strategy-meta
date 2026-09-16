@@ -1,0 +1,820 @@
+{
+  "date": "2026-09-12",
+  "candidate": "agent/c110_reserve8.py",
+  "source_sha256": "0f31fd48e64cf3040a8fc66b14e98676b6b65916c010e0443fa5855d9ccc63ad",
+  "engine_version": "1.32.7",
+  "tests": {
+    "unit_and_engine_integration": 33,
+    "passed": 33
+  },
+  "results": {
+    "c110_fulltrain": {
+      "native_reacting": {
+        "overall": {
+          "games": 72,
+          "valid_games": 72,
+          "failures": 0,
+          "wins": 72,
+          "losses": 0,
+          "ties": 0,
+          "score_rate_ties_half": 1.0,
+          "seed_clusters": 12,
+          "seed_cluster_bootstrap_95": null,
+          "mean_margin": 17765.875,
+          "worst_margin": 444.0,
+          "max_action_seconds": 0.1315885999938473,
+          "over_one_second_calls": 0
+        },
+        "by_opponent": {
+          "c101": {
+            "games": 24,
+            "valid_games": 24,
+            "failures": 0,
+            "wins": 24,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 12,
+            "seed_cluster_bootstrap_95": null,
+            "mean_margin": 6385.083333333333,
+            "worst_margin": 444.0,
+            "max_action_seconds": 0.09973759995773435,
+            "over_one_second_calls": 0
+          },
+          "public_v27": {
+            "games": 24,
+            "valid_games": 24,
+            "failures": 0,
+            "wins": 24,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 12,
+            "seed_cluster_bootstrap_95": null,
+            "mean_margin": 45095.458333333336,
+            "worst_margin": 27361.0,
+            "max_action_seconds": 0.11171240010298789,
+            "over_one_second_calls": 0
+          },
+          "public_v37": {
+            "games": 24,
+            "valid_games": 24,
+            "failures": 0,
+            "wins": 24,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 12,
+            "seed_cluster_bootstrap_95": null,
+            "mean_margin": 1817.0833333333333,
+            "worst_margin": 649.0,
+            "max_action_seconds": 0.1315885999938473,
+            "over_one_second_calls": 0
+          }
+        },
+        "by_family": {
+          "kaito_v27": {
+            "games": 48,
+            "valid_games": 48,
+            "failures": 0,
+            "wins": 48,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 12,
+            "seed_cluster_bootstrap_95": null,
+            "mean_margin": 25740.270833333332,
+            "worst_margin": 444.0,
+            "max_action_seconds": 0.11171240010298789,
+            "over_one_second_calls": 0
+          },
+          "shop_router_0908": {
+            "games": 24,
+            "valid_games": 24,
+            "failures": 0,
+            "wins": 24,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 12,
+            "seed_cluster_bootstrap_95": null,
+            "mean_margin": 1817.0833333333333,
+            "worst_margin": 649.0,
+            "max_action_seconds": 0.1315885999938473,
+            "over_one_second_calls": 0
+          }
+        },
+        "by_seat": {
+          "0": {
+            "games": 36,
+            "valid_games": 36,
+            "failures": 0,
+            "wins": 36,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 12,
+            "seed_cluster_bootstrap_95": null,
+            "mean_margin": 17778.722222222223,
+            "worst_margin": 444.0,
+            "max_action_seconds": 0.1315885999938473,
+            "over_one_second_calls": 0
+          },
+          "1": {
+            "games": 36,
+            "valid_games": 36,
+            "failures": 0,
+            "wins": 36,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 12,
+            "seed_cluster_bootstrap_95": null,
+            "mean_margin": 17753.027777777777,
+            "worst_margin": 444.0,
+            "max_action_seconds": 0.09383849997539073,
+            "over_one_second_calls": 0
+          }
+        }
+      }
+    },
+    "c110_selection": {
+      "native_reacting": {
+        "overall": {
+          "games": 128,
+          "valid_games": 128,
+          "failures": 0,
+          "wins": 124,
+          "losses": 4,
+          "ties": 0,
+          "score_rate_ties_half": 0.96875,
+          "seed_clusters": 16,
+          "seed_cluster_bootstrap_95": [
+            0.921875,
+            1.0
+          ],
+          "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+          "mean_margin": 13847.328125,
+          "worst_margin": -3608.0,
+          "max_action_seconds": 0.18502960004843771,
+          "over_one_second_calls": 0
+        },
+        "by_opponent": {
+          "c101": {
+            "games": 32,
+            "valid_games": 32,
+            "failures": 0,
+            "wins": 30,
+            "losses": 2,
+            "ties": 0,
+            "score_rate_ties_half": 0.9375,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.8125,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 7616.71875,
+            "worst_margin": -190.0,
+            "max_action_seconds": 0.12558600003831089,
+            "over_one_second_calls": 0
+          },
+          "master_engine_v2": {
+            "games": 32,
+            "valid_games": 32,
+            "failures": 0,
+            "wins": 31,
+            "losses": 1,
+            "ties": 0,
+            "score_rate_ties_half": 0.96875,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.90625,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 3710.03125,
+            "worst_margin": -3470.0,
+            "max_action_seconds": 0.18502960004843771,
+            "over_one_second_calls": 0
+          },
+          "public_v27": {
+            "games": 32,
+            "valid_games": 32,
+            "failures": 0,
+            "wins": 32,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": null,
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 41971.65625,
+            "worst_margin": 26011.0,
+            "max_action_seconds": 0.1672685999656096,
+            "over_one_second_calls": 0
+          },
+          "public_v37": {
+            "games": 32,
+            "valid_games": 32,
+            "failures": 0,
+            "wins": 31,
+            "losses": 1,
+            "ties": 0,
+            "score_rate_ties_half": 0.96875,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.90625,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 2090.90625,
+            "worst_margin": -3608.0,
+            "max_action_seconds": 0.17332360008731484,
+            "over_one_second_calls": 0
+          }
+        },
+        "by_family": {
+          "kaito_v27": {
+            "games": 64,
+            "valid_games": 64,
+            "failures": 0,
+            "wins": 62,
+            "losses": 2,
+            "ties": 0,
+            "score_rate_ties_half": 0.96875,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.90625,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 24794.1875,
+            "worst_margin": -190.0,
+            "max_action_seconds": 0.1672685999656096,
+            "over_one_second_calls": 0
+          },
+          "shop_router_0908": {
+            "games": 64,
+            "valid_games": 64,
+            "failures": 0,
+            "wins": 62,
+            "losses": 2,
+            "ties": 0,
+            "score_rate_ties_half": 0.96875,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.90625,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 2900.46875,
+            "worst_margin": -3608.0,
+            "max_action_seconds": 0.18502960004843771,
+            "over_one_second_calls": 0
+          }
+        },
+        "by_seat": {
+          "0": {
+            "games": 64,
+            "valid_games": 64,
+            "failures": 0,
+            "wins": 61,
+            "losses": 3,
+            "ties": 0,
+            "score_rate_ties_half": 0.953125,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.875,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 13595.265625,
+            "worst_margin": -3608.0,
+            "max_action_seconds": 0.18502960004843771,
+            "over_one_second_calls": 0
+          },
+          "1": {
+            "games": 64,
+            "valid_games": 64,
+            "failures": 0,
+            "wins": 63,
+            "losses": 1,
+            "ties": 0,
+            "score_rate_ties_half": 0.984375,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.953125,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 14099.390625,
+            "worst_margin": -190.0,
+            "max_action_seconds": 0.15898090007249266,
+            "over_one_second_calls": 0
+          }
+        }
+      }
+    },
+    "c110_holdout": {
+      "native_reacting": {
+        "overall": {
+          "games": 256,
+          "valid_games": 256,
+          "failures": 0,
+          "wins": 252,
+          "losses": 4,
+          "ties": 0,
+          "score_rate_ties_half": 0.984375,
+          "seed_clusters": 32,
+          "seed_cluster_bootstrap_95": [
+            0.9609375,
+            1.0
+          ],
+          "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+          "mean_margin": 14046.38671875,
+          "worst_margin": -3860.0,
+          "max_action_seconds": 0.24234399991109967,
+          "over_one_second_calls": 0
+        },
+        "by_opponent": {
+          "c101": {
+            "games": 64,
+            "valid_games": 64,
+            "failures": 0,
+            "wins": 62,
+            "losses": 2,
+            "ties": 0,
+            "score_rate_ties_half": 0.96875,
+            "seed_clusters": 32,
+            "seed_cluster_bootstrap_95": [
+              0.90625,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 6835.015625,
+            "worst_margin": -165.0,
+            "max_action_seconds": 0.18528820003848523,
+            "over_one_second_calls": 0
+          },
+          "master_engine_v2": {
+            "games": 64,
+            "valid_games": 64,
+            "failures": 0,
+            "wins": 63,
+            "losses": 1,
+            "ties": 0,
+            "score_rate_ties_half": 0.984375,
+            "seed_clusters": 32,
+            "seed_cluster_bootstrap_95": [
+              0.953125,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 3651.109375,
+            "worst_margin": -2849.0,
+            "max_action_seconds": 0.18234519998077303,
+            "over_one_second_calls": 0
+          },
+          "public_v27": {
+            "games": 64,
+            "valid_games": 64,
+            "failures": 0,
+            "wins": 64,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 32,
+            "seed_cluster_bootstrap_95": null,
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 43861.84375,
+            "worst_margin": 26986.0,
+            "max_action_seconds": 0.24234399991109967,
+            "over_one_second_calls": 0
+          },
+          "public_v37": {
+            "games": 64,
+            "valid_games": 64,
+            "failures": 0,
+            "wins": 63,
+            "losses": 1,
+            "ties": 0,
+            "score_rate_ties_half": 0.984375,
+            "seed_clusters": 32,
+            "seed_cluster_bootstrap_95": [
+              0.953125,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 1837.578125,
+            "worst_margin": -3860.0,
+            "max_action_seconds": 0.22855419991537929,
+            "over_one_second_calls": 0
+          }
+        },
+        "by_family": {
+          "kaito_v27": {
+            "games": 128,
+            "valid_games": 128,
+            "failures": 0,
+            "wins": 126,
+            "losses": 2,
+            "ties": 0,
+            "score_rate_ties_half": 0.984375,
+            "seed_clusters": 32,
+            "seed_cluster_bootstrap_95": [
+              0.953125,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 25348.4296875,
+            "worst_margin": -165.0,
+            "max_action_seconds": 0.24234399991109967,
+            "over_one_second_calls": 0
+          },
+          "shop_router_0908": {
+            "games": 128,
+            "valid_games": 128,
+            "failures": 0,
+            "wins": 126,
+            "losses": 2,
+            "ties": 0,
+            "score_rate_ties_half": 0.984375,
+            "seed_clusters": 32,
+            "seed_cluster_bootstrap_95": [
+              0.953125,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 2744.34375,
+            "worst_margin": -3860.0,
+            "max_action_seconds": 0.22855419991537929,
+            "over_one_second_calls": 0
+          }
+        },
+        "by_seat": {
+          "0": {
+            "games": 128,
+            "valid_games": 128,
+            "failures": 0,
+            "wins": 125,
+            "losses": 3,
+            "ties": 0,
+            "score_rate_ties_half": 0.9765625,
+            "seed_clusters": 32,
+            "seed_cluster_bootstrap_95": [
+              0.9375,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 13940.7265625,
+            "worst_margin": -3860.0,
+            "max_action_seconds": 0.22855419991537929,
+            "over_one_second_calls": 0
+          },
+          "1": {
+            "games": 128,
+            "valid_games": 128,
+            "failures": 0,
+            "wins": 127,
+            "losses": 1,
+            "ties": 0,
+            "score_rate_ties_half": 0.9921875,
+            "seed_clusters": 32,
+            "seed_cluster_bootstrap_95": [
+              0.9765625,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 14152.046875,
+            "worst_margin": -165.0,
+            "max_action_seconds": 0.24234399991109967,
+            "over_one_second_calls": 0
+          }
+        }
+      }
+    },
+    "c110_additional": {
+      "native_reacting": {
+        "overall": {
+          "games": 24,
+          "valid_games": 24,
+          "failures": 0,
+          "wins": 24,
+          "losses": 0,
+          "ties": 0,
+          "score_rate_ties_half": 1.0,
+          "seed_clusters": 6,
+          "seed_cluster_bootstrap_95": null,
+          "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+          "mean_margin": 3405.0833333333335,
+          "worst_margin": 1709.0,
+          "max_action_seconds": 0.31305220001377165,
+          "over_one_second_calls": 0
+        },
+        "by_opponent": {
+          "market_smart_h5": {
+            "games": 12,
+            "valid_games": 12,
+            "failures": 0,
+            "wins": 12,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 6,
+            "seed_cluster_bootstrap_95": null,
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 2623.5,
+            "worst_margin": 1709.0,
+            "max_action_seconds": 0.31305220001377165,
+            "over_one_second_calls": 0
+          },
+          "small_shock": {
+            "games": 12,
+            "valid_games": 12,
+            "failures": 0,
+            "wins": 12,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 6,
+            "seed_cluster_bootstrap_95": null,
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 4186.666666666667,
+            "worst_margin": 2767.0,
+            "max_action_seconds": 0.2567710999865085,
+            "over_one_second_calls": 0
+          }
+        },
+        "by_family": {
+          "shop_router_0908": {
+            "games": 12,
+            "valid_games": 12,
+            "failures": 0,
+            "wins": 12,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 6,
+            "seed_cluster_bootstrap_95": null,
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 2623.5,
+            "worst_margin": 1709.0,
+            "max_action_seconds": 0.31305220001377165,
+            "over_one_second_calls": 0
+          },
+          "shop_router_0909_moon": {
+            "games": 12,
+            "valid_games": 12,
+            "failures": 0,
+            "wins": 12,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 6,
+            "seed_cluster_bootstrap_95": null,
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 4186.666666666667,
+            "worst_margin": 2767.0,
+            "max_action_seconds": 0.2567710999865085,
+            "over_one_second_calls": 0
+          }
+        },
+        "by_seat": {
+          "0": {
+            "games": 12,
+            "valid_games": 12,
+            "failures": 0,
+            "wins": 12,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 6,
+            "seed_cluster_bootstrap_95": null,
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 3405.0833333333335,
+            "worst_margin": 1709.0,
+            "max_action_seconds": 0.31305220001377165,
+            "over_one_second_calls": 0
+          },
+          "1": {
+            "games": 12,
+            "valid_games": 12,
+            "failures": 0,
+            "wins": 12,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 6,
+            "seed_cluster_bootstrap_95": null,
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 3405.0833333333335,
+            "worst_margin": 1709.0,
+            "max_action_seconds": 0.19557360000908375,
+            "over_one_second_calls": 0
+          }
+        }
+      }
+    },
+    "v37_selection": {
+      "native_reacting": {
+        "overall": {
+          "games": 96,
+          "valid_games": 96,
+          "failures": 0,
+          "wins": 93,
+          "losses": 3,
+          "ties": 0,
+          "score_rate_ties_half": 0.96875,
+          "seed_clusters": 16,
+          "seed_cluster_bootstrap_95": [
+            0.9166666666666666,
+            1.0
+          ],
+          "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+          "mean_margin": 17624.572916666668,
+          "worst_margin": -4483.0,
+          "max_action_seconds": 0.2857576000969857,
+          "over_one_second_calls": 0
+        },
+        "by_opponent": {
+          "c101": {
+            "games": 32,
+            "valid_games": 32,
+            "failures": 0,
+            "wins": 30,
+            "losses": 2,
+            "ties": 0,
+            "score_rate_ties_half": 0.9375,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.8125,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 8515.21875,
+            "worst_margin": -387.0,
+            "max_action_seconds": 0.2857576000969857,
+            "over_one_second_calls": 0
+          },
+          "master_engine_v2": {
+            "games": 32,
+            "valid_games": 32,
+            "failures": 0,
+            "wins": 31,
+            "losses": 1,
+            "ties": 0,
+            "score_rate_ties_half": 0.96875,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.90625,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 1644.75,
+            "worst_margin": -4483.0,
+            "max_action_seconds": 0.22826030000578612,
+            "over_one_second_calls": 0
+          },
+          "public_v27": {
+            "games": 32,
+            "valid_games": 32,
+            "failures": 0,
+            "wins": 32,
+            "losses": 0,
+            "ties": 0,
+            "score_rate_ties_half": 1.0,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": null,
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 42713.75,
+            "worst_margin": 26491.0,
+            "max_action_seconds": 0.20098580000922084,
+            "over_one_second_calls": 0
+          }
+        },
+        "by_family": {
+          "kaito_v27": {
+            "games": 64,
+            "valid_games": 64,
+            "failures": 0,
+            "wins": 62,
+            "losses": 2,
+            "ties": 0,
+            "score_rate_ties_half": 0.96875,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.90625,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 25614.484375,
+            "worst_margin": -387.0,
+            "max_action_seconds": 0.2857576000969857,
+            "over_one_second_calls": 0
+          },
+          "shop_router_0908": {
+            "games": 32,
+            "valid_games": 32,
+            "failures": 0,
+            "wins": 31,
+            "losses": 1,
+            "ties": 0,
+            "score_rate_ties_half": 0.96875,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.90625,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 1644.75,
+            "worst_margin": -4483.0,
+            "max_action_seconds": 0.22826030000578612,
+            "over_one_second_calls": 0
+          }
+        },
+        "by_seat": {
+          "0": {
+            "games": 48,
+            "valid_games": 48,
+            "failures": 0,
+            "wins": 46,
+            "losses": 2,
+            "ties": 0,
+            "score_rate_ties_half": 0.9583333333333334,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.8958333333333334,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 17389.541666666668,
+            "worst_margin": -4483.0,
+            "max_action_seconds": 0.2857576000969857,
+            "over_one_second_calls": 0
+          },
+          "1": {
+            "games": 48,
+            "valid_games": 48,
+            "failures": 0,
+            "wins": 47,
+            "losses": 1,
+            "ties": 0,
+            "score_rate_ties_half": 0.9791666666666666,
+            "seed_clusters": 16,
+            "seed_cluster_bootstrap_95": [
+              0.9375,
+              1.0
+            ],
+            "bootstrap_note": "Unavailable with fewer than two seeds or no between-seed variation; not a guarantee of unseen performance",
+            "mean_margin": 17859.604166666668,
+            "worst_margin": -387.0,
+            "max_action_seconds": 0.22826030000578612,
+            "over_one_second_calls": 0
+          }
+        }
+      }
+    }
+  },
+  "replay_diagnostics": [
+    {
+      "scenario": "previous_own_loss",
+      "margin": 73349.0,
+      "valid": true,
+      "original_reproduced": true
+    },
+    {
+      "scenario": "elite",
+      "margin": -9397.0,
+      "valid": true,
+      "original_reproduced": true
+    },
+    {
+      "scenario": "elite",
+      "margin": -21920.0,
+      "valid": true,
+      "original_reproduced": true
+    },
+    {
+      "scenario": "elite",
+      "margin": -6632.0,
+      "valid": true,
+      "original_reproduced": true
+    },
+    {
+      "scenario": "previous_own_loss",
+      "margin": 5299.0,
+      "valid": true,
+      "original_reproduced": true
+    }
+  ],
+  "submission": {
+    "ref": 56185728,
+    "status": "COMPLETE",
+    "public_score": "600.0",
+    "observed_at_utc": "2026-09-12T12:51:44.644292+00:00",
+    "visible_episodes": 1,
+    "interpretation": "Initial server validation and placement score only; no mature ladder-strength claim."
+  },
+  "limits": "Native opponent panel comprises related public route families; no private elite policy included. Replays are fixed-action diagnostics, never live win-rate estimates."
+}

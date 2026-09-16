@@ -1,0 +1,3 @@
+{"name": "tomato", "env": "KAGG_FORCE_TOMATO", "actions": ["KEEP", "SMALL", "MEDIUM"],
+ "key_tel": "o214_key", "fired_tel": "o214_fired", "agent": "agent/o214_tomato.py",
+ "buckets": ["tomato", "one_milk", "two_milk", "goose"], "opps": ["c150", "v43", "fsv4", "msf"]}

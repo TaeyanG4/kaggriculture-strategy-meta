@@ -1,0 +1,21 @@
+{
+    "schema":  1,
+    "candidate":  "c173_mirror_horizon16",
+    "status":  "implemented_unvalidated",
+    "parent":  {
+                   "path":  "agent/o199c_carrot_price2.py",
+                   "sha256":  "1429673c3c1057c07f0a644124a4fd497b111b1646451bac1de852e5c035a41d"
+               },
+    "overlays":  [
+                     "agent/overlays/c172_mirror_net_edge.py",
+                     "inline:disable_reorder",
+                     "agent/overlays/c173_mirror_horizon16.py"
+                 ],
+    "intent":  "isolated high-confidence physical sale lead horizon 16",
+    "output":  {
+                   "path":  "agent/c173_mirror_horizon16.py",
+                   "sha256":  "32bbd3140cdd9545645377971c9734f21f45ceaba8535c05ecc6d65437363c61",
+                   "bytes":  415328
+               },
+    "promotion":  false
+}
