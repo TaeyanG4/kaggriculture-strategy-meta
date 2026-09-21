@@ -593,11 +593,25 @@ class PublicLeagueTests(unittest.TestCase):
                reward_a,reward_b,margin_a,created_at,completed_at)
               VALUES('history','engine',?,?,9,0,'complete',1,110,90,20,?,?)""",
               (a, b, now, now))
+            self.store.db.execute("""INSERT INTO matches
+              (match_key,engine_sha,agent_a,agent_b,seed,seat_a,status,created_at)
+              VALUES('history-running','engine',?,?,10,0,'running',?)""", (a, b, now))
+            self.store.db.execute("""INSERT INTO matches
+              (match_key,engine_sha,agent_a,agent_b,seed,seat_a,status,error,created_at,completed_at)
+              VALUES('history-invalid','engine',?,?,11,0,'invalid','boom',?,?)""",
+              (a, b, now, now))
         history = league.agent_match_history(self.store, b)
-        self.assertEqual(history["total"], 1)
-        self.assertEqual(history["matches"][0]["opponent_name"], "A")
-        self.assertEqual(history["matches"][0]["outcome"], 0)
-        self.assertEqual(history["matches"][0]["margin"], -20)
+        self.assertEqual(history["total"], 3)
+        by_status = {row["status"]: row for row in history["matches"]}
+        self.assertEqual(by_status["complete"]["opponent_name"], "A")
+        self.assertEqual(by_status["complete"]["outcome"], 0)
+        self.assertEqual(by_status["complete"]["margin"], -20)
+        self.assertEqual(by_status["complete"]["result_label"], "패")
+        self.assertEqual(by_status["complete"]["status_label"], "완료")
+        self.assertEqual(by_status["running"]["result_label"], "진행 중")
+        self.assertEqual(by_status["running"]["status_label"], "대전 중")
+        self.assertEqual(by_status["invalid"]["result_label"], "무효")
+        self.assertEqual(by_status["invalid"]["status_label"], "무효")
 
     def test_new_agent_gets_catch_up_matches_until_game_deficit_closes(self):
         veterans = [self.seed_agent(ch * 64, ch.upper()) for ch in "abc"]
