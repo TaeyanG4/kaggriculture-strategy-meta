@@ -1824,6 +1824,49 @@ def prepare_artifact_files(store: Store, files: dict[str, bytes]) -> dict[str, b
             if not name.lower().endswith((".cpp", ".hpp", ".h", ".inc"))}
 
 
+LINUX_ONLY_SIGNAL_NAMES = {
+    "SIGALRM", "SIGVTALRM", "SIGPROF", "ITIMER_REAL", "ITIMER_VIRTUAL", "ITIMER_PROF",
+    "alarm", "setitimer", "getitimer",
+}
+
+
+def python_artifact_requires_linux(files: dict[str, bytes]) -> bool:
+    """Detect Python bundles that use POSIX-only signal APIs.
+
+    Kaggle submissions run on Linux.  Running a bundle that uses SIGALRM on
+    the Windows dashboard host creates a false QA failure before the agent can
+    return its first action.  Keep ordinary Python agents on the faster host
+    path and route only statically identifiable POSIX-signal users to Docker.
+    """
+    for name, payload in files.items():
+        if not name.lower().endswith(".py"):
+            continue
+        try:
+            tree = ast.parse(payload.decode("utf-8-sig"), filename=name)
+        except (SyntaxError, UnicodeDecodeError):
+            continue
+        signal_modules: set[str] = set()
+        direct_names: set[str] = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name == "signal":
+                        signal_modules.add(alias.asname or "signal")
+            elif isinstance(node, ast.ImportFrom) and node.module == "signal":
+                for alias in node.names:
+                    if alias.name in LINUX_ONLY_SIGNAL_NAMES or alias.name == "*":
+                        direct_names.add(alias.asname or alias.name)
+        for node in ast.walk(tree):
+            if (isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name)
+                    and node.value.id in signal_modules
+                    and node.attr in LINUX_ONLY_SIGNAL_NAMES):
+                return True
+            if (isinstance(node, ast.Name) and node.id in direct_names
+                    and isinstance(node.ctx, ast.Load)):
+                return True
+    return False
+
+
 def save_artifact(store: Store, files: dict[str, bytes]) -> tuple[str, Path, str, list[str], str]:
     files = prepare_artifact_files(store, files)
     source_data = canonical_source(files["main.py"])
@@ -1842,7 +1885,8 @@ def save_artifact(store: Store, files: dict[str, bytes]) -> tuple[str, Path, str
             target.parent.mkdir(parents=True, exist_ok=True)
             if not target.exists(): target.write_bytes(payload)
         source = folder / "main.py"
-    platform = "linux" if any(name.endswith((".so", ".dylib")) for name in files) else "host"
+    platform = ("linux" if (any(name.endswith((".so", ".dylib")) for name in files)
+                            or python_artifact_requires_linux(files)) else "host")
     return digest, source, source_digest, sorted(files), platform
 
 
@@ -2210,7 +2254,11 @@ def quarantine_runtime_failures(store: Store, threshold=None) -> dict:
             if code_count < code_threshold:
                 continue
             prior = store.db.execute("SELECT qa_status FROM agents WHERE id=?", (agent_id,)).fetchone()
-            if prior and prior[0] == "runtime_failed":
+            # Only currently eligible, QA-passed identities may transition to
+            # runtime_failed.  Superseded historical artifacts retain their old
+            # invalid matches for provenance and must never re-enter quarantine
+            # when an unrelated league batch completes.
+            if not prior or prior[0] != "pass":
                 continue
             detail = json.dumps(examples[agent_id], ensure_ascii=False)[:1200]
             store.db.execute("""UPDATE agents SET qa_status='runtime_failed',status='quarantine',qa_error=?

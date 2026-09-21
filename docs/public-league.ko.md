@@ -13,7 +13,7 @@
 2. 새 버전만 `kernels pull`로 받아 원본 디렉터리를 보존한다.
 3. `main.py`와 함께 tar 멤버, 모든 `%%writefile`/`%%agentfile`, 독립 실행 가능한 direct-agent code cell, 정적으로 해제 가능한 gzip/base64 파일맵, 100 MiB 이하의 선언 dataset 부속파일을 복원한다. `/kaggle/working/...` writefile은 제출 archive-root 상대경로로 정규화한다. `main.py`가 없으면 독립 파싱되고 top-level 공식 entrypoint를 정의하는 writefile이 정확히 하나인 경우에만 그 파일을 `main.py`로 승격한다. Dataset 파일 목록은 Kaggle CLI의 CSV 앞 pagination 문구와 다음 페이지까지 읽고, 전체 크기를 확인한 뒤에만 내려받는다. 완료 표식이 없는 중단 다운로드는 완성본으로 간주하지 않는다. `kernels pull`에 없는 현재 saved notebook의 공개 Output도 별도로 조회해 `main.py`/`submission.py`/submission tar와 작은 런타임 sidecar만 내려받는다. Notebook cell은 실행하지 않는다. C++ source형은 고정 Docker 환경에서 `agent.so`를 빌드한다.
 4. 단일 `main.py`는 기존 LF 정규화 source SHA를 유지한다. 다중 파일 제출은 정렬된 경로와 모든 런타임 파일 바이트로 artifact SHA를 계산한다. C++ 빌드 뒤 `.cpp/.hpp/.h/.inc`는 제출 런타임 신원에서 제외하고 `main.py + agent.so`로 식별한다. 미세 코드·asset 변경은 별도 agent다.
-5. 컴파일과 Kaggle last-callable 로더에 더해 공식 native 관측으로 첫 행동을 실제 호출한 agent만 리그에 넣는다. Linux shared-library bundle은 엔진 1.32.7 Docker에서 실행한다.
+5. 컴파일과 Kaggle last-callable 로더에 더해 공식 native 관측으로 첫 행동을 실제 호출한 agent만 리그에 넣는다. Linux shared-library bundle과 `SIGALRM`/POSIX interval timer를 실제 import해 쓰는 Python bundle은 엔진 1.32.7 Docker에서 실행한다. 일반 Python bundle은 host에서 실행한다.
 6. 엔진·v2 규칙·설정·runner·두 artifact·시드·좌석이 같은 경기는 SQLite 캐시를 재사용한다. 모든 대결은 양 좌석이다.
 7. 누적 경기 수가 적은 신규 후보를 우선 배정한다. 첫 배치 뒤 `archived`가 되어도 최대 32경기까지 catch-up 대진을 계속한다. 표본과 pair 수가 비슷하면 Bradley–Terry(BT) 점수가 가까운 상대를 우선한다. 유효 경기만 BT와 Wilson 승점률 구간에 반영한다.
 8. 최소 경기 수를 채운 agent 중 상위 100개를 `active`로 유지한다. 나머지는 `archived`로 바꾸되 소스·노트북·전적은 삭제하지 않는다.
@@ -110,6 +110,7 @@ powershell -ExecutionPolicy Bypass -File tools\remove-public-league-tasks.ps1
 - 공식 status/행동 예외/720-step 계약 실패 경기는 `invalid`이며 승리로 계산하지 않는다. 외부 wall cap은 공식 `runTimeout=1200`보다 긴 1220초다.
 - 공식 DONE·719회 호출·행동 예외 0이면 로컬 `over_one_second`와 이름에 `error`가 들어간 자체 telemetry는 경고로만 남긴다. 공식 환경의 행동당 1초와 누적 overage 60초 판정은 엔진 status가 담당한다.
 - 외부 전체 경기 timeout은 어느 좌석이 원인인지 알 수 없어 자동 격리 근거로 쓰지 않는다. 행동 예외·잘못된 반환처럼 agent에 직접 귀속되는 코드 오류가 2경기에서 반복되면 격리한다.
+- 자동 runtime 격리는 현재 QA를 통과한 agent만 대상으로 한다. 부속파일이 빠진 옛 신원이 완전한 후속 artifact로 대체되면 옛 소스·무효 경기는 삭제하지 않고 `superseded/archived`로 보존하며, 과거 오류 때문에 다시 quarantine으로 돌아가지 않는다.
 - 대결 중지는 Windows 워커 프로세스 트리 전체를 종료하고, Linux artifact 경기의 결정적 이름 Docker container도 강제 제거한 뒤 예약된 `running` 행을 정리한다.
 - 노트북이 갱신되면 새 version 행과 새 소스를 추가하고 과거 버전은 덮어쓰지 않는다.
 - 자동 Kaggle 제출은 이 서비스 범위에 포함하지 않는다. 제출 후보는 충분한 로컬 증거와 exact source readback을 별도 승격 단계에서 처리한다.

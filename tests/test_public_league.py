@@ -777,6 +777,24 @@ class PublicLeagueTests(unittest.TestCase):
         row = self.store.db.execute("SELECT qa_status,status FROM agents WHERE id=?", (bad,)).fetchone()
         self.assertEqual(tuple(row), ("runtime_failed", "quarantine"))
 
+    def test_superseded_historical_failures_do_not_reenter_quarantine(self):
+        old = self.seed_agent("1" * 64, "Old Incomplete")
+        good = self.seed_agent("2" * 64, "Complete Replacement")
+        now = league.utcnow()
+        with self.store.db:
+            self.store.db.execute(
+                "UPDATE agents SET qa_status='superseded',status='archived' WHERE id=?", (old,))
+            for i in range(2):
+                self.store.db.execute("""INSERT INTO matches
+                  (match_key,engine_sha,agent_a,agent_b,seed,seat_a,status,result_json,created_at)
+                  VALUES(?,?,?,?,?,0,'invalid',?,?)""", (f"historical{i}", "e", old, good, i,
+                  json.dumps({"errors": [[{"type": "FileNotFoundError"}], []]}), now))
+        out = league.quarantine_runtime_failures(self.store)
+        self.assertNotIn(old, out["agent_ids"])
+        row = self.store.db.execute(
+            "SELECT qa_status,status FROM agents WHERE id=?", (old,)).fetchone()
+        self.assertEqual(tuple(row), ("superseded", "archived"))
+
     def test_repeated_local_timing_warning_does_not_quarantine_agent(self):
         bad = self.seed_agent("c" * 64, "Slow"); good = self.seed_agent("d" * 64, "Good")
         other = self.seed_agent("e" * 64, "Other")
@@ -810,6 +828,17 @@ class PublicLeagueTests(unittest.TestCase):
         self.assertNotEqual(first, second)
         self.assertEqual(league.artifact_digest({"main.py": main}),
                          league.sha256(league.canonical_source(main)))
+
+    def test_sigalrm_python_bundle_uses_linux_runtime(self):
+        main = b"import signal as sig\nTOKEN = sig.SIGALRM\n" + AGENT.encode()
+        _, _, _, _, platform = league.save_artifact(
+            self.store, {"main.py": main, "helper.py": b"from signal import alarm\nalarm(0)\n"})
+        self.assertEqual(platform, "linux")
+
+    def test_ordinary_python_bundle_stays_on_host_runtime(self):
+        _, _, _, _, platform = league.save_artifact(
+            self.store, {"main.py": AGENT.encode(), "helper.py": b"import math\n"})
+        self.assertEqual(platform, "host")
 
     def test_notebook_gzip_json_map_recovers_all_files(self):
         import base64, gzip
