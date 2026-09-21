@@ -55,6 +55,7 @@ PUBLIC_LEAGUE_MATCH_TIMEOUT_SECONDS = 1220
 PUBLIC_LEAGUE_DOCKER_IMAGE = "kaggriculture-public-league:1.32.7"
 PUBLIC_LEAGUE_MAX_DATASET_BYTES = 100 * 1024 * 1024
 NEWCOMER_PRIORITY_GAMES = 32
+DEFAULT_TOP_K = 100
 BROWSER_HEARTBEAT_TTL_SECONDS = 180
 BROWSER_CLOSE_GRACE_SECONDS = 5
 
@@ -923,10 +924,20 @@ def artifacts_from_notebook(path: Path) -> list[tuple[str, dict[str, bytes]]]:
             continue
         src = _cell_source(cell)
         lines = src.splitlines()
-        match = re.match(r"^\s*%%writefile\s+(.+?)\s*$", lines[0], re.I) if lines else None
-        if match:
+        write_match = re.match(r"^\s*%%writefile\s+(.+?)\s*$", lines[0], re.I) if lines else None
+        agentfile_match = re.match(r"^\s*%%agentfile(?:\s+(.+?))?\s*$", lines[0], re.I) if lines else None
+        if write_match or agentfile_match:
             with contextlib.suppress(ValueError):
-                filename = safe_relative_path(match.group(1).strip().strip("'\""))
+                raw_name = ((write_match or agentfile_match).group(1) or "main.py").strip().strip("'\"")
+                # Kaggle examples commonly write to /kaggle/working/main.py.
+                # That path is the archive root at submission time, so retain
+                # only its relative suffix while still rejecting arbitrary
+                # absolute paths and traversal.
+                normalized = raw_name.replace("\\", "/")
+                prefix = "/kaggle/working/"
+                if normalized.lower().startswith(prefix):
+                    normalized = normalized[len(prefix):]
+                filename = safe_relative_path(normalized)
                 payload = "\n".join(lines[1:]) + "\n"
                 writefiles[filename] = canonical_source(payload) if filename.endswith(".py") else payload.encode()
         # Common public notebooks store the full submission in a string literal.
@@ -934,6 +945,19 @@ def artifacts_from_notebook(path: Path) -> list[tuple[str, dict[str, bytes]]]:
             tree = ast.parse(src)
         except SyntaxError:
             continue
+        # Some public notebooks put a complete submission directly in one code
+        # cell instead of writing main.py or packing it into a literal.  Treat
+        # that cell as a candidate only when it parses independently and
+        # defines an official entry point; normal compile/loader/first-action
+        # QA still decides whether it enters the league.
+        direct_entries = {
+            node.name for node in tree.body
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.name in ("agent", "kaggle_submission_agent")
+        }
+        if direct_entries:
+            found.append((f"{path.name}:cell{index}:direct-agent-cell",
+                          {"main.py": canonical_source(src)}))
         for origin, files in packed_artifacts_from_tree(tree):
             found.append((f"{path.name}:cell{index}:{origin}", files))
         packed_map = _gzip_json_artifact(tree)
@@ -953,9 +977,24 @@ def artifacts_from_notebook(path: Path) -> list[tuple[str, dict[str, bytes]]]:
     for name, value in literals.items():
         found.append((f"{path.name}:literal:{name}", {"main.py": canonical_source(value)}))
     if "main.py" not in writefiles:
-        main_candidates = [n for n in writefiles if Path(n).name in ("agent_main.py", "submission_main.py")]
+        # Many notebooks write one executable agent as submission.py,
+        # my_agent.py, or parent_v*.py and rename it only while creating the
+        # tarball.  Promote exactly one independently parsable file that
+        # defines an official top-level entry point.  Ambiguous multi-agent
+        # notebooks remain uncollected instead of guessing.
+        main_candidates = []
+        for name, data in writefiles.items():
+            if not name.endswith(".py"):
+                continue
+            with contextlib.suppress(SyntaxError, UnicodeError):
+                candidate_tree = ast.parse(data.decode("utf-8"))
+                if any(isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+                       and node.name in ("agent", "kaggle_submission_agent")
+                       for node in candidate_tree.body):
+                    main_candidates.append(name)
         if len(main_candidates) == 1:
-            writefiles["main.py"] = writefiles[main_candidates[0]]
+            source_name = main_candidates[0]
+            writefiles["main.py"] = writefiles.pop(source_name)
     writefiles.update({name: data for name, data in sidecars.items() if name not in writefiles})
     if "main.py" in writefiles:
         found.insert(0, (f"{path.name}:writefile", writefiles))
@@ -1098,7 +1137,8 @@ def discover_artifacts(archive: Path) -> list[tuple[str, dict[str, bytes]]]:
     if not found:
         for path in sorted(archive.rglob("*.ipynb")):
             with contextlib.suppress(OSError, UnicodeError, json.JSONDecodeError):
-                found.extend(sources_from_builder_cells(path))
+                found.extend((origin, {"main.py": data})
+                             for origin, data in sources_from_builder_cells(path))
     # Explicit writefile/tar/main candidates first, exact candidates once.
     priority = lambda x: (0 if "writefile" in x[0] else 1 if "main.py" in x[0].lower() else 2,
                           -len(x[1]), -sum(map(len, x[1].values())))
@@ -1227,7 +1267,20 @@ def extract(store: Store, limit=100) -> dict:
     """, (limit,)).fetchall()
     extracted = duplicate = quarantined = empty = 0
     for row in versions:
-        candidates = discover_artifacts(Path(row["archive_path"]))
+        try:
+            candidates = discover_artifacts(Path(row["archive_path"]))
+        except Exception as exc:
+            # One malformed public notebook must never starve every newer item
+            # in the extraction queue.  Preserve the failure for inspection and
+            # continue with the remaining immutable notebook versions.
+            error = f"extractor {type(exc).__name__}: {exc}"
+            with store.db:
+                store.db.execute(
+                    "UPDATE notebook_versions SET status='quarantine',error=? WHERE id=?",
+                    (error[:5000], row["id"]),
+                )
+            quarantined += 1
+            continue
         winner = None
         errors = []
         for origin, files in candidates:
@@ -1326,7 +1379,7 @@ def eligible_agents(store: Store):
     """).fetchall()
 
 
-def schedule_matches(store: Store, top_k=50, seeds_per_pair=1, max_matches=240,
+def schedule_matches(store: Store, top_k=DEFAULT_TOP_K, seeds_per_pair=1, max_matches=240,
                      newcomer_priority_games=NEWCOMER_PRIORITY_GAMES,
                      focus_agent_id=None) -> list[dict]:
     agents = eligible_agents(store)
@@ -1697,7 +1750,7 @@ def repair_nonfatal_telemetry_matches(store: Store) -> dict:
     return {"matches": repaired, "agents": len(touched)}
 
 
-def run_league(store: Store, workers=8, top_k=50, seeds_per_pair=1,
+def run_league(store: Store, workers=8, top_k=DEFAULT_TOP_K, seeds_per_pair=1,
                max_matches=240, timeout=PUBLIC_LEAGUE_MATCH_TIMEOUT_SECONDS,
                stop_event=None, focus_agent_id=None) -> dict:
     with process_lock(store.state / "league.lock") as acquired:
@@ -1707,7 +1760,7 @@ def run_league(store: Store, workers=8, top_k=50, seeds_per_pair=1,
                                     max_matches, timeout, stop_event, focus_agent_id)
 
 
-def _run_league_unlocked(store: Store, workers=8, top_k=50, seeds_per_pair=1,
+def _run_league_unlocked(store: Store, workers=8, top_k=DEFAULT_TOP_K, seeds_per_pair=1,
                          max_matches=240, timeout=PUBLIC_LEAGUE_MATCH_TIMEOUT_SECONDS, stop_event=None,
                          focus_agent_id=None) -> dict:
     if workers not in range(1, 13):
@@ -1863,7 +1916,7 @@ def bradley_terry_ratings(agent_ids, rows, regularization=1.0) -> dict[int, floa
     return {key: 1500.0 + scale * ability[key] for key in ids}
 
 
-def update_rankings(store: Store, top_k=50, min_games=8):
+def update_rankings(store: Store, top_k=DEFAULT_TOP_K, min_games=8):
     agents = eligible_agents(store)
     rows = store.db.execute("SELECT * FROM matches WHERE status='complete' ORDER BY id").fetchall()
     ratings = bradley_terry_ratings((x["id"] for x in agents), rows)
@@ -2181,9 +2234,9 @@ DASHBOARD = r'''<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <div class="card settings"><b>자동 수집·대결 설정</b><button id="autoCollectButton" onclick="toggleAutoCollect()">자동 수집 확인 중…</button><label>수집 주기(시간) <input id="intervalHours" type="number" min="0.25" max="168" step="0.25"></label><label>대결 워커 수 <input id="workers" type="number" min="1" max="12" step="1"></label><button onclick="saveSettings()">설정 저장</button><span class="muted" id="settingsResult">수집은 예약 실행, 대결 워커는 다음 배치부터 적용</span></div>
 <div class="card settings"><b>노트북 검색·직접 추가</b><input id="searchQuery" style="width:min(520px,70vw)" placeholder="제목 검색 또는 https://www.kaggle.com/code/author/slug"><button onclick="searchNotebooks()">검색</button><label>집중 추가 유효 경기 수 <input id="focusGames" type="number" min="2" max="10000" step="2" value="500"></label><span class="muted" id="searchResultText">기존 누적 경기와 별도로 추가 측정 · 양 좌석 묶음 때문에 최대 1경기 초과 가능</span></div>
 <div id="searchResults" class="card" style="display:none"></div>
-<details class="card"><summary><b>현재 매칭 방식</b></summary><p>일반 대결은 QA-pass agent 중 상위 active와 신규 challenger를 최대 50개 풀로 잡습니다. 표본이 부족한 모델을 먼저 고르고, 경기 수와 상대 전적이 비슷하면 BT 점수가 가까운 상대를 우선합니다. 신규 모델은 32경기까지 catch-up하며 세 번째 대진마다 경험 많은 강자를 섞습니다. 집중 측정은 선택한 agent를 모든 경기에 고정합니다. 같은 결정적 seed를 양 좌석으로 실행하며 동일 계약·두 artifact·seed·좌석은 다시 돌리지 않습니다. 240경기는 내부 재편성 묶음이고 유효 경기만 BT·승점률에 반영합니다. main.py와 모든 제출 부속파일이 같은 artifact만 별칭으로 묶습니다.</p></details>
+<details class="card"><summary><b>현재 매칭 방식</b></summary><p>일반 대결은 QA-pass agent 중 상위 active와 신규 challenger를 최대 100개 풀로 잡습니다. 표본이 부족한 모델을 먼저 고르고, 경기 수와 상대 전적이 비슷하면 BT 점수가 가까운 상대를 우선합니다. 신규 모델은 32경기까지 catch-up하며 세 번째 대진마다 경험 많은 강자를 섞습니다. 집중 측정은 선택한 agent를 모든 경기에 고정합니다. 같은 결정적 seed를 양 좌석으로 실행하며 동일 계약·두 artifact·seed·좌석은 다시 돌리지 않습니다. 240경기는 내부 재편성 묶음이고 유효 경기만 BT·승점률에 반영합니다. main.py와 모든 제출 부속파일이 같은 artifact만 별칭으로 묶습니다.</p></details>
 <div class="cards" id="cards"></div><div class="tabs"><button class="on" onclick="tab('rank',this)">랭킹</button> <button id="agentMatchTab" onclick="tab('agentmatches',this)">선택 agent 전적</button> <button onclick="tab('unplayable',this)">수집됨·대전 불가</button> <button onclick="tab('events',this)">수집 기록</button> <button onclick="tab('matches',this)">최근 경기</button></div>
-<div class="legend"><div class="card"><b class="active">active</b>최소 8개 유효 경기를 마치고 현재 상위 50에 든 agent.</div><div class="card"><b class="candidate">candidate</b>실제 첫 행동 QA를 통과했지만 아직 표본이 부족하거나 도전자 대기열에 있는 agent.</div><div class="card"><b class="archived">archived</b>검증은 끝났지만 현재 상위 50 밖인 agent. 파일과 전적은 보존된다.</div><div class="card"><b class="quarantine">quarantine</b>컴파일·loader·첫 행동 QA 실패 또는 반복 코드 예외가 확인된 agent. 공식 DONE 경기의 로컬 시간 경고만으로 격리하지 않는다.</div></div>
+<div class="legend"><div class="card"><b class="active">active</b>최소 8개 유효 경기를 마치고 현재 상위 100에 든 agent.</div><div class="card"><b class="candidate">candidate</b>실제 첫 행동 QA를 통과했지만 아직 표본이 부족하거나 도전자 대기열에 있는 agent.</div><div class="card"><b class="archived">archived</b>검증은 끝났지만 현재 상위 100 밖인 agent. 파일과 전적은 보존된다.</div><div class="card"><b class="quarantine">quarantine</b>컴파일·loader·첫 행동 QA 실패 또는 반복 코드 예외가 확인된 agent. 공식 DONE 경기의 로컬 시간 경고만으로 격리하지 않는다.</div></div>
 <section id="rank" class="panel on scroll"><table><thead><tr><th>로컬 #</th><th>공유 노트북</th><th>작성자</th><th>게시/갱신</th><th>상태</th><th>로컬 BT</th><th>Kaggle 현재/최고</th><th>W-L-T</th><th>승점률 95% CI</th><th>artifact</th><th>측정·전적</th><th>동일 artifact 별칭</th></tr></thead><tbody id="agents"></tbody></table></section>
 <section id="agentmatches" class="panel scroll"><div class="card" id="agentmatchsummary">순위표에서 <b>전적 보기</b>를 누르세요.</div><table><thead><tr><th>시각 (KST)</th><th>상대</th><th>시드·좌석</th><th>결과</th><th>우리/상대 현금</th><th>마진</th><th>상태·오류</th></tr></thead><tbody id="agentmatchrows"></tbody></table></section>
 <section id="unplayable" class="panel scroll"><p class="muted">목록과 파일은 수집했지만 실행 가능한 agent 소스를 찾지 못했거나 추출을 완료하지 못한 최신 버전입니다. 로컬 대전에는 넣지 않습니다.</p><table><thead><tr><th>공유 노트북</th><th>작성자</th><th>게시/갱신</th><th>Kaggle 현재/최고</th><th>수집 상태</th><th>이유</th></tr></thead><tbody id="unplayablerows"></tbody></table></section>
@@ -2405,7 +2458,7 @@ def _collect_cycle_unlocked(store: Store, limit=200, pull_limit=40) -> dict:
     return result
 
 
-def refresh(store: Store, workers=8, limit=200, pull_limit=40, top_k=50,
+def refresh(store: Store, workers=8, limit=200, pull_limit=40, top_k=DEFAULT_TOP_K,
             seeds_per_pair=1, max_matches=240) -> dict:
     """Legacy one-shot command: collect once, then run one league batch."""
     with process_lock(store.state / "refresh.lock") as acquired:
@@ -2459,8 +2512,8 @@ def main(argv=None):
     restore.add_argument("--sha256", required=True)
     restore.add_argument("--reason", required=True)
     collect_cmd = sub.add_parser("collect"); collect_cmd.add_argument("--limit", type=int, default=200); collect_cmd.add_argument("--pull-limit", type=int, default=40)
-    run = sub.add_parser("run"); run.add_argument("--workers", type=int, default=8, choices=range(1,13)); run.add_argument("--top-k", type=int, default=50); run.add_argument("--seeds-per-pair", type=int, default=1); run.add_argument("--max-matches", type=int, default=240); run.add_argument("--timeout", type=float, default=PUBLIC_LEAGUE_MATCH_TIMEOUT_SECONDS)
-    ref = sub.add_parser("refresh"); ref.add_argument("--workers", type=int, default=8, choices=range(1,13)); ref.add_argument("--limit", type=int, default=200); ref.add_argument("--pull-limit", type=int, default=40); ref.add_argument("--top-k", type=int, default=50); ref.add_argument("--seeds-per-pair", type=int, default=1); ref.add_argument("--max-matches", type=int, default=240)
+    run = sub.add_parser("run"); run.add_argument("--workers", type=int, default=8, choices=range(1,13)); run.add_argument("--top-k", type=int, default=DEFAULT_TOP_K); run.add_argument("--seeds-per-pair", type=int, default=1); run.add_argument("--max-matches", type=int, default=240); run.add_argument("--timeout", type=float, default=PUBLIC_LEAGUE_MATCH_TIMEOUT_SECONDS)
+    ref = sub.add_parser("refresh"); ref.add_argument("--workers", type=int, default=8, choices=range(1,13)); ref.add_argument("--limit", type=int, default=200); ref.add_argument("--pull-limit", type=int, default=40); ref.add_argument("--top-k", type=int, default=DEFAULT_TOP_K); ref.add_argument("--seeds-per-pair", type=int, default=1); ref.add_argument("--max-matches", type=int, default=240)
     status = sub.add_parser("status"); status.add_argument("--json", action="store_true")
     web = sub.add_parser("serve"); web.add_argument("--host", default="127.0.0.1"); web.add_argument("--port", type=int, default=8791); web.add_argument("--exit-with-browser", action="store_true")
     qa = sub.add_parser("_qa"); qa.add_argument("--source", type=Path, required=True); qa.add_argument("--result", type=Path, required=True)

@@ -11,12 +11,14 @@
 1. Kaggle Code 목록을 `scoreDescending`, `dateRun` 두 기준으로 수집한다.
    대회 연결 목록만으로는 검색 노트북이 빠질 수 있어 `kaggriculture` 검색 결과의 점수순·최신순도 합쳐 중복 제거한다.
 2. 새 버전만 `kernels pull`로 받아 원본 디렉터리를 보존한다.
-3. `main.py`와 함께 tar 멤버, 모든 `%%writefile`, 정적으로 해제 가능한 gzip/base64 파일맵, 100 MiB 이하의 선언 dataset 부속파일을 복원한다. Dataset 파일 목록은 Kaggle CLI의 CSV 앞 pagination 문구와 다음 페이지까지 읽고, 전체 크기를 확인한 뒤에만 내려받는다. 완료 표식이 없는 중단 다운로드는 완성본으로 간주하지 않는다. C++ source형은 고정 Docker 환경에서 `agent.so`를 빌드한다.
+3. `main.py`와 함께 tar 멤버, 모든 `%%writefile`/`%%agentfile`, 독립 실행 가능한 direct-agent code cell, 정적으로 해제 가능한 gzip/base64 파일맵, 100 MiB 이하의 선언 dataset 부속파일을 복원한다. `/kaggle/working/...` writefile은 제출 archive-root 상대경로로 정규화한다. `main.py`가 없으면 독립 파싱되고 top-level 공식 entrypoint를 정의하는 writefile이 정확히 하나인 경우에만 그 파일을 `main.py`로 승격한다. Dataset 파일 목록은 Kaggle CLI의 CSV 앞 pagination 문구와 다음 페이지까지 읽고, 전체 크기를 확인한 뒤에만 내려받는다. 완료 표식이 없는 중단 다운로드는 완성본으로 간주하지 않는다. C++ source형은 고정 Docker 환경에서 `agent.so`를 빌드한다.
 4. 단일 `main.py`는 기존 LF 정규화 source SHA를 유지한다. 다중 파일 제출은 정렬된 경로와 모든 런타임 파일 바이트로 artifact SHA를 계산한다. C++ 빌드 뒤 `.cpp/.hpp/.h/.inc`는 제출 런타임 신원에서 제외하고 `main.py + agent.so`로 식별한다. 미세 코드·asset 변경은 별도 agent다.
 5. 컴파일과 Kaggle last-callable 로더에 더해 공식 native 관측으로 첫 행동을 실제 호출한 agent만 리그에 넣는다. Linux shared-library bundle은 엔진 1.32.7 Docker에서 실행한다.
 6. 엔진·v2 규칙·설정·runner·두 artifact·시드·좌석이 같은 경기는 SQLite 캐시를 재사용한다. 모든 대결은 양 좌석이다.
 7. 누적 경기 수가 적은 신규 후보를 우선 배정한다. 첫 배치 뒤 `archived`가 되어도 최대 32경기까지 catch-up 대진을 계속한다. 표본과 pair 수가 비슷하면 Bradley–Terry(BT) 점수가 가까운 상대를 우선한다. 유효 경기만 BT와 Wilson 승점률 구간에 반영한다.
-8. 최소 경기 수를 채운 agent 중 상위 50개를 `active`로 유지한다. 나머지는 `archived`로 바꾸되 소스·노트북·전적은 삭제하지 않는다.
+8. 최소 경기 수를 채운 agent 중 상위 100개를 `active`로 유지한다. 나머지는 `archived`로 바꾸되 소스·노트북·전적은 삭제하지 않는다.
+
+각 notebook version은 독립적으로 추출한다. 한 노트북의 압축 builder나 malformed artifact에서 추출 예외가 발생해도 그 버전만 오류로 보존하고 뒤의 신규 버전 처리를 계속한다. 압축 builder가 복원한 단일 `main.py`도 artifact dictionary로 정규화한 뒤 일반 QA와 동일하게 검사한다.
 
 공개 노트북의 Kaggle 현재 점수와 최고 점수는 Kaggle의 연결 제출 정보에서 읽는다. 추천 수(`totalVotes`)와 구분하며 수집/스크린 우선순위에만 쓰고 로컬 BT에는 넣지 않는다. 대시보드는 로컬 BT, Kaggle 현재/최고 점수, 게시·갱신일을 각각 표시한다. 행동 fingerprint는 동일 artifact 판정에 쓰지 않는다.
 
@@ -59,11 +61,11 @@ powershell -ExecutionPolicy Bypass -File tools\register-public-league-protocol.p
 
 **자동 수집·대결 설정**의 **자동 수집 ON/OFF** 버튼은 Windows의 `Kaggriculture Public League Collect` 예약 작업을 실제로 활성화하거나 비활성화한다. OFF여도 **지금 수집**은 사용할 수 있다. 수집 주기(0.25~168시간)와 대결 워커 수(1~12)를 바꿀 수 있으며, 저장하면 수집 전용 작업이 갱신된다. 워커 수는 연속 대결의 다음 배치부터 적용된다. 예약 작업은 대결을 시작하지 않으므로 **연속 대결 OFF** 뒤 자동으로 다시 시작되지 않는다.
 
-**연속 대결 OFF · 시작 / ON · 중지** 버튼은 별도의 연속 대결 상태를 바꾼다. 시작하면 **사용자가 중지할 때까지 계속** 대결한다. 화면의 `현재 처리 묶음`은 종료 목표가 아니다. 내부적으로 `240경기`는 전 agent의 완전 상호 대전 수가 아니라 BT 재적합과 대진 재편성을 위한 계산량 상한이다. 스케줄러는 최대 50개 active/challenger 풀에서 한 모델 쌍을 선택하고 같은 seed를 양 좌석으로 실행하므로, 한 묶음은 최대 120쌍·240경기다. 신규 모델은 32경기까지 먼저 따라잡고 이후 일반 편성으로 내려간다. 중지하면 완료된 경기만 보존하고 대기·실행 중 경기는 제거한다. 모델별 Wilson 95% 구간도 함께 표시한다.
+**연속 대결 OFF · 시작 / ON · 중지** 버튼은 별도의 연속 대결 상태를 바꾼다. 시작하면 **사용자가 중지할 때까지 계속** 대결한다. 화면의 `현재 처리 묶음`은 종료 목표가 아니다. 내부적으로 `240경기`는 전 agent의 완전 상호 대전 수가 아니라 BT 재적합과 대진 재편성을 위한 계산량 상한이다. 스케줄러는 최대 100개 active/challenger 풀에서 한 모델 쌍을 선택하고 같은 seed를 양 좌석으로 실행하므로, 한 묶음은 최대 120쌍·240경기다. 신규 모델은 32경기까지 먼저 따라잡고 이후 일반 편성으로 내려간다. 중지하면 완료된 경기만 보존하고 대기·실행 중 경기는 제거한다. 모델별 Wilson 95% 구간도 함께 표시한다.
 
 일반 매칭의 구체적인 우선순위는 다음과 같다.
 
-1. QA-pass agent에서 현재 active 강자와 신규 candidate를 합쳐 최대 50개 풀을 만든다. 상위 50 자리를 모두 기존 강자로 채우지 않고 신규 challenger 자리를 10개 남긴다.
+1. QA-pass agent에서 현재 active 강자와 신규 candidate를 합쳐 최대 100개 풀을 만든다. 상위 100 자리를 모두 기존 강자로 채우지 않고 신규 challenger 자리를 10개 남긴다.
 2. 누적 유효 경기 수가 가장 적은 모델을 먼저 고른다. 신규 또는 표본 부족 모델은 32경기까지 catch-up 우선권을 받는다.
 3. 상대는 전체 유효 경기 수와 서로 맞붙은 수가 적은 순서로 고르고, 그 조건이 비슷하면 BT가 가까운 상대를 먼저 고른다. 따라잡기 중 세 번째 pair마다 더 경험 많은 강자를 anchor로 섞는다.
 4. artifact 두 개·엔진·v2 계약·seed·좌석에서 결정되는 match key가 DB에 있으면 다음 결정적 seed로 넘어간다.
@@ -75,9 +77,9 @@ powershell -ExecutionPolicy Bypass -File tools\register-public-league-protocol.p
 
 상태 의미:
 
-- `active`: 최소 8개 유효 경기를 마치고 현재 상위 50에 포함됨.
+- `active`: 최소 8개 유효 경기를 마치고 현재 상위 100에 포함됨.
 - `candidate`: 컴파일·공식 loader·첫 행동 QA는 통과했지만 아직 8경기 미만이거나 도전자 대기열에 있음.
-- `archived`: 검증을 마쳤으나 현재 상위 50 밖임. 파일과 전적은 보존됨.
+- `archived`: 검증을 마쳤으나 현재 상위 100 밖임. 파일과 전적은 보존됨.
 - `quarantine`: 컴파일/loader/첫 행동 QA 실패나 agent에 귀속되는 코드 예외가 반복되어 순위에서 격리됨. 공식 엔진이 DONE 처리한 경기의 로컬 1초 경고나 자체 telemetry 이름만으로는 격리하지 않는다.
 - `no_source`: 분석용 노트북 등에서 지원하는 형태의 실행 가능한 agent를 찾지 못한 버전. agent 순위표에는 나타나지 않음. `FILES['main.py']`에 base85+zlib로 넣은 공개 artifact builder는 AST의 literal payload와 고정 SHA를 읽어 공개 코드를 실행하지 않고 추출한다.
 

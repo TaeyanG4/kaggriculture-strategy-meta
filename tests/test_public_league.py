@@ -189,6 +189,46 @@ class PublicLeagueTests(unittest.TestCase):
         found = league.sources_from_builder_cells(nb)
         self.assertEqual(found[0][1], AGENT.encode())
 
+    def test_self_contained_direct_agent_cell_is_an_artifact_candidate(self):
+        nb = self.root / "direct.ipynb"
+        nb.write_text(json.dumps({"cells": [
+            {"cell_type": "code", "source": AGENT},
+        ]}), encoding="utf-8")
+        found = league.artifacts_from_notebook(nb)
+        self.assertEqual(found[0][1], {"main.py": AGENT.encode()})
+
+    def test_absolute_kaggle_working_main_writefile_is_collected(self):
+        nb = self.root / "absolute-main.ipynb"
+        nb.write_text(json.dumps({"cells": [{"cell_type": "code",
+            "source": "%%writefile /kaggle/working/main.py\n" + AGENT}]}), encoding="utf-8")
+        found = league.artifacts_from_notebook(nb)
+        self.assertEqual(found[0][1], {"main.py": AGENT.encode()})
+
+    def test_single_named_agent_writefile_is_promoted_to_main(self):
+        nb = self.root / "named-agent.ipynb"
+        nb.write_text(json.dumps({"cells": [{"cell_type": "code",
+            "source": "%%writefile submission.py\n" + AGENT}]}), encoding="utf-8")
+        found = league.artifacts_from_notebook(nb)
+        self.assertEqual(found[0][1], {"main.py": AGENT.encode()})
+
+    def test_agentfile_magic_without_name_is_main(self):
+        nb = self.root / "agentfile.ipynb"
+        nb.write_text(json.dumps({"cells": [{"cell_type": "code",
+            "source": "%%agentfile\n" + AGENT}]}), encoding="utf-8")
+        found = league.artifacts_from_notebook(nb)
+        self.assertEqual(found[0][1], {"main.py": AGENT.encode()})
+
+    def test_discover_artifacts_wraps_builder_source_as_single_file_artifact(self):
+        import base64, zlib
+        encoded = base64.b85encode(zlib.compress(AGENT.encode())).decode()
+        nb = self.root / "packed-discovery.ipynb"
+        cell = ("import base64,zlib\nEXPECTED_MAIN_SHA256='pinned'\n"
+                f"SUBMISSION_B85={encoded!r}\n"
+                "Path('main.py').write_bytes(zlib.decompress(base64.b85decode(SUBMISSION_B85)))")
+        nb.write_text(json.dumps({"cells": [{"cell_type": "code", "source": cell}]}), encoding="utf-8")
+        found = league.discover_artifacts(self.root)
+        self.assertEqual(found[0][1], {"main.py": AGENT.encode()})
+
     def test_literal_files_dictionary_recovers_packed_main_without_execution(self):
         import base64, hashlib, zlib
         encoded = base64.b85encode(zlib.compress(AGENT.encode())).decode()
@@ -218,6 +258,29 @@ class PublicLeagueTests(unittest.TestCase):
             "SELECT version_id,is_current FROM aliases ORDER BY version_id")]
         self.assertEqual(aliases, [{"version_id": old_id, "is_current": 0},
                                    {"version_id": cur.lastrowid, "is_current": 1}])
+
+    def test_extractor_exception_does_not_starve_later_versions(self):
+        broken = self.root / "broken"; self.notebook(broken, AGENT)
+        healthy = self.root / "healthy"; self.notebook(healthy, AGENT + "# healthy\n")
+        broken_id = self.add_version("alice/broken", "Broken", broken, "v1")
+        healthy_id = self.add_version("alice/healthy", "Healthy", healthy, "v1")
+        real_discover = league.discover_artifacts
+
+        def discover(path):
+            if Path(path) == broken:
+                raise AttributeError("malformed recovered artifact")
+            return real_discover(path)
+
+        with patch.object(league, "discover_artifacts", side_effect=discover):
+            result = league.extract(self.store)
+        broken_row = self.store.db.execute(
+            "SELECT status,error FROM notebook_versions WHERE id=?", (broken_id,)).fetchone()
+        healthy_row = self.store.db.execute(
+            "SELECT status FROM notebook_versions WHERE id=?", (healthy_id,)).fetchone()
+        self.assertEqual(broken_row["status"], "quarantine")
+        self.assertIn("extractor AttributeError", broken_row["error"])
+        self.assertEqual(healthy_row["status"], "extracted")
+        self.assertEqual(result["quarantined"], 1)
 
     def test_exact_source_duplicate_becomes_one_agent_with_two_named_links(self):
         for ref, title in (("alice/one", "Notebook One"), ("bob/two", "Notebook Two")):

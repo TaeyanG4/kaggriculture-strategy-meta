@@ -25,7 +25,7 @@
     "seats": [0, 1],
     "workers": 8,
     "max_matches_per_cycle": 240,
-    "top_k": 50,
+    "top_k": 100,
     "challenger_slots": 10,
     "newcomer_priority_until_games": 32,
     "minimum_games_for_active": 8,
