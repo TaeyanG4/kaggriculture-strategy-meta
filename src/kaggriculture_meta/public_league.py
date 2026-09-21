@@ -11,12 +11,14 @@ import argparse
 import ast
 import base64
 import csv
+import codeop
 import concurrent.futures
 import contextlib
 import datetime as dt
 import hashlib
 import io
 import json
+import lzma
 import math
 import os
 import random
@@ -73,6 +75,11 @@ def canonical_source(data: bytes | str) -> bytes:
         data = data.encode("utf-8")
     text = data.decode("utf-8-sig")
     return text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
+
+
+def subprocess_no_window_flags() -> int:
+    """Keep console executables such as docker.exe hidden under pythonw."""
+    return getattr(subprocess, "CREATE_NO_WINDOW", 0) if os.name == "nt" else 0
 
 
 def safe_relative_path(value: str) -> str:
@@ -504,7 +511,9 @@ def add_public_notebook(store: Store, ref: str) -> dict:
 def run_kaggle(args: list[str], timeout=180) -> str:
     exe = KAGGLE if KAGGLE.exists() else Path("kaggle")
     proc = subprocess.run([str(exe), *args], cwd=ROOT, capture_output=True, text=True,
-                          encoding="utf-8", errors="replace", timeout=timeout)
+                          encoding="utf-8", errors="replace", timeout=timeout,
+                          env={**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1"},
+                          creationflags=subprocess_no_window_flags())
     if proc.returncode:
         msg = (proc.stderr or proc.stdout).strip()[-1200:]
         raise RuntimeError(f"kaggle {' '.join(args[:3])} failed: {msg}")
@@ -566,6 +575,103 @@ def download_notebook_datasets(target: Path, metadata: dict) -> dict:
         except Exception as exc:
             failed.append({"ref": ref, "error": f"{type(exc).__name__}: {exc}"[:500]})
     return {"downloaded": downloaded, "skipped": skipped, "failed": failed}
+
+
+def ensure_notebook_datasets(target: Path) -> dict:
+    """Backfill attachments for versions pulled before dataset support existed."""
+    metadata_path = Path(target) / "kernel-metadata.json"
+    if not metadata_path.exists():
+        return {"downloaded": [], "skipped": [], "failed": []}
+    try:
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8-sig"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return {"downloaded": [], "skipped": [], "failed": []}
+    refs = [ref for ref in metadata.get("dataset_sources") or []
+            if isinstance(ref, str) and "/" in ref]
+    if not refs:
+        return {"downloaded": [], "skipped": [], "failed": []}
+    return download_notebook_datasets(Path(target), {"dataset_sources": refs})
+
+
+def _published_output_names(text: str) -> list[str]:
+    """Select runtime artifacts from a ``kaggle kernels files`` listing."""
+    try:
+        rows = json.loads(text)
+    except (TypeError, json.JSONDecodeError):
+        return []
+    if not isinstance(rows, list):
+        return []
+    names = []
+    for row in rows:
+        name = row.get("name") if isinstance(row, dict) else None
+        if not isinstance(name, str):
+            continue
+        with contextlib.suppress(ValueError):
+            name = safe_relative_path(name)
+            low = name.lower()
+            if (low.endswith((".py", ".so", ".dll", ".dylib", ".npz", ".npy",
+                              ".pkl", ".pickle", ".joblib", ".json", ".bin", ".dat"))
+                    or low.endswith((".tar.gz", ".tgz", ".tar"))):
+                names.append(name)
+    primary = [name for name in names if Path(name).name.lower() in
+               ("main.py", "submission.py", "agent.py", "kaggle_agent.py",
+                "submission.tar.gz", "submission.tgz", "submission.tar")]
+    return sorted(set(names)) if primary else []
+
+
+def ensure_notebook_outputs(target: Path, ref: str) -> dict:
+    """Download the current saved notebook's published submission output.
+
+    No notebook cell is executed.  Extraction and official first-action QA
+    still decide whether the downloaded output is an executable agent.
+    """
+    target = Path(target)
+    destination = target / "_published_output"
+    marker = destination / ".public-league-output-complete.json"
+    if marker.exists():
+        with contextlib.suppress(OSError, UnicodeError, json.JSONDecodeError):
+            saved = json.loads(marker.read_text(encoding="utf-8"))
+            if saved.get("ref") == ref:
+                return {"downloaded": saved.get("files", []), "failed": []}
+    try:
+        listing = run_kaggle(["kernels", "files", ref, "--format", "json",
+                              "--page-size", "200"], timeout=120)
+        names = _published_output_names(listing)
+        if not names:
+            return {"downloaded": [], "failed": []}
+        pattern = "^(?:" + "|".join(re.escape(name) for name in names) + ")$"
+        with tempfile.TemporaryDirectory(prefix="published-output-", dir=target) as tmp_name:
+            work = Path(tmp_name)
+            run_kaggle(["kernels", "output", ref, "-p", str(work), "-o", "-q",
+                        "--file-pattern", pattern], timeout=600)
+            selected, total = {}, 0
+            for item in sorted(work.rglob("*")):
+                if not item.is_file():
+                    continue
+                relative = item.relative_to(work).as_posix()
+                # Kaggle may emit the run log despite the requested pattern.
+                match = next((name for name in names
+                              if relative == name or item.name == Path(name).name), None)
+                if match is None:
+                    continue
+                size = item.stat().st_size
+                if size > PUBLIC_LEAGUE_MAX_DATASET_BYTES or total + size > PUBLIC_LEAGUE_MAX_DATASET_BYTES:
+                    raise ValueError("published notebook output exceeds size limit")
+                selected[match] = item.read_bytes(); total += size
+            if not selected:
+                raise ValueError("published output listed submission files but returned none")
+            destination.mkdir(parents=True, exist_ok=True)
+            for name, payload in selected.items():
+                output = destination / safe_relative_path(name)
+                output.parent.mkdir(parents=True, exist_ok=True)
+                output.write_bytes(payload)
+        summary = {"ref": ref, "files": sorted(selected), "bytes": total,
+                   "completed_at": utcnow()}
+        marker.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+        return {"downloaded": summary["files"], "failed": []}
+    except Exception as exc:
+        return {"downloaded": [],
+                "failed": [{"ref": ref, "error": f"{type(exc).__name__}: {exc}"[:500]}]}
 
 
 def fetch_public_score(row: dict, timeout=15) -> dict:
@@ -833,6 +939,440 @@ def _decompress_zlib_bounded(payload: bytes, limit=10_000_000) -> bytes:
     return data
 
 
+def _decompress_gzip_bounded(payload: bytes, limit=10_000_000) -> bytes:
+    """Decompress one gzip stream while enforcing the same output limit."""
+    decoder = zlib.decompressobj(16 + zlib.MAX_WBITS)
+    data = decoder.decompress(payload, limit + 1)
+    if len(data) > limit or decoder.unconsumed_tail or not decoder.eof:
+        raise ValueError("packed source exceeds limit or is incomplete")
+    data += decoder.flush(limit + 1 - len(data))
+    if len(data) > limit:
+        raise ValueError("packed source exceeds limit")
+    return data
+
+
+def _decompress_lzma_bounded(payload: bytes, limit=10_000_000) -> bytes:
+    decoder = lzma.LZMADecompressor()
+    data = decoder.decompress(payload, max_length=limit + 1)
+    if len(data) > limit or not decoder.eof or decoder.unused_data:
+        raise ValueError("packed source exceeds limit or is incomplete")
+    return data
+
+
+def _static_literal_value(node: ast.AST, values: dict[str, object], depth=0):
+    """Evaluate a small, side-effect-free AST subset used by artifact builders."""
+    if depth > 30:
+        raise ValueError("literal expression nesting limit")
+    if isinstance(node, ast.Constant):
+        if isinstance(node.value, (str, bytes, int, float, bool, type(None))):
+            return node.value
+        raise ValueError("unsupported constant")
+    if isinstance(node, ast.Name):
+        if node.id not in values:
+            raise ValueError(f"unknown literal name {node.id}")
+        return values[node.id]
+    if isinstance(node, (ast.List, ast.Tuple)):
+        items = [_static_literal_value(item, values, depth + 1) for item in node.elts]
+        return items if isinstance(node, ast.List) else tuple(items)
+    if isinstance(node, ast.JoinedStr):
+        parts = []
+        for item in node.values:
+            if isinstance(item, ast.Constant) and isinstance(item.value, str):
+                parts.append(item.value)
+            elif isinstance(item, ast.FormattedValue):
+                value = _static_literal_value(item.value, values, depth + 1)
+                if not isinstance(value, (str, int, float)):
+                    raise ValueError("unsupported formatted literal")
+                parts.append(str(value))
+            else:
+                raise ValueError("unsupported joined string")
+        return "".join(parts)
+    if isinstance(node, ast.Dict):
+        return {_static_literal_value(key, values, depth + 1):
+                _static_literal_value(value, values, depth + 1)
+                for key, value in zip(node.keys, node.values) if key is not None}
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+        left = _static_literal_value(node.left, values, depth + 1)
+        right = _static_literal_value(node.right, values, depth + 1)
+        if isinstance(left, (str, bytes, list, tuple)) and isinstance(right, type(left)):
+            return left + right
+        raise ValueError("unsupported literal addition")
+    if not isinstance(node, ast.Call):
+        raise ValueError("unsupported literal expression")
+
+    args = [_static_literal_value(item, values, depth + 1) for item in node.args]
+    func = node.func
+    if isinstance(func, ast.Name) and func.id in ("bytes", "str", "list", "tuple", "dict"):
+        if len(args) != 1:
+            raise ValueError("invalid literal constructor")
+        return {"bytes": bytes, "str": str, "list": list, "tuple": tuple, "dict": dict}[func.id](args[0])
+    if not isinstance(func, ast.Attribute):
+        raise ValueError("unsupported literal call")
+    if isinstance(func.value, ast.Name) and func.value.id == "base64" and len(args) == 1:
+        decoder = {"b85decode": base64.b85decode, "a85decode": base64.a85decode,
+                   "b64decode": base64.b64decode}.get(func.attr)
+        if decoder:
+            payload = args[0].encode("ascii") if isinstance(args[0], str) else args[0]
+            if not isinstance(payload, bytes):
+                raise ValueError("encoded payload is not bytes")
+            return decoder(payload)
+    if isinstance(func.value, ast.Name) and func.attr == "decompress" and len(args) == 1:
+        payload = args[0]
+        if not isinstance(payload, bytes):
+            raise ValueError("compressed payload is not bytes")
+        if func.value.id == "zlib":
+            return _decompress_zlib_bounded(payload, PUBLIC_LEAGUE_MAX_DATASET_BYTES)
+        if func.value.id == "gzip":
+            return _decompress_gzip_bounded(payload, PUBLIC_LEAGUE_MAX_DATASET_BYTES)
+        if func.value.id == "lzma":
+            return _decompress_lzma_bounded(payload, PUBLIC_LEAGUE_MAX_DATASET_BYTES)
+    receiver = _static_literal_value(func.value, values, depth + 1)
+    if func.attr == "encode" and isinstance(receiver, str) and len(args) <= 1:
+        return receiver.encode(args[0] if args else "utf-8")
+    if func.attr == "decode" and isinstance(receiver, bytes) and len(args) <= 1:
+        return receiver.decode(args[0] if args else "utf-8")
+    if func.attr == "join" and isinstance(receiver, (str, bytes)) and len(args) == 1:
+        return receiver.join(args[0])
+    raise ValueError("unsupported literal call")
+
+
+def _official_source(payload: object) -> bytes | None:
+    if not isinstance(payload, (str, bytes)):
+        return None
+    with contextlib.suppress(UnicodeError, SyntaxError):
+        source = canonical_source(payload)
+        tree = ast.parse(source.decode("utf-8"))
+        if any((isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef))
+                and (item.name in ("agent", "kaggle_submission_agent")
+                     or item.name.lower().endswith("_agent"))) or
+               (isinstance(item, (ast.Assign, ast.AnnAssign)) and any(
+                    isinstance(target, ast.Name) and target.id in ("agent", "kaggle_submission_agent")
+                    for target in (item.targets if isinstance(item, ast.Assign) else [item.target])))
+               for item in tree.body):
+            return source
+    return None
+
+
+def _packed_chunks(value: object) -> bytes | None:
+    if isinstance(value, bytes):
+        return value
+    if isinstance(value, str):
+        return value.encode("utf-8")
+    if isinstance(value, (list, tuple)) and value:
+        parts = [_packed_chunks(item) for item in value]
+        if all(part is not None for part in parts):
+            return b"".join(parts)
+    return None
+
+
+def _payload_candidates(value: object) -> list[bytes]:
+    """Return bounded raw/decoded/decompressed forms of a literal payload."""
+    raw = _packed_chunks(value)
+    if raw is None:
+        return []
+    queue, found, seen = [raw], [], set()
+    while queue and len(seen) < 20:
+        item = queue.pop(0)
+        digest = sha256(item)
+        if digest in seen or len(item) > PUBLIC_LEAGUE_MAX_DATASET_BYTES:
+            continue
+        seen.add(digest); found.append(item)
+        for transform in (base64.b85decode, base64.a85decode, base64.b64decode,
+                          lambda data: _decompress_zlib_bounded(data, PUBLIC_LEAGUE_MAX_DATASET_BYTES),
+                          lambda data: _decompress_gzip_bounded(data, PUBLIC_LEAGUE_MAX_DATASET_BYTES),
+                          lambda data: _decompress_lzma_bounded(data, PUBLIC_LEAGUE_MAX_DATASET_BYTES)):
+            with contextlib.suppress(Exception):
+                result = transform(item)
+                if isinstance(result, bytes) and sha256(result) not in seen:
+                    queue.append(result)
+    return found
+
+
+def _mapping_artifact(value: object) -> dict[str, bytes] | None:
+    if not isinstance(value, dict):
+        return None
+    files = {}
+    for raw_name, descriptor in value.items():
+        if not isinstance(raw_name, str):
+            continue
+        with contextlib.suppress(ValueError):
+            name = safe_relative_path(raw_name)
+            expected = None
+            payload = descriptor
+            if isinstance(descriptor, dict) and "payload" in descriptor:
+                payload = descriptor["payload"]
+                expected = descriptor.get("sha256")
+            selected = None
+            for candidate in _payload_candidates(payload):
+                if expected and (not isinstance(expected, str) or sha256(candidate) != expected.lower()):
+                    continue
+                if name.endswith(".py"):
+                    with contextlib.suppress(UnicodeError, SyntaxError):
+                        canonical_source(candidate)
+                        compile(canonical_source(candidate), name, "exec")
+                        selected = canonical_source(candidate); break
+                elif expected or candidate == _packed_chunks(payload):
+                    selected = candidate; break
+            if selected is not None:
+                files[name] = selected
+    return files if "main.py" in files else None
+
+
+def _path_basename(node: ast.AST, paths: dict[str, str]) -> str | None:
+    if isinstance(node, ast.Name):
+        return paths.get(node.id)
+    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "Path" and node.args:
+        with contextlib.suppress(Exception):
+            return Path(str(ast.literal_eval(node.args[0]))).name
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+        with contextlib.suppress(Exception):
+            value = ast.literal_eval(node.right)
+            if isinstance(value, str):
+                return Path(value).name
+    return None
+
+
+def literal_packed_sources_from_tree(tree: ast.AST) -> list[tuple[str, dict[str, bytes]]]:
+    """Recover literal source/maps/archives without executing a notebook cell."""
+    values: dict[str, object] = {}
+    paths: dict[str, str] = {}
+    found: list[tuple[str, dict[str, bytes]]] = []
+    for node in getattr(tree, "body", []):
+        if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+            continue
+        target = node.targets[0] if isinstance(node, ast.Assign) and len(node.targets) == 1 else (
+            node.target if isinstance(node, ast.AnnAssign) else None)
+        if not isinstance(target, ast.Name):
+            continue
+        path_name = _path_basename(node.value, paths)
+        if path_name:
+            paths[target.id] = path_name
+        with contextlib.suppress(Exception):
+            values[target.id] = _static_literal_value(node.value, values)
+
+    pinned = [value.lower() for name, value in values.items()
+              if isinstance(value, str) and re.fullmatch(r"[0-9a-fA-F]{64}", value)
+              and "SHA" in name.upper() and "ARCHIVE" not in name.upper()]
+    written = {}
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Attribute):
+            continue
+        if node.func.attr not in ("write_bytes", "write_text") or not node.args:
+            continue
+        name = _path_basename(node.func.value, paths)
+        if not name:
+            continue
+        with contextlib.suppress(Exception, ValueError):
+            name = safe_relative_path(name)
+            payload = _static_literal_value(node.args[0], values)
+            if isinstance(payload, str):
+                payload = payload.encode("utf-8")
+            if isinstance(payload, bytes):
+                written[name] = canonical_source(payload) if name.endswith(".py") else payload
+    if "main.py" in written:
+        found.append(("literal:writes", written))
+    for filename, payload in written.items():
+        found.extend((f"literal-written-archive:{filename}:{origin}", files)
+                     for origin, files in artifacts_from_archive_bytes(payload, filename))
+
+    for name, value in values.items():
+        mapped = _mapping_artifact(value)
+        if mapped:
+            found.append((f"literal-map:{name}", mapped))
+        for candidate in _payload_candidates(value):
+            source = _official_source(candidate)
+            if source and (not pinned or sha256(candidate) in pinned or sha256(source) in pinned):
+                sidecars = {filename: payload for filename, payload in written.items()
+                            if filename != "submission.tar.gz"
+                            and (filename == "main.py" or not filename.endswith(".py"))}
+                sidecars["main.py"] = source
+                found.append((f"literal-source:{name}", sidecars))
+            found.extend((f"literal-archive:{name}:{origin}", files)
+                         for origin, files in artifacts_from_archive_bytes(candidate, name))
+    return found
+
+
+def _static_tree_from_cell(source: str) -> ast.AST | None:
+    """Parse a cell, salvaging complete top-level literal assignments only.
+
+    Some published notebooks contain copied display text after a valid packed
+    assignment.  We do not repair or execute the cell; we isolate only
+    syntactically complete column-zero assignments for the literal decoder.
+    """
+    try:
+        return ast.parse(source)
+    except SyntaxError:
+        pass
+    lines = source.splitlines(keepends=True)
+    recovered = []
+    for start, line in enumerate(lines):
+        if not re.match(r"^[A-Za-z_]\w*\s*(?::[^=]+)?=", line):
+            continue
+        block = ""
+        for end in range(start, len(lines)):
+            block += lines[end]
+            try:
+                compiled = codeop.compile_command(block, symbol="exec")
+            except (SyntaxError, OverflowError, ValueError):
+                break
+            if compiled is None:
+                continue
+            with contextlib.suppress(SyntaxError):
+                tree = ast.parse(block)
+                recovered.extend(node for node in tree.body
+                                  if isinstance(node, (ast.Assign, ast.AnnAssign)))
+            break
+    return ast.Module(body=recovered, type_ignores=[]) if recovered else None
+
+
+def _pinned_remote_artifacts(tree: ast.AST, cache_root: Path) -> list[tuple[str, dict[str, bytes]]]:
+    """Fetch a public archive only when the cell pins its exact SHA-256."""
+    values = {}
+    for node in getattr(tree, "body", []):
+        if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+            continue
+        target = node.targets[0] if isinstance(node, ast.Assign) and len(node.targets) == 1 else (
+            node.target if isinstance(node, ast.AnnAssign) else None)
+        if not isinstance(target, ast.Name):
+            continue
+        with contextlib.suppress(Exception):
+            values[target.id] = _static_literal_value(node.value, values)
+    urls = [(name, value) for name, value in values.items()
+            if isinstance(value, str) and value.startswith("https://")
+            and value.lower().endswith((".tar.gz", ".tgz", ".tar"))]
+    expected = [(name, value.lower()) for name, value in values.items()
+                if isinstance(value, str) and re.fullmatch(r"[0-9a-fA-F]{64}", value)
+                and any(marker in name.upper() for marker in ("EXPECTED", "ARCHIVE_SHA"))]
+    found = []
+    for url_name, url in urls:
+        host = (urllib.parse.urlparse(url).hostname or "").lower()
+        if host not in ("raw.githubusercontent.com", "github.com"):
+            continue
+        # Archive builders normally expose one archive digest.  Refuse an
+        # ambiguous cell instead of guessing between source/member hashes.
+        archive_hashes = [digest for name, digest in expected
+                          if "MAIN" not in name.upper() and "SOURCE" not in name.upper()]
+        fixed_release = host == "github.com" and "/releases/download/" in url
+        if len(archive_hashes) > 1 or (not archive_hashes and not fixed_release):
+            continue
+        digest = archive_hashes[0] if archive_hashes else None
+        cache_key = digest or ("url-" + sha256(url.encode()))
+        cache = cache_root / "_remote" / f"{cache_key}.tar.gz"
+        payload = None
+        if cache.exists() and cache.stat().st_size <= PUBLIC_LEAGUE_MAX_DATASET_BYTES:
+            candidate = cache.read_bytes()
+            if digest is None or sha256(candidate) == digest:
+                payload = candidate
+        if payload is None:
+            request = urllib.request.Request(url, headers={"user-agent": "Kaggriculture-Public-League/1"})
+            with urllib.request.urlopen(request, timeout=60) as response:
+                chunks, total = [], 0
+                while True:
+                    chunk = response.read(1024 * 1024)
+                    if not chunk:
+                        break
+                    total += len(chunk)
+                    if total > PUBLIC_LEAGUE_MAX_DATASET_BYTES:
+                        raise ValueError("remote archive exceeds size limit")
+                    chunks.append(chunk)
+            candidate = b"".join(chunks)
+            if digest is not None and sha256(candidate) != digest:
+                continue
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            cache.write_bytes(candidate)
+            payload = candidate
+        provenance = "pinned-remote" if digest else "fixed-release-remote"
+        found.extend((f"{provenance}:{url_name}:{origin}", files)
+                     for origin, files in artifacts_from_archive_bytes(payload, Path(url).name))
+    return found
+
+
+def _v23_external_output_artifact(doc: dict, cache_root: Path) -> list[tuple[str, dict[str, bytes]]]:
+    """Reproduce the published V23 recipe from its SHA-pinned donor output."""
+    cells = [_cell_source(cell) for cell in doc.get("cells", []) if cell.get("cell_type") == "code"]
+    joined = "\n".join(cells)
+    if "__V23_ROUTE_BLOB__" not in joined or "DONOR_HANDLE" not in joined:
+        return []
+    values = {}
+    for source in cells:
+        tree = _static_tree_from_cell(source)
+        if tree is None:
+            continue
+        local = dict(values)
+        for node in tree.body:
+            if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+                continue
+            target = node.targets[0] if isinstance(node, ast.Assign) and len(node.targets) == 1 else (
+                node.target if isinstance(node, ast.AnnAssign) else None)
+            if not isinstance(target, ast.Name):
+                continue
+            with contextlib.suppress(Exception):
+                local[target.id] = _static_literal_value(node.value, local)
+        values.update(local)
+    required = ("EXPECTED_MAIN_SHA256", "DONOR_HANDLE", "DONOR_SHA256", "V23_TEMPLATE_B64")
+    if not all(isinstance(values.get(name), str) for name in required):
+        return []
+    expected_main = values["EXPECTED_MAIN_SHA256"].lower()
+    donor_sha = values["DONOR_SHA256"].lower()
+    if not re.fullmatch(r"[0-9a-f]{64}", expected_main) or not re.fullmatch(r"[0-9a-f]{64}", donor_sha):
+        return []
+    handle = values["DONOR_HANDLE"].replace("/versions/", "/")
+    destination = cache_root / "_notebook_outputs" / safe_component(handle.replace("/", "--"))
+    donor = destination / "main.py"
+    if not donor.exists() or sha256(donor.read_bytes()) != donor_sha:
+        destination.mkdir(parents=True, exist_ok=True)
+        run_kaggle(["kernels", "output", handle, "-p", str(destination), "-o",
+                    "--file-pattern", "^main\\.py$"], timeout=300)
+    donor_bytes = donor.read_bytes()
+    if sha256(donor_bytes) != donor_sha:
+        return []
+    donor_tree = ast.parse(donor_bytes)
+    assignment = next((node for node in donor_tree.body
+                       if isinstance(node, ast.Assign) and node.targets
+                       and isinstance(node.targets[0], ast.Tuple)
+                       and [item.id for item in node.targets[0].elts if isinstance(item, ast.Name)]
+                       == ["SCHEDULES", "POLICY"]), None)
+    if assignment is None:
+        return []
+    donor_blob = next((node.value for node in ast.walk(assignment.value)
+                       if isinstance(node, ast.Constant) and isinstance(node.value, str)), None)
+    if donor_blob is None:
+        return []
+    schedules, _ = json.loads(_decompress_zlib_bounded(base64.b85decode(donor_blob)))
+    if len(schedules) != 5 or any(len(route) != 719 for route in schedules):
+        return []
+    base = json.loads(json.dumps(schedules[0]))
+    route_payload = {"base": base, "patches": {}}
+    for branch in (1, 2, 3, 4):
+        tape = json.loads(json.dumps(schedules[branch]))
+        tape[:144] = json.loads(json.dumps(base[:144]))
+        if branch in (3, 4):
+            tape[144:288] = json.loads(json.dumps(schedules[2][144:288]))
+        route_payload["patches"][str(branch)] = [
+            [step, action] for step, action in enumerate(tape) if action != base[step]
+        ]
+    route_blob = base64.b85encode(zlib.compress(
+        json.dumps(route_payload, separators=(",", ":")).encode(), 9)).decode()
+    template_b64 = "".join(values["V23_TEMPLATE_B64"].split())
+    template_b64 = template_b64.replace("j1upVZZ0tyhW", "j1upVZ0tyhW")
+    template_b64 = template_b64.replace("xHeLNAMGEliRp", "xHeLNAMdliRp")
+    template = _decompress_zlib_bounded(base64.b64decode(template_b64, validate=True)).decode("utf-8")
+    request = urllib.request.Request("https://www.apache.org/licenses/LICENSE-2.0.txt",
+                                     headers={"user-agent": "Kaggriculture-Public-League/1"})
+    with urllib.request.urlopen(request, timeout=60) as response:
+        license_text = response.read().decode("utf-8").replace("\r\n", "\n")
+    if sha256(license_text.encode()) != "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30":
+        return []
+    notice = "# SPDX-License-Identifier: Apache-2.0\n"
+    notice += "# v23 modifications: public production router, audited Python chassis, and build tooling.\n"
+    notice += "# Credits: thomastschinkel, yhay81, tetsutani; offline simulator: destbreso/nikital7.\n"
+    notice += "".join("# " + line + "\n" for line in license_text.splitlines())
+    source = (notice + template.replace("__V23_ROUTE_BLOB__", repr(route_blob))).encode("utf-8")
+    if sha256(source) != expected_main or not _official_source(source):
+        return []
+    return [("pinned-kaggle-output:v23-recipe", {"main.py": canonical_source(source)})]
+
+
 def packed_artifacts_from_tree(tree: ast.AST) -> list[tuple[str, dict[str, bytes]]]:
     """Statically recover literal packed-file dictionaries without executing code."""
     mappings: dict[str, dict] = {}
@@ -861,7 +1401,10 @@ def packed_artifacts_from_tree(tree: ast.AST) -> list[tuple[str, dict[str, bytes
                 filename = safe_relative_path(filename)
             if not filename or not isinstance(encoded, (str, bytes)):
                 continue
-            packed = encoded.encode("ascii") if isinstance(encoded, str) else encoded
+            try:
+                packed = encoded.encode("ascii") if isinstance(encoded, str) else encoded
+            except UnicodeEncodeError:
+                continue
             decoded = []
             for decoder in (base64.b85decode, base64.a85decode, base64.b64decode):
                 with contextlib.suppress(ValueError, TypeError, zlib.error):
@@ -897,9 +1440,9 @@ def _gzip_json_artifact(tree: ast.AST) -> dict[str, bytes] | None:
     for name, payload in values.items():
         if not isinstance(payload, (str, bytes)) or len(payload) < 100:
             continue
-        raw = payload.encode("ascii") if isinstance(payload, str) else payload
         with contextlib.suppress(ValueError, TypeError, gzip.BadGzipFile, UnicodeError,
                                  json.JSONDecodeError):
+            raw = payload.encode("ascii") if isinstance(payload, str) else payload
             decoded = json.loads(gzip.decompress(base64.b64decode(raw)))
             if not isinstance(decoded, dict):
                 continue
@@ -941,23 +1484,21 @@ def artifacts_from_notebook(path: Path) -> list[tuple[str, dict[str, bytes]]]:
                 payload = "\n".join(lines[1:]) + "\n"
                 writefiles[filename] = canonical_source(payload) if filename.endswith(".py") else payload.encode()
         # Common public notebooks store the full submission in a string literal.
-        try:
-            tree = ast.parse(src)
-        except SyntaxError:
+        tree = _static_tree_from_cell(src)
+        if tree is None:
             continue
         # Some public notebooks put a complete submission directly in one code
         # cell instead of writing main.py or packing it into a literal.  Treat
         # that cell as a candidate only when it parses independently and
         # defines an official entry point; normal compile/loader/first-action
         # QA still decides whether it enters the league.
-        direct_entries = {
-            node.name for node in tree.body
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
-            and node.name in ("agent", "kaggle_submission_agent")
-        }
-        if direct_entries:
+        if _official_source(src):
             found.append((f"{path.name}:cell{index}:direct-agent-cell",
                           {"main.py": canonical_source(src)}))
+        for origin, files in literal_packed_sources_from_tree(tree):
+            found.append((f"{path.name}:cell{index}:{origin}", files))
+        for origin, files in _pinned_remote_artifacts(tree, path.parent):
+            found.append((f"{path.name}:cell{index}:{origin}", files))
         for origin, files in packed_artifacts_from_tree(tree):
             found.append((f"{path.name}:cell{index}:{origin}", files))
         packed_map = _gzip_json_artifact(tree)
@@ -988,16 +1529,23 @@ def artifacts_from_notebook(path: Path) -> list[tuple[str, dict[str, bytes]]]:
                 continue
             with contextlib.suppress(SyntaxError, UnicodeError):
                 candidate_tree = ast.parse(data.decode("utf-8"))
-                if any(isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
-                       and node.name in ("agent", "kaggle_submission_agent")
-                       for node in candidate_tree.body):
+                if _official_source(data):
                     main_candidates.append(name)
         if len(main_candidates) == 1:
             source_name = main_candidates[0]
             writefiles["main.py"] = writefiles.pop(source_name)
+        elif len([name for name in writefiles if name.endswith(".py")]) == 1:
+            # An explicit submission.py/agent.py writefile is itself stronger
+            # evidence than a function name: Kaggle officially selects the
+            # last callable and does not require it to be named ``agent``.
+            source_name = next(name for name in writefiles if name.endswith(".py"))
+            if Path(source_name).name.lower() in ("submission.py", "agent.py", "kaggle_agent.py"):
+                writefiles["main.py"] = writefiles.pop(source_name)
     writefiles.update({name: data for name, data in sidecars.items() if name not in writefiles})
     if "main.py" in writefiles:
         found.insert(0, (f"{path.name}:writefile", writefiles))
+    found.extend((f"{path.name}:{origin}", files)
+                 for origin, files in _v23_external_output_artifact(doc, path.parent))
     return found
 
 
@@ -1048,14 +1596,19 @@ def sources_from_builder_cells(path: Path, timeout=30) -> list[tuple[str, bytes]
     return found
 
 
-def artifacts_from_archive(path: Path) -> list[tuple[str, dict[str, bytes]]]:
+def artifacts_from_archive_bytes(payload: bytes, label="literal.tar") -> list[tuple[str, dict[str, bytes]]]:
+    """Read a bounded in-memory tar artifact and reject unsafe member paths."""
     found = []
     try:
-        with tarfile.open(path, "r:*") as tf:
+        with tarfile.open(fileobj=io.BytesIO(payload), mode="r:*") as tf:
             files = {}
+            total = 0
             for member in tf.getmembers():
                 if not member.isfile() or member.size > PUBLIC_LEAGUE_MAX_DATASET_BYTES:
                     continue
+                total += member.size
+                if total > PUBLIC_LEAGUE_MAX_DATASET_BYTES:
+                    raise ValueError("archive exceeds extraction limit")
                 with contextlib.suppress(ValueError):
                     name = safe_relative_path(member.name)
                     stream = tf.extractfile(member)
@@ -1069,10 +1622,19 @@ def artifacts_from_archive(path: Path) -> list[tuple[str, dict[str, bytes]]]:
                 bundle = {name[len(prefix):]: data for name, data in files.items()
                           if not prefix or name.startswith(prefix)}
                 if "main.py" in bundle:
-                    found.append((f"{path.name}:{main}", bundle))
-    except (tarfile.TarError, OSError, UnicodeError):
+                    found.append((f"{label}:{main}", bundle))
+    except (tarfile.TarError, OSError, UnicodeError, ValueError):
         pass
     return found
+
+
+def artifacts_from_archive(path: Path) -> list[tuple[str, dict[str, bytes]]]:
+    try:
+        if path.stat().st_size > PUBLIC_LEAGUE_MAX_DATASET_BYTES:
+            return []
+        return artifacts_from_archive_bytes(path.read_bytes(), path.name)
+    except OSError:
+        return []
 
 
 def sources_from_archive(path: Path) -> list[tuple[str, bytes]]:
@@ -1082,8 +1644,12 @@ def sources_from_archive(path: Path) -> list[tuple[str, bytes]]:
 def _directory_artifacts(root: Path) -> list[tuple[str, dict[str, bytes]]]:
     found = []
     ignored = {"kernel-metadata.json", "submission-metadata.json",
-               ".public-league-download-complete.json"}
+               ".public-league-download-complete.json",
+               ".public-league-output-complete.json"}
+    cache_dirs = {"_notebook_outputs", "_remote"}
     for main in sorted(root.rglob("main.py")):
+        if any(part in cache_dirs for part in main.relative_to(root).parts):
+            continue
         parent = main.parent
         files = {}
         total = 0
@@ -1111,7 +1677,63 @@ def _directory_artifacts(root: Path) -> list[tuple[str, dict[str, bytes]]]:
             files[rel] = canonical_source(payload) if rel.endswith(".py") else payload
         if "main.py" in files:
             found.append((str(main.relative_to(root)), files))
+    # Attached source datasets sometimes name the runtime shim agent_main.py
+    # and compile a sibling C++ policy into agent.so in the notebook.  Promote
+    # exactly one top-level official Python entry point and retain every small
+    # sibling so prepare_artifact_files can reproduce the runtime bundle.
+    for directory in sorted({path.parent for path in root.rglob("*.py")
+                             if not any(part in cache_dirs for part in path.relative_to(root).parts)}):
+        if (directory / "main.py").exists():
+            continue
+        if not (any(directory.glob("*.cpp")) or (directory / "source_manifest.json").exists()):
+            continue
+        candidates = []
+        for path in directory.glob("*.py"):
+            with contextlib.suppress(OSError, UnicodeError, SyntaxError):
+                payload = canonical_source(path.read_bytes())
+                if _official_source(payload):
+                    candidates.append((path, payload))
+        if len(candidates) != 1:
+            continue
+        promoted, main_payload = candidates[0]
+        files, total = {"main.py": main_payload}, len(main_payload)
+        for item in sorted(directory.iterdir()):
+            if not item.is_file() or item == promoted or item.name in ignored:
+                continue
+            if item.suffix.lower() in (".ipynb", ".tar", ".tgz") or item.name.endswith(".tar.gz"):
+                continue
+            size = item.stat().st_size
+            if size > PUBLIC_LEAGUE_MAX_DATASET_BYTES or total + size > PUBLIC_LEAGUE_MAX_DATASET_BYTES:
+                continue
+            files[safe_relative_path(item.name)] = item.read_bytes(); total += size
+        found.append((str(promoted.relative_to(root)) + ":promoted-main", files))
     return found
+
+
+def _assemble_explicit_plan_placeholder(root: Path, files: dict[str, bytes]) -> dict[str, bytes]:
+    """Reproduce the Fieldbook's documented single-file assembly recipe."""
+    main = files.get("main.py")
+    if not main or b"# <FIELD_BOOK_PLAN_SCRIPTS>" not in main:
+        return files
+    candidates = list(root.rglob("fieldbook_tapes.py"))
+    if len(candidates) != 1:
+        return files
+    try:
+        logic = main.decode("utf-8")
+        tape = candidates[0].read_text(encoding="utf-8")
+        placeholder = "from fieldbook_tapes import PLAN_SCRIPTS\n\n# <FIELD_BOOK_PLAN_SCRIPTS>"
+        begin_marker = "# === BEGIN FIELD BOOK PLAN SCRIPTS ==="
+        end_marker = "# === END FIELD BOOK PLAN SCRIPTS ==="
+        begin = tape.index(begin_marker) + len(begin_marker) + 1
+        end = tape.index("\n" + end_marker, begin)
+        if logic.count(placeholder) != 1:
+            return files
+        assembled = canonical_source(logic.replace(placeholder, tape[begin:end]))
+        if not _official_source(assembled):
+            return files
+        return {**files, "main.py": assembled}
+    except (OSError, UnicodeError, ValueError):
+        return files
 
 
 def discover_artifacts(archive: Path) -> list[tuple[str, dict[str, bytes]]]:
@@ -1120,13 +1742,16 @@ def discover_artifacts(archive: Path) -> list[tuple[str, dict[str, bytes]]]:
     for path in sorted(archive.rglob("*")):
         if not path.is_file():
             continue
+        relative_parts = path.relative_to(archive).parts
+        if any(part in {"_notebook_outputs", "_remote"} for part in relative_parts):
+            continue
         try:
             if path.suffix.lower() == ".ipynb":
                 found.extend(artifacts_from_notebook(path))
             elif path.name.lower().endswith((".tar.gz", ".tgz", ".tar")):
                 found.extend(artifacts_from_archive(path))
             elif (path.suffix.lower() == ".py" and path.name != "kernel-metadata.py"
-                  and "_datasets" not in path.relative_to(archive).parts):
+                  and "_datasets" not in relative_parts):
                 data = canonical_source(path.read_bytes())
                 if b"def agent(" in data or b"class Agent" in data:
                     found.append((str(path.relative_to(archive)), {"main.py": data}))
@@ -1146,6 +1771,7 @@ def discover_artifacts(archive: Path) -> list[tuple[str, dict[str, bytes]]]:
     for origin, files in sorted(found, key=priority):
         if "main.py" not in files:
             continue
+        files = _assemble_explicit_plan_placeholder(archive, files)
         normalized = {safe_relative_path(n): (canonical_source(d) if n.endswith(".py") else d)
                       for n, d in files.items()}
         unique.setdefault(artifact_digest(normalized), (origin, normalized))
@@ -1186,7 +1812,8 @@ def prepare_artifact_files(store: Store, files: dict[str, bytes]) -> dict[str, b
                        "-w", "/build" + ("/" + build_parent if build_parent != "." else ""),
                        PUBLIC_LEAGUE_DOCKER_IMAGE, "g++", "-O3", "-std=c++17", "-shared",
                        "-fPIC", "-I.", *include_args, "-o", "/build/agent.so", *sources]
-            proc = subprocess.run(command, capture_output=True, text=True, timeout=600)
+            proc = subprocess.run(command, capture_output=True, text=True, timeout=600,
+                                  creationflags=subprocess_no_window_flags())
             output = work / "agent.so"
             if proc.returncode or not output.exists():
                 raise RuntimeError((proc.stderr or proc.stdout or "agent.so build failed")[-2000:])
@@ -1225,13 +1852,14 @@ def _docker_path(path: Path) -> str:
 
 def ensure_public_league_docker_image() -> None:
     probe = subprocess.run(["docker", "image", "inspect", PUBLIC_LEAGUE_DOCKER_IMAGE],
-                           capture_output=True, text=True)
+                           capture_output=True, text=True,
+                           creationflags=subprocess_no_window_flags())
     if probe.returncode == 0:
         return
     dockerfile = ROOT / "tools" / "public-league.Dockerfile"
     proc = subprocess.run(["docker", "build", "-f", str(dockerfile), "-t",
                            PUBLIC_LEAGUE_DOCKER_IMAGE, str(ROOT)], capture_output=True,
-                          text=True, timeout=1800)
+                          text=True, timeout=1800, creationflags=subprocess_no_window_flags())
     if proc.returncode:
         raise RuntimeError((proc.stderr or proc.stdout or "docker image build failed")[-2000:])
 
@@ -1246,7 +1874,8 @@ def qa_source(source: Path, timeout=60, execution_platform="host") -> dict:
                    PUBLIC_LEAGUE_DOCKER_IMAGE, "python", "-m", "kaggriculture_meta.public_league",
                    "_qa", "--source", _docker_path(source), "--result", _docker_path(result)]
         proc = subprocess.run(command, capture_output=True, text=True, encoding="utf-8",
-                              errors="replace", timeout=timeout)
+                              errors="replace", timeout=timeout,
+                              creationflags=subprocess_no_window_flags())
     else:
         proc = subprocess.run(
             [sys.executable, "-m", "kaggriculture_meta.public_league", "_qa",
@@ -1268,7 +1897,18 @@ def extract(store: Store, limit=100) -> dict:
     extracted = duplicate = quarantined = empty = 0
     for row in versions:
         try:
-            candidates = discover_artifacts(Path(row["archive_path"]))
+            archive_path = Path(row["archive_path"])
+            dataset_summary = ensure_notebook_datasets(archive_path)
+            if dataset_summary["failed"] or dataset_summary["skipped"]:
+                store.event("dataset", f"dataset attachment partial: {row['ref']}",
+                            dataset_summary, "warning")
+            output_summary = ({"downloaded": [], "failed": []}
+                              if row["version_key"] != row["current_version_key"]
+                              else ensure_notebook_outputs(archive_path, row["ref"]))
+            if output_summary["failed"]:
+                store.event("notebook_output", f"published output partial: {row['ref']}",
+                            output_summary, "warning")
+            candidates = discover_artifacts(archive_path)
         except Exception as exc:
             # One malformed public notebook must never starve every newer item
             # in the extraction queue.  Preserve the failure for inspection and
@@ -1297,6 +1937,12 @@ def extract(store: Store, limit=100) -> dict:
             errors.append(f"{origin}: {qa.get('error', 'loader failed')}")
         if not winner:
             status = "no_source" if not candidates else "quarantine"
+            if status == "no_source" and output_summary["failed"]:
+                errors.extend("published output unavailable: " + item["error"]
+                              for item in output_summary["failed"])
+            if status == "no_source" and dataset_summary["failed"]:
+                errors.extend("dataset unavailable: " + item["error"]
+                              for item in dataset_summary["failed"])
             with store.db:
                 store.db.execute("UPDATE notebook_versions SET status=?,error=? WHERE id=?",
                                  (status, "\n".join(errors)[:5000] or "no agent source found", row["id"]))
@@ -1636,7 +2282,8 @@ def _league_job(job: dict) -> dict:
                    "_worker", "--job", f"/league-state/jobs/{job_path.name}",
                    "--result", f"/league-state/jobs/{result_path.name}"]
         proc = subprocess.run(command, capture_output=True, text=True,
-                              timeout=PUBLIC_LEAGUE_MATCH_TIMEOUT_SECONDS)
+                              timeout=PUBLIC_LEAGUE_MATCH_TIMEOUT_SECONDS,
+                              creationflags=subprocess_no_window_flags())
         if proc.returncode or not result_path.exists():
             return {"valid": False, "error": "docker_worker_failed",
                     "stderr": (proc.stderr or proc.stdout or "")[-1200:]}
@@ -2481,10 +3128,14 @@ def _qa_main(source: Path, result: Path):
             raise TypeError("last object is not callable")
         from kaggle_environments import make
         env = make("kaggriculture", configuration={"episodeSteps": 2, "seed": 1}, debug=False)
-        env.reset(2)
-        observation = env.steps[0][0].observation
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
-            action = entry(observation, env.configuration)
+            steps = env.run([str(source), "starter"])
+        if len(steps) < 2 or str(steps[-1][0].status) != "DONE":
+            error = "official runner did not complete first action"
+            if getattr(env, "logs", None):
+                error += f": {env.logs[0][-1:]!r}"
+            raise RuntimeError(error)
+        action = steps[1][0].action
         if not isinstance(action, dict):
             raise TypeError(f"first action is {type(action).__name__}, expected dict")
         payload = {"ok": True, "entrypoint": getattr(entry, "__name__", type(entry).__name__),

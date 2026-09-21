@@ -11,7 +11,7 @@
 1. Kaggle Code 목록을 `scoreDescending`, `dateRun` 두 기준으로 수집한다.
    대회 연결 목록만으로는 검색 노트북이 빠질 수 있어 `kaggriculture` 검색 결과의 점수순·최신순도 합쳐 중복 제거한다.
 2. 새 버전만 `kernels pull`로 받아 원본 디렉터리를 보존한다.
-3. `main.py`와 함께 tar 멤버, 모든 `%%writefile`/`%%agentfile`, 독립 실행 가능한 direct-agent code cell, 정적으로 해제 가능한 gzip/base64 파일맵, 100 MiB 이하의 선언 dataset 부속파일을 복원한다. `/kaggle/working/...` writefile은 제출 archive-root 상대경로로 정규화한다. `main.py`가 없으면 독립 파싱되고 top-level 공식 entrypoint를 정의하는 writefile이 정확히 하나인 경우에만 그 파일을 `main.py`로 승격한다. Dataset 파일 목록은 Kaggle CLI의 CSV 앞 pagination 문구와 다음 페이지까지 읽고, 전체 크기를 확인한 뒤에만 내려받는다. 완료 표식이 없는 중단 다운로드는 완성본으로 간주하지 않는다. C++ source형은 고정 Docker 환경에서 `agent.so`를 빌드한다.
+3. `main.py`와 함께 tar 멤버, 모든 `%%writefile`/`%%agentfile`, 독립 실행 가능한 direct-agent code cell, 정적으로 해제 가능한 gzip/base64 파일맵, 100 MiB 이하의 선언 dataset 부속파일을 복원한다. `/kaggle/working/...` writefile은 제출 archive-root 상대경로로 정규화한다. `main.py`가 없으면 독립 파싱되고 top-level 공식 entrypoint를 정의하는 writefile이 정확히 하나인 경우에만 그 파일을 `main.py`로 승격한다. Dataset 파일 목록은 Kaggle CLI의 CSV 앞 pagination 문구와 다음 페이지까지 읽고, 전체 크기를 확인한 뒤에만 내려받는다. 완료 표식이 없는 중단 다운로드는 완성본으로 간주하지 않는다. `kernels pull`에 없는 현재 saved notebook의 공개 Output도 별도로 조회해 `main.py`/`submission.py`/submission tar와 작은 런타임 sidecar만 내려받는다. Notebook cell은 실행하지 않는다. C++ source형은 고정 Docker 환경에서 `agent.so`를 빌드한다.
 4. 단일 `main.py`는 기존 LF 정규화 source SHA를 유지한다. 다중 파일 제출은 정렬된 경로와 모든 런타임 파일 바이트로 artifact SHA를 계산한다. C++ 빌드 뒤 `.cpp/.hpp/.h/.inc`는 제출 런타임 신원에서 제외하고 `main.py + agent.so`로 식별한다. 미세 코드·asset 변경은 별도 agent다.
 5. 컴파일과 Kaggle last-callable 로더에 더해 공식 native 관측으로 첫 행동을 실제 호출한 agent만 리그에 넣는다. Linux shared-library bundle은 엔진 1.32.7 Docker에서 실행한다.
 6. 엔진·v2 규칙·설정·runner·두 artifact·시드·좌석이 같은 경기는 SQLite 캐시를 재사용한다. 모든 대결은 양 좌석이다.
@@ -81,7 +81,7 @@ powershell -ExecutionPolicy Bypass -File tools\register-public-league-protocol.p
 - `candidate`: 컴파일·공식 loader·첫 행동 QA는 통과했지만 아직 8경기 미만이거나 도전자 대기열에 있음.
 - `archived`: 검증을 마쳤으나 현재 상위 100 밖임. 파일과 전적은 보존됨.
 - `quarantine`: 컴파일/loader/첫 행동 QA 실패나 agent에 귀속되는 코드 예외가 반복되어 순위에서 격리됨. 공식 엔진이 DONE 처리한 경기의 로컬 1초 경고나 자체 telemetry 이름만으로는 격리하지 않는다.
-- `no_source`: 분석용 노트북 등에서 지원하는 형태의 실행 가능한 agent를 찾지 못한 버전. agent 순위표에는 나타나지 않음. `FILES['main.py']`에 base85+zlib로 넣은 공개 artifact builder는 AST의 literal payload와 고정 SHA를 읽어 공개 코드를 실행하지 않고 추출한다.
+- `no_source`: pulled notebook, 선언 dataset과 공개 notebook Output까지 확인했지만 지원하는 형태의 실행 가능한 agent를 찾지 못한 버전. agent 순위표에는 나타나지 않음. Output/dataset 조회 자체가 거부되면 그 오류를 함께 기록한다. `FILES['main.py']`에 base85+zlib로 넣은 공개 artifact builder는 AST의 literal payload와 고정 SHA를 읽어 공개 코드를 실행하지 않고 추출한다.
 
 `수집됨·대전 불가` 탭은 최신 버전 파일까지 받았지만 실행 가능한 agent를 찾지 못했거나 추출/QA에 실패한 노트북을 보여준다. Kaggle 목록에서 사라진 것이 아니라 대전할 실행 소스가 없어서 랭킹에서 제외된 경우를 여기서 구분한다.
 

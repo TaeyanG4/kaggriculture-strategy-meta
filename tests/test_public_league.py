@@ -142,8 +142,10 @@ class PublicLeagueTests(unittest.TestCase):
         result_path.parent.mkdir(parents=True, exist_ok=True)
 
         commands = []
+        call_kwargs = []
         def fake_run(command, **kwargs):
             commands.append(command)
+            call_kwargs.append(kwargs)
             if "--name" in command:
                 result_path.write_text(json.dumps({"valid": True}), encoding="utf-8")
             return SimpleNamespace(returncode=0, stdout="", stderr="")
@@ -152,8 +154,11 @@ class PublicLeagueTests(unittest.TestCase):
                 league.subprocess, "run", side_effect=fake_run):
             league._league_job(job)
         docker_run = next(command for command in commands if "--name" in command)
+        docker_index = commands.index(docker_run)
         self.assertEqual(docker_run[docker_run.index("--name") + 1],
                          league._league_container_name(job))
+        self.assertEqual(call_kwargs[docker_index]["creationflags"],
+                         league.subprocess_no_window_flags())
 
     def test_dataset_helper_is_not_promoted_as_standalone_agent(self):
         dataset = self.root / "_datasets" / "bundle"
@@ -178,6 +183,45 @@ class PublicLeagueTests(unittest.TestCase):
         self.assertEqual(result["skipped"][0]["reason"], "size_limit")
         self.assertFalse(any(args[:2] == ["datasets", "download"] for args in calls))
 
+    def test_published_output_listing_requires_submission_primary(self):
+        listing = json.dumps([
+            {"name": "analysis.json", "size": 10},
+            {"name": "weights.npz", "size": 10},
+        ])
+        self.assertEqual(league._published_output_names(listing), [])
+        listing = json.dumps([
+            {"name": "main.py", "size": 10},
+            {"name": "weights.npz", "size": 10},
+            {"name": "movie.mp4", "size": 10},
+        ])
+        self.assertEqual(league._published_output_names(listing),
+                         ["main.py", "weights.npz"])
+
+    def test_published_notebook_output_is_downloaded_without_running_cells(self):
+        archive = self.root / "published"; archive.mkdir()
+
+        def fake_kaggle(args, timeout=180):
+            if args[:2] == ["kernels", "files"]:
+                return json.dumps([{"name": "submission.py", "size": 1},
+                                   {"name": "weights.npz", "size": 1},
+                                   {"name": "plot.png", "size": 1}])
+            destination = Path(args[args.index("-p") + 1])
+            (destination / "submission.py").write_text(AGENT, encoding="utf-8")
+            (destination / "weights.npz").write_bytes(b"weights")
+            (destination / "ignored.log").write_text("log", encoding="utf-8")
+            return ""
+
+        with patch.object(league, "run_kaggle", side_effect=fake_kaggle):
+            result = league.ensure_notebook_outputs(archive, "alice/bot")
+        self.assertEqual(result["downloaded"], ["submission.py", "weights.npz"])
+        output = archive / "_published_output"
+        self.assertTrue((output / "submission.py").exists())
+        self.assertTrue((output / "weights.npz").exists())
+        self.assertFalse((output / "ignored.log").exists())
+        artifact = league.discover_artifacts(archive)[0][1]
+        self.assertEqual(artifact["main.py"], AGENT.encode())
+        self.assertNotIn(".public-league-output-complete.json", artifact)
+
     def test_compressed_builder_cell_can_reconstruct_main(self):
         import base64, zlib
         encoded = base64.b85encode(zlib.compress(AGENT.encode())).decode()
@@ -196,6 +240,15 @@ class PublicLeagueTests(unittest.TestCase):
         ]}), encoding="utf-8")
         found = league.artifacts_from_notebook(nb)
         self.assertEqual(found[0][1], {"main.py": AGENT.encode()})
+
+    def test_named_baseline_agent_cell_is_an_artifact_candidate(self):
+        source = AGENT.replace("def agent(", "def greedy_farmer_agent(")
+        nb = self.root / "named-direct.ipynb"
+        nb.write_text(json.dumps({"cells": [
+            {"cell_type": "code", "source": source},
+        ]}), encoding="utf-8")
+        found = league.artifacts_from_notebook(nb)
+        self.assertEqual(found[0][1], {"main.py": source.encode()})
 
     def test_absolute_kaggle_working_main_writefile_is_collected(self):
         nb = self.root / "absolute-main.ipynb"
@@ -217,6 +270,105 @@ class PublicLeagueTests(unittest.TestCase):
             "source": "%%agentfile\n" + AGENT}]}), encoding="utf-8")
         found = league.artifacts_from_notebook(nb)
         self.assertEqual(found[0][1], {"main.py": AGENT.encode()})
+
+    def test_literal_lzma_base85_agent_source_is_recovered_without_execution(self):
+        import base64, lzma
+        encoded = base64.b85encode(lzma.compress(AGENT.encode())).decode()
+        nb = self.root / "lzma-source.ipynb"
+        cell = ("import base64,lzma\n"
+                f"AGENT_SOURCE=lzma.decompress(base64.b85decode({encoded!r})).decode()\n"
+                "raise RuntimeError('must not execute notebook cell')")
+        nb.write_text(json.dumps({"cells": [{"cell_type": "code", "source": cell}]}),
+                      encoding="utf-8")
+        found = league.artifacts_from_notebook(nb)
+        self.assertEqual(found[0][1], {"main.py": AGENT.encode()})
+
+    def test_literal_zlib_base85_name_and_split_parts_are_recovered(self):
+        import base64, zlib
+        encoded = base64.b85encode(zlib.compress(AGENT.encode())).decode()
+        parts = [encoded[index:index + 31] for index in range(0, len(encoded), 31)]
+        nb = self.root / "zlib-parts.ipynb"
+        cell = (f"AGENT_SHA256={league.sha256(AGENT.encode())!r}\n"
+                f"PARTS={parts!r}\n"
+                "agent_bytes=zlib.decompress(base64.b85decode(''.join(PARTS).encode('ascii')))\n"
+                "raise RuntimeError('must not execute notebook cell')")
+        nb.write_text(json.dumps({"cells": [{"cell_type": "code", "source": cell}]}),
+                      encoding="utf-8")
+        found = league.artifacts_from_notebook(nb)
+        self.assertTrue(any(files == {"main.py": AGENT.encode()} for _, files in found))
+
+    def test_literal_gzip_source_and_written_sidecars_are_recovered(self):
+        import base64, gzip
+        source = base64.b85encode(gzip.compress(AGENT.encode())).decode()
+        notice = base64.b85encode(gzip.compress(b"notice")).decode()
+        nb = self.root / "gzip-sidecars.ipynb"
+        cell = (f"SOURCE_B85={source!r}\nNOTICE_B85={notice!r}\n"
+                "source=gzip.decompress(base64.b85decode(SOURCE_B85))\n"
+                "notice=gzip.decompress(base64.b85decode(NOTICE_B85))\n"
+                "main=WORK/'main.py'\nnotice_path=WORK/'NOTICE.txt'\n"
+                "main.write_bytes(source)\nnotice_path.write_bytes(notice)\n")
+        nb.write_text(json.dumps({"cells": [{"cell_type": "code", "source": cell}]}),
+                      encoding="utf-8")
+        files = next(files for _, files in league.artifacts_from_notebook(nb)
+                     if set(files) == {"main.py", "NOTICE.txt"})
+        self.assertEqual(files, {"main.py": AGENT.encode(), "NOTICE.txt": b"notice"})
+
+    def test_literal_base64_tar_archive_is_recovered(self):
+        import base64, io, tarfile
+        raw = io.BytesIO()
+        with tarfile.open(fileobj=raw, mode="w:gz") as bundle:
+            info = tarfile.TarInfo("main.py"); info.size = len(AGENT.encode())
+            bundle.addfile(info, io.BytesIO(AGENT.encode()))
+        encoded = base64.b64encode(raw.getvalue()).decode()
+        nb = self.root / "literal-archive.ipynb"
+        cell = f"Path('submission.tar.gz').write_bytes(base64.b64decode({encoded!r}))\n"
+        nb.write_text(json.dumps({"cells": [{"cell_type": "code", "source": cell}]}),
+                      encoding="utf-8")
+        found = league.artifacts_from_notebook(nb)
+        self.assertTrue(any(files == {"main.py": AGENT.encode()} for _, files in found))
+
+    def test_nested_payload_map_and_raw_source_map_are_recovered(self):
+        import base64, zlib
+        encoded = base64.b85encode(zlib.compress(AGENT.encode())).decode()
+        digest = league.sha256(AGENT.encode())
+        for name, expression in (
+            ("nested", f"FILES={{'main.py':{{'size':{len(AGENT)},'sha256':{digest!r},'payload':({encoded!r},)}}}}"),
+            ("raw", f"TOP_AGENT_FILES={{'main.py':{AGENT!r}}}"),
+        ):
+            nb = self.root / f"{name}.ipynb"
+            nb.write_text(json.dumps({"cells": [{"cell_type": "code", "source": expression}]}),
+                          encoding="utf-8")
+            found = league.artifacts_from_notebook(nb)
+            self.assertTrue(any(files == {"main.py": AGENT.encode()} for _, files in found), name)
+
+    def test_literal_assignment_survives_unrelated_malformed_output_line(self):
+        source = AGENT.encode().replace(b"\n", b"\r\n")
+        chunks = tuple(source[index:index + 17] for index in range(0, len(source), 17))
+        digest = league.sha256(source)
+        cell = (f"EXPECTED_MAIN_SHA256={digest!r}\nSOURCE_BYTES=b''.join({chunks!r})\n"
+                "Copied display output that is not Python\n")
+        nb = self.root / "malformed-output.ipynb"
+        nb.write_text(json.dumps({"cells": [{"cell_type": "code", "source": cell}]}),
+                      encoding="utf-8")
+        found = league.artifacts_from_notebook(nb)
+        self.assertTrue(any(files == {"main.py": AGENT.encode()} for _, files in found))
+
+    def test_pinned_remote_archive_is_hash_checked_before_collection(self):
+        import hashlib
+        raw = io.BytesIO()
+        with tarfile.open(fileobj=raw, mode="w:gz") as bundle:
+            info = tarfile.TarInfo("main.py"); info.size = len(AGENT.encode())
+            bundle.addfile(info, io.BytesIO(AGENT.encode()))
+        payload = raw.getvalue(); digest = hashlib.sha256(payload).hexdigest()
+        nb = self.root / "remote.ipynb"
+        cell = (f"COMMIT='{'a' * 40}'\nEXPECTED={digest!r}\n"
+                "URL=f'https://raw.githubusercontent.com/user/repo/{COMMIT}/agent.tar.gz'\n")
+        nb.write_text(json.dumps({"cells": [{"cell_type": "code", "source": cell}]}),
+                      encoding="utf-8")
+        response = io.BytesIO(payload)
+        with patch.object(league.urllib.request, "urlopen", return_value=response):
+            found = league.artifacts_from_notebook(nb)
+        self.assertTrue(any(files == {"main.py": AGENT.encode()} for _, files in found))
 
     def test_discover_artifacts_wraps_builder_source_as_single_file_artifact(self):
         import base64, zlib
@@ -675,6 +827,17 @@ class PublicLeagueTests(unittest.TestCase):
         source.write_text("from pathlib import Path\nPath\n", encoding="utf-8")
         qa = league.qa_source(source)
         self.assertFalse(qa["ok"])
+
+    def test_qa_uses_official_runner_signature_adaptation(self):
+        source = self.root / "one-argument-agent.py"
+        source.write_text('''def agent(obs):
+    return {"farmer": ["PASS"], "hands": [], "market": []}
+def _kaggle_submission_entrypoint(obs):
+    return agent(obs)
+''', encoding="utf-8")
+        qa = league.qa_source(source)
+        self.assertTrue(qa["ok"], qa)
+        self.assertEqual(qa["entrypoint"], "_kaggle_submission_entrypoint")
 
     def test_bradley_terry_orders_clear_winner(self):
         rows = [{"agent_a": 1, "agent_b": 2, "outcome_a": 1.0} for _ in range(8)]
