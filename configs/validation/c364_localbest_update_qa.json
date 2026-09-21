@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "workers": 2,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c364 composition QA only",
+    "design": "two fresh non-promotion worlds, raw updated Local Best/off/c364, both seats",
+    "gate": "off action hashes and rewards equal raw; active executes productive opening with health0",
+    "limits": "QA only, not strength evidence"
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "raw": {
+      "path": "state/public_league/sources/89a50e928ea14281220413f73cc9fa16b7ad47f2bf930ba7279a75d125a21859.py",
+      "sha256": "89a50e928ea14281220413f73cc9fa16b7ad47f2bf930ba7279a75d125a21859"
+    },
+    "off": {
+      "path": "state/c360/c364_disabled.py",
+      "sha256": "2bbd41dc725f01475ba8909a2e29cb82afd3e6de25d0a47e7278518e444a8ae3"
+    },
+    "c364": {
+      "path": "agent/c364_localbest_update_hybrid.py",
+      "sha256": "ae1485b974e984c6be3a5c9ebc242de6f04ee394834c8fd18354ac5f173ef533"
+    }
+  },
+  "opponents": {
+    "metav4": {
+      "path": "state/public_league/sources/9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9.py",
+      "sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "family": "qa"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "off",
+      "parent": "raw",
+      "primary": true
+    },
+    {
+      "candidate": "c364",
+      "parent": "raw",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        908561218,
+        1135679073
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        260605548,
+        1647470041
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        712034236,
+        1859488615
+      ],
+      "alpha": 0.025
+    }
+  }
+}

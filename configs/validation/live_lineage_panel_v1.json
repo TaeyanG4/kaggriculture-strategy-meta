@@ -1,0 +1,176 @@
+{
+ "schema": 1,
+ "workers": 8,
+ "timeout_seconds": 240,
+ "configuration": {
+  "episodeSteps": 720
+ },
+ "engine": {
+  "version": "1.32.7",
+  "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+  "files": {
+   "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+   "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+   "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+   "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+   "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+  }
+ },
+ "stages": {
+  "screen": {
+   "seeds": [
+    1890989655,
+    661565352,
+    1864579182,
+    330893410,
+    1326818356,
+    108333311,
+    2143419517,
+    1302796184
+   ],
+   "alpha": 0.01
+  },
+  "confirm": {
+   "seeds": [
+    1966621022,
+    926016350,
+    756085687,
+    1763075231,
+    1725529062,
+    1349382822,
+    698602602,
+    1415770726
+   ],
+   "alpha": 0.015
+  },
+  "final": {
+   "seeds": [
+    336591571,
+    769035469,
+    1776984819,
+    1585550033,
+    235283874,
+    1178613230,
+    1266627415,
+    793454899,
+    268050736,
+    210120067,
+    467506751,
+    408743817,
+    1848198911,
+    99867513,
+    722258405,
+    1807070755
+   ],
+   "alpha": 0.025
+  }
+ },
+ "models": {
+  "base19-planner": {
+   "path": "state/o_dev/p000_base19.py",
+   "sha256": "53d803424d2e9686a1474c04af7827945ec1a08fce5c71df2b6334dcc3f31290"
+  },
+  "p001-mx2": {
+   "path": "state/o_dev/p001_mx2.py",
+   "sha256": "448d61158356e211b38fe41db66a5eb4bb281bd44d46ae5f621757a84ca46331"
+  },
+  "p002-cow1": {
+   "path": "state/o_dev/p002_cow1.py",
+   "sha256": "f1ca473570e6ef1b8382a528270f5cde635375a015b8dc1d6cdae19dd65f1986"
+  },
+  "p002-cow1-mx2": {
+   "path": "state/o_dev/p002_cow1_mx2.py",
+   "sha256": "88991c8eb6be0bf7f4eff72367202ac2f65a5c6ce1573d436888e44909a9f621"
+  }
+ },
+ "opponents": {
+  "tschinkel-router-v5": {
+   "path": "state/o_dev/datasets/donor_agents/agents/tschinkel-router-v5.py",
+   "sha256": "b87a27ed614a33329be85f1b662e51cf4078a019fee937afcebbbbf2f51f8522",
+   "family": "router_tschinkel",
+   "cluster": "router_tschinkel",
+   "live_note": "93.8% Public State Router v5; reproduced live episode 110295006 720/720 steps (7/117 live games)"
+  },
+  "tschinkel-state-router-v31": {
+   "path": "state/o_dev/datasets/donor_agents/agents/tschinkel-state-router.py",
+   "sha256": "197b1ceef97d2ee20b833457ecbf06c0969832086c086ee6596bd0752e57a3c1",
+   "family": "router_tschinkel",
+   "cluster": "router_tschinkel",
+   "live_note": "74.5% Public State Router v3.1; same 6-turn opening as 8/117 live games, diverges d6+/d25 (other version)"
+  },
+  "boatlee-v29-roundtrip": {
+   "path": "state/o_dev/datasets/donor_agents/agents/boatlee-v29-market-hysteresis.py",
+   "sha256": "c4a6964cec3c1c99207c32bb1fd91e53c3ec01e6890da5734331cbeab1cc1267",
+   "family": "roundtrip_n",
+   "cluster": "roundtrip_n",
+   "live_note": "B53/S48 round-trip variant; 6-turn match 2/17 of the round-trip-N lineage, diverges d6-d9"
+  },
+  "prvsiyan-wheat-q45": {
+   "path": "state/o_dev/datasets/donor_agents/agents/prvsiyan-wheat-q45.py",
+   "sha256": "7aacd7233e5113e41024db0ff85912ab13cbd164e85ed5438af17df25a85b287",
+   "family": "roundtrip_n",
+   "cluster": "roundtrip_n",
+   "live_note": "B45/S40 round-trip variant (public source of the lineage; no exact live match)"
+  },
+  "v48-fast-climber": {
+   "path": "state/o_dev/v48_public.py",
+   "sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+   "family": "v48",
+   "cluster": "v48",
+   "live_note": "6-turn match 5/9 of the v48 lineage, diverges d5/d10"
+  },
+  "v46-reacting": {
+   "path": "state/o_dev/v46_public.py",
+   "sha256": "735c370383b70d3bf3aac792f2c147e0afc99166fc9f253ede10e8a030acedb6",
+   "family": "v46_exact",
+   "cluster": "v46_exact",
+   "live_note": "reproduced live episode 110208980 720/720 steps (1/117 live games)"
+  }
+ },
+ "comparisons": [
+  {
+   "candidate": "p002-cow1",
+   "parent": "base19-planner",
+   "primary": true
+  },
+  {
+   "candidate": "p002-cow1-mx2",
+   "parent": "p001-mx2",
+   "primary": true
+  },
+  {
+   "candidate": "p001-mx2",
+   "parent": "base19-planner",
+   "primary": false
+  },
+  {
+   "candidate": "p002-cow1-mx2",
+   "parent": "base19-planner",
+   "primary": false
+  }
+ ],
+ "arena_meta": {
+  "name": "live_lineage_panel_v1",
+  "version": "1.0",
+  "created": "2026-09-18",
+  "derived_from": "live_weighted_arena_v1 (runner/schema); opponents = live lineages missing from v1 (reports/o-live-source-trace-2026-09-18.ko.md)",
+  "description": "Supplementary REACTING panel for the four-way separation base19 / +MX2 / +p002 / +MX2+p002 against the live-population lineages absent from arena v1. Executing public sources only; the fieldbook lineage (no exact source) is judged by the frozen diagnostic (o_tools/lineage_report.py), not here. Rules L1-L4 fixed in reports/o-p002-panel-plan-2026-09-18.ko.md before any game.",
+  "cluster_weights": {
+   "router_tschinkel": 0.3571,
+   "roundtrip_n": 0.4048,
+   "v48": 0.2143,
+   "v46_exact": 0.0238
+  },
+  "live_counts_117": {
+   "router_tschinkel": 15,
+   "roundtrip_n": 17,
+   "fieldbook(frozen diagnostic only)": 23,
+   "v48": 9,
+   "v46_exact": 1,
+   "v4x_shop_router(in arena v1 via dmitrii-lb2700)": 7,
+   "planner_like_v21r1": 9,
+   "other": 36
+  },
+  "blind_seeds_reserved": "7240-7255 untouched"
+ }
+}

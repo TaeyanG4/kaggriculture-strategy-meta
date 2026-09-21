@@ -1,5 +1,7 @@
 # r000 — 1위(Majkel1337) 전략 리버스 엔지니어링 (2026-09-15)
 
+> 09-19 정정: §1의 “라우터가 아니라 반응형 플래너”는 미확정이다. 행동열 분기만으로 조건부 테이프/규칙 실행기/탐색 플래너를 구분할 수 없다. 원문은 보존한다. [근거 감사](c308-majkel-architecture-evidence-2026-09-19.ko.md).
+
 방법: leoprovorov "Kaggricult-Man: Reverse-Engineering Top-Agents Meta (Part 1)"의 절차를 그대로 적용.
 소스가 아닌 **공개 리플레이의 반복 행동**에서 전략을 복원한다 — (1) Field Skeleton(결정 구조·라우팅),
 (2) Field Ledger(단계별 경제 원장), (3) Field Worlds(상점 세계별 결과), (4) 부모를 얼린 채 좁은 게이트의

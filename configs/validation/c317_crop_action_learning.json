@@ -1,0 +1,189 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "purpose": "Direct crop-allocation action values, screen32seeds x4executing opponents x2seats x3policies=768native games. No supply forecast model.",
+    "prior": "c309 failed8seeds/31unique states atd6 whole-route choice; c310 late-compatible alternatives had one-world slack; c313 force2 fixed-world economic loss despite genuine calendar fix. c315/c316 learned supply failed. Retry changes decision information tod11 actual purchase, preserves certified lane, includes ordered shops and public farms, and32 independent worlds. NOT a fixed-size promotion or threshold tuning.",
+    "choices": "KEEP, existing2tile small tranche, whole13tile certified native tranche. Quantities chosen from existing execution contracts before outcomes, not search grid. Calendar fix and c179 investment compatibility in both alternatives. No newland/labor program.",
+    "inputs": "Immediately before first eligible d11 BUY_SEED; c308 features include shop order, public farms, own private only. No seed/opponentname/outcome/future shops. Require common decision-state and prefix across alternatives; unchanged cases identical.",
+    "learning": "Pre-fixed8fold by32seed groups, each4seeds held out together. RF64/depth4/leaf4/random317/jobs12 for point and margin differences. Positive predicted point best; predicted margin tie-break; otherwiseKEEP. Fold-only vectorizer and fixed-best control. No hyperparameter/feature tuning.",
+    "gate": "OOF point delta>0, mean margin delta>0, seed-bootstrap point CI lower>0, and positive point delta against at least2source labels including a non-v9 opponent. Oracle only diagnosis. Only then independent deployed-agent confirmation, never automatic confirm/final.",
+    "limits": "Public executable pool, not private current top band. Native alternative actions may change later shops. Same seed grouped over all opponents/seats. Costs/failures retained, no ex-post removal. Blind preserved."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "keep": {
+      "path": "state/c317/agents/keep.py",
+      "sha256": "9e59cf032dda1ed7f9d6ff08eeaa6e00c5b5538b0c13280cc9157b0e71e7cf88"
+    },
+    "small": {
+      "path": "state/c317/agents/small.py",
+      "sha256": "d4dd58da6e4d9b7291d204f73b4385861718585df418a0b9d029a1077aee7785"
+    },
+    "full": {
+      "path": "state/c317/agents/full.py",
+      "sha256": "ebeb67203d806b60a69952453e23e7f7a9fba145f5a067212e5bdd24947de5d4"
+    }
+  },
+  "opponents": {
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49"
+    },
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006"
+    },
+    "o240": {
+      "path": "agent/o240_sale_race.py",
+      "sha256": "b7de2d7b882727417c568bdb6f89fc3c2625b4855af66ad43dbb0ca2deb88f1c",
+      "family": "own_tape"
+    },
+    "v9": {
+      "path": "state/c312/public_v9_4.py",
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7",
+      "family": "tschinkel_v9"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "small",
+      "parent": "keep",
+      "primary": true
+    },
+    {
+      "candidate": "full",
+      "parent": "keep",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1083426871,
+        657354135,
+        358095002,
+        1820413402,
+        1759732966,
+        813944482,
+        921467198,
+        1052053824,
+        1975680013,
+        1483177028,
+        1160007973,
+        1446191354,
+        1621383265,
+        536776844,
+        235163247,
+        497197152,
+        1923066605,
+        1273860697,
+        1624664870,
+        1670496506,
+        1375228391,
+        1071037967,
+        1942981117,
+        872157330,
+        1327874584,
+        355580176,
+        1756027458,
+        1176035724,
+        501841158,
+        92579255,
+        900745405,
+        1757767940
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        131703008,
+        260334620,
+        328912816,
+        562081185,
+        1750547475,
+        774349774,
+        464371096,
+        1779940898,
+        250413231,
+        1963810534,
+        994525644,
+        943647094,
+        431193691,
+        529167853,
+        973379807,
+        437230487,
+        346209563,
+        1172396326,
+        1010489215,
+        1026254016,
+        1135650485,
+        1222644394,
+        260066861,
+        317827274,
+        649441515,
+        1288947885,
+        188655466,
+        1809817061,
+        1525644861,
+        1039165625,
+        1353626329,
+        1921930770
+      ],
+      "alpha": 0.025
+    },
+    "final": {
+      "seeds": [
+        823128176,
+        1036057368,
+        837106156,
+        1094353323,
+        1302300970,
+        1673109036,
+        394613322,
+        375263996,
+        950916918,
+        184141844,
+        1126015168,
+        240987204,
+        36749286,
+        282358746,
+        598205080,
+        1934989489,
+        1496285174,
+        488483940,
+        749462839,
+        1648213394,
+        1990582916,
+        1061155510,
+        146825917,
+        1289743508,
+        2088071533,
+        61761542,
+        94635558,
+        1926959079,
+        511985021,
+        1639317198,
+        165289164,
+        1126877259
+      ],
+      "alpha": 0.025
+    }
+  }
+}

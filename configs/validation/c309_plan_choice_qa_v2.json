@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "purpose": "Identity QA only: both action streams and rewards must match; telemetry does not alter policy."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "keep": {
+      "path": "state/c309/v2/agents/keep.py",
+      "sha256": "76bf43f1d74ff682ed648739f74e259e27102a2ab25a4e2a326aba2b7c5bbb53"
+    },
+    "parent": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960"
+    }
+  },
+  "opponents": {
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49"
+    },
+    "o239": {
+      "path": "agent/o239_open_roundtrip_50.py",
+      "sha256": "4e8bdfa3621eba05806e029fbd6e1b48a62d23d41c0062b35caba3516e925a74",
+      "family": "o239"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "keep",
+      "parent": "parent",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        7000,
+        7001
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        147672003,
+        1175026875,
+        1922148697,
+        1852171473,
+        2110399960,
+        646374296,
+        677877030,
+        928558590
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        1786894689,
+        1113686502,
+        2077427426,
+        881233614,
+        851980867,
+        1462456017,
+        988169313,
+        2009689699,
+        352173594,
+        1031204990,
+        1426933825,
+        1847328802,
+        893225344,
+        1246685318,
+        750067679,
+        1673980477
+      ],
+      "alpha": 0.025
+    }
+  }
+}

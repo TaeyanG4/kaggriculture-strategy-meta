@@ -35,3 +35,12 @@ state/public_agent_adoption/
 # Local submission build artifacts
 submission/
 build/
+/main.py
+/*.tar.gz
+
+# Local runtime, replay, and generated research corpora.  The reproducible
+# source, configs, reports, and tools are committed; these payloads are not.
+state/
+o_results/
+o_replays/
+/tmp*/

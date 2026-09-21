@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c313/c317/c320 one-species replacement and fixed tomato tail failed whole-policy tests. c321 now generates repeated crop/action sequences on verified own-program visits, with seed-budget and observed execution contracts. Five original synthesis weights unchanged after QA; no selector or new sales.",
+    "design": "8new seeds x4executing sources x2seats x6models=384native. Primary balanced vs unchanged full v9; four other fixed profiles exploratory. Screen is not independent confirmation or elite strength.",
+    "mechanism": "At native d11 berry seed orders, validate current own-route full calendar signature, substitute packs costing<=100per native seed, cap10orders, exclude ambiguous simultaneous seed transactions, confirm private seed acquisition, reserve untouched plant demand, repair weeds/missed planting on existing slots. Incompatible/shared slots retain parent commands; therefore actual execution differs from isolated no-fertilizer optimum. No added sale orders; c179 V219 predicate reused.",
+    "gate": "Continue at most one profile: own>0,margin>=500,point>0 with positive point effect on at least2sources including non-v9, no source point delta below -0.0625, all execution valid/max<1s. If several qualify rank point then margin then fixed profile order balanced/grain/carrot/tomato/berry. Any selection is exploratory: independently frozen32seed confirmation required with positive mean margin and point CI99 lower>0, non-v9 improvement retained. No parameter tuning on screen. Reject all if none pass.",
+    "checks": "Source/engine/runner hashes pre/post; nativeQA14/14 matches pairtrace actions and cash, off4/4, native first265steps identical14 cases. Log funded/unconfirmed lanes, field conflicts/repairs/seed shortages and physical engine ledger. Unchanged full source remains baseline; generated berry is an alternative, not baseline.",
+    "limits": "Bank covers38known calendars; unsupported calendars retain parent. More cash/own margin not ranking proof. Native future shops may differ. Shared source lineage and private elite unavailable. Protectedblind7240-7255 unused; submission owner-only."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "balanced": {
+      "path": "state/c321/executor_v1/balanced.py",
+      "sha256": "2e04b7aee95c8339e443b65e7d922b5141c02a9b9ecc04038ac7bbd4598c5fd4"
+    },
+    "grain": {
+      "path": "state/c321/executor_v1/grain.py",
+      "sha256": "3fb9f10399a4f322b2b08f827a23382cc04e96554c8148dcd177649e2ec045c3"
+    },
+    "carrot": {
+      "path": "state/c321/executor_v1/carrot.py",
+      "sha256": "3ddffbcc86d90559d56ba4143436f893f8e8b9106bbf0c6b98dfa5a9d1a159cb"
+    },
+    "tomato": {
+      "path": "state/c321/executor_v1/tomato.py",
+      "sha256": "bdf52cd2be22158708fb79920ddae445b03da5d7b7395611961ec7171e3be13c"
+    },
+    "berry": {
+      "path": "state/c321/executor_v1/berry.py",
+      "sha256": "c9f70599f5da24aafd71fab4113f82ba763c66a03f08c361933e2e8628a1baa3"
+    },
+    "keep": {
+      "path": "state/c312/public_v9_4.py",
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7"
+    }
+  },
+  "opponents": {
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006"
+    },
+    "v9": {
+      "path": "state/c312/public_v9_4.py",
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7",
+      "family": "tschinkel_v9"
+    },
+    "enh": {
+      "path": "state/c318/enhanced_instrumented.py",
+      "sha256": "21445200893ab1d48749507fa8b17737f4ccffd4a2dae465aa84e949ca981976",
+      "family": "enhanced_k0006"
+    },
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "balanced",
+      "parent": "keep",
+      "primary": true
+    },
+    {
+      "candidate": "grain",
+      "parent": "keep",
+      "primary": false
+    },
+    {
+      "candidate": "carrot",
+      "parent": "keep",
+      "primary": false
+    },
+    {
+      "candidate": "tomato",
+      "parent": "keep",
+      "primary": false
+    },
+    {
+      "candidate": "berry",
+      "parent": "keep",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        930823070,
+        1128194241,
+        576324633,
+        364312299,
+        2044568288,
+        782561403,
+        773560668,
+        1384072395
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        619111424,
+        328442003,
+        2077984569,
+        461170948,
+        307446641,
+        86356657,
+        909899069,
+        547430321,
+        1109285121,
+        261243582,
+        1570677442,
+        1576281312,
+        2096936471,
+        1823411057,
+        450930681,
+        762368427,
+        1370401902,
+        1911534552,
+        880731319,
+        1758298736,
+        373888443,
+        181650881,
+        126877693,
+        208577205,
+        1267044300,
+        1167729819,
+        1341190121,
+        292594335,
+        1969382410,
+        362850649,
+        1942802706,
+        318293885
+      ],
+      "alpha": 0.01
+    },
+    "final": {
+      "seeds": [
+        427142432,
+        1476655161,
+        486134017,
+        1457723568,
+        85529213,
+        552573744,
+        1452023920,
+        2048009417,
+        536600555,
+        2088416389,
+        1711917410,
+        1781864384,
+        517449771,
+        222025413,
+        1695158588,
+        1725251364,
+        1944037880,
+        1178559810,
+        816993868,
+        500395822,
+        890403969,
+        781700751,
+        859535289,
+        1009191770,
+        85878259,
+        654959166,
+        83321563,
+        496553193,
+        587734551,
+        668031587,
+        1763750995,
+        1317489545
+      ],
+      "alpha": 0.01
+    }
+  }
+}

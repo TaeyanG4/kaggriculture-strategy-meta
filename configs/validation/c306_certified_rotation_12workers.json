@@ -1,0 +1,195 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "name": "c306_certified_rotation_v1",
+    "purpose": "Native reacting screen of sale-isolated route-certified conversion; no private elite rank proof",
+    "rng": 202609190306,
+    "blind_reserved": "7240-7255 untouched",
+    "seed_overlap_check": "All current configs/validation JSON stages; not all historical raw jobs",
+    "development_gate": "health0, own/margin/points>0, each opponent margin>=-1000, WtoL<=LtoW; no promotion"
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "v48": {
+      "path": "state/o_dev/v48_clearqueue_public.py",
+      "sha256": "4b5402888feeb4170dce38f34bebe56788b62ca287139fce7db72df8eb89bb96"
+    },
+    "c306": {
+      "path": "agent/c306_v48_native_sale_rotation.py",
+      "sha256": "15b3d35ca21a4a960b924b73a74e3b30cf4932ad984daabac8200ed8d963bf5d"
+    }
+  },
+  "opponents": {
+    "opp-v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49_public"
+    },
+    "opp-o239": {
+      "path": "agent/o239_open_roundtrip_50.py",
+      "sha256": "4e8bdfa3621eba05806e029fbd6e1b48a62d23d41c0062b35caba3516e925a74",
+      "family": "o239"
+    },
+    "opp-k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006"
+    },
+    "opp-base19": {
+      "path": "state/o_dev/p000_base19.py",
+      "sha256": "53d803424d2e9686a1474c04af7827945ec1a08fce5c71df2b6334dcc3f31290",
+      "family": "base19"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c306",
+      "parent": "v48",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1527193565,
+        493481067,
+        1116495441,
+        851270584,
+        910512980,
+        1074569665,
+        799431214,
+        1984963473,
+        1648559195,
+        1552973944,
+        303520538,
+        1717599792,
+        1477642906,
+        1605603922,
+        2082290219,
+        392876110
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        422498838,
+        1709527679,
+        1262204176,
+        236427907,
+        1938380152,
+        1446498758,
+        501715272,
+        754961471,
+        2067085688,
+        568588706,
+        452320707,
+        891158284,
+        1805527053,
+        701158152,
+        1294605473,
+        793749415,
+        1503706325,
+        1721853008,
+        136025658,
+        1001203984,
+        1276820617,
+        242991484,
+        1007181701,
+        1164927313,
+        308312346,
+        889902815,
+        1730960281,
+        639981673,
+        636622327,
+        894522841,
+        1544304810,
+        1812971643
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        1295339008,
+        569179626,
+        1188506137,
+        699109106,
+        695428235,
+        1975285351,
+        567660601,
+        1079429256,
+        933732982,
+        252701440,
+        553483538,
+        1276473356,
+        212263603,
+        795428576,
+        349322737,
+        256994317,
+        420720927,
+        214514166,
+        129008793,
+        1820271797,
+        1089152402,
+        743040666,
+        409210246,
+        255143646,
+        946080014,
+        1721067097,
+        884935821,
+        1704686365,
+        964031319,
+        1832994607,
+        114677271,
+        1144620636,
+        585035502,
+        1807103032,
+        1492893956,
+        1382842520,
+        218947665,
+        585567170,
+        1822963042,
+        1201674008,
+        1288547669,
+        1907192855,
+        535393032,
+        1489048508,
+        1291516452,
+        1577873676,
+        1611797716,
+        1744406693,
+        282331757,
+        541501312,
+        1040794564,
+        711153015,
+        2050990189,
+        1113618033,
+        1667424523,
+        565940234,
+        2082352159,
+        1158302856,
+        783546948,
+        1911159342,
+        461811067,
+        1697912507,
+        2137044893,
+        1721366870
+      ],
+      "alpha": 0.025
+    }
+  }
+}

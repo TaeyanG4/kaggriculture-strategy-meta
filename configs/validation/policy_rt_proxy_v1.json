@@ -1,0 +1,120 @@
+{
+ "schema": 1,
+ "workers": 8,
+ "timeout_seconds": 240,
+ "configuration": {
+  "episodeSteps": 720
+ },
+ "arena_meta": {
+  "name": "policy_rt_proxy_v1",
+  "created": "2026-09-19",
+  "description": "Diagnostic only: the five policies against executing PROXIES of the live round-trip cluster (our own tape with 70/60-unit step-0 pairs). Not exact live sources; descriptive.",
+  "blind_seeds_reserved": "7240-7255 untouched"
+ },
+ "engine": {
+  "version": "1.32.7",
+  "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+  "files": {
+   "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+   "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+   "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+   "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+   "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+  }
+ },
+ "models": {
+  "base19-planner": {
+   "path": "state/o_dev/p000_base19.py",
+   "sha256": "53d803424d2e9686a1474c04af7827945ec1a08fce5c71df2b6334dcc3f31290"
+  },
+  "v46-exact": {
+   "path": "state/o_dev/v46_public.py",
+   "sha256": "735c370383b70d3bf3aac792f2c147e0afc99166fc9f253ede10e8a030acedb6"
+  },
+  "v47-public": {
+   "path": "state/o_dev/v47_public.py",
+   "sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842",
+   "note": "kaggle.com/code/ahmedberatozer/kaggriculture-v47-reactive-market-coordination, notebook-pinned main.py digest, public score 2686 (2026-09-18); 3 exact live copies verified in the 2400+ band"
+  },
+  "v48-clearqueue-public": {
+   "path": "state/o_dev/v48_clearqueue_public.py",
+   "sha256": "4b5402888feeb4170dce38f34bebe56788b62ca287139fce7db72df8eb89bb96",
+   "note": "kaggle.com/code/ahmedberatozer/kaggriculture-v48-clear-the-queue, notebook-pinned digest; 6 exact live copies verified (ratings 2435-2600 while climbing)"
+  },
+  "o239-roundtrip50-tape": {
+   "path": "agent/o239_open_roundtrip_50.py",
+   "sha256": "4e8bdfa3621eba05806e029fbd6e1b48a62d23d41c0062b35caba3516e925a74",
+   "note": "our live tape line (submission 56278146 lineage, live 2660-2754); diagnostic reference only"
+  }
+ },
+ "opponents": {
+  "o238-roundtrip70-tape": {
+   "path": "agent/o238_open_roundtrip.py",
+   "sha256": "4467ef8394ecd53552c45de9e379bac19fbc30433cc9f831b00a4cf7870791d9",
+   "family": "roundtrip70_proxy",
+   "note": "our tape with the [BUY 70, SELL 70] step-0 pair = the most common 2600-2850 live opening (30/171 distinct opponents, V45-style); executing PROXY of that live group, not their exact source"
+  },
+  "o239-roundtrip60-tape": {
+   "path": "agent/o239_open_roundtrip_60.py",
+   "sha256": "d8c9ed4aba357f09eb313a66f47d37e26d35fb070f185e7285cba9a7a3893d98",
+   "family": "roundtrip60_proxy",
+   "note": "our tape with a 60-unit pair; proxy for the B55-B69 live variants"
+  }
+ },
+ "comparisons": [
+  {
+   "candidate": "v48-clearqueue-public",
+   "parent": "o239-roundtrip50-tape",
+   "primary": true
+  }
+ ],
+ "stages": {
+  "screen": {
+   "seeds": [
+    1360408755,
+    211221630,
+    1731695924,
+    753666044,
+    299387588,
+    1692877162,
+    1406320235,
+    1607321654
+   ],
+   "alpha": 0.01
+  },
+  "confirm": {
+   "seeds": [
+    2123141811,
+    1750783264,
+    1645646950,
+    727065759,
+    863774942,
+    1546655756,
+    1203423100,
+    601752748
+   ],
+   "alpha": 0.015
+  },
+  "final": {
+   "seeds": [
+    119059566,
+    1880029133,
+    134376825,
+    919164306,
+    199629467,
+    1155206970,
+    48262182,
+    2018712653,
+    682956804,
+    1264765038,
+    2048232782,
+    1474056416,
+    50426424,
+    823249496,
+    8148738,
+    77960040
+   ],
+   "alpha": 0.025
+  }
+ }
+}

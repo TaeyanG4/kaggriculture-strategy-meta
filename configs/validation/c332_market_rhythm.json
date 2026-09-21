@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c318 isolated sale-slot DP gave +1.47 margin; c324 newer public ed89 failed v9 gate. Old First in Line 53dc224a is verified same lineage; this release adds queue scenarios and opening10, no new production controller. Not prior-source rerun or architecture claim.",
+    "design": "Exact frozen public f3be6392 versus v9. Reuse c324 QA16 then 16 fresh seeds x 4 executing sources(V49,K0006,o240,v9) x 2 seats x 2 policies=256 native. 12 workers, one campaign. Author seed range excluded.",
+    "gate": "Continue independent16seedconfirm only if equal-source meanpoint95%seedbootstraplower>0,meanmargin>0,and no opponent pointdelta<-0.0625. Repeat same gate onconfirm for developmentparent selection. Otherwise retain baseline, no same-source retuning. No automaticfinal/submission.",
+    "limits": "Shared public lineage is not current private elite. Author confirmation 144games has only12seedclusters and queue increment20.78 CI[-19.03,62.70]. Largest author gain partly opening. Exact newer opponent source64da is distinct from our ed89; claims not independently reproduced. Existing error telemetry only, no strategy edits."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "new": {
+      "path": "state/c332/new_instrumented.py",
+      "sha256": "56ff3cff48d47e98fb04424058b4670ebdaabbd9759e54fae0ce7defd5bacacc"
+    },
+    "v9": {
+      "path": "state/c324/v9_instrumented.py",
+      "sha256": "37b047c517948043bd63779e9c3da9583e9026857f711eeadd34dbd9e0a6ff02"
+    }
+  },
+  "opponents": {
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49_family"
+    },
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006_family"
+    },
+    "o240": {
+      "path": "state/c322/o240_telemetry.py",
+      "sha256": "e08393981a32b9e68b54839d08d5f0a41e60c5c88cdd5ce9f729a3cec99994c3",
+      "family": "own_tape"
+    },
+    "v9": {
+      "path": "state/c324/v9_instrumented.py",
+      "sha256": "37b047c517948043bd63779e9c3da9583e9026857f711eeadd34dbd9e0a6ff02",
+      "family": "tschinkel_v9"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "new",
+      "parent": "v9",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "confirm": {
+      "seeds": [
+        2104307014,
+        1221851046,
+        558826544,
+        1925256412,
+        1739333739,
+        1747077275,
+        945902223,
+        1674282144,
+        544972099,
+        448951574,
+        1692819748,
+        14433213,
+        1648281885,
+        1998539337,
+        163463295,
+        273452669
+      ],
+      "alpha": 0.015
+    },
+    "screen": {
+      "seeds": [
+        1738950215,
+        1449121031,
+        1152899770,
+        6299307,
+        1694315761,
+        370910116,
+        275274938,
+        1123869115,
+        1081649797,
+        330022735,
+        738682674,
+        2145844181,
+        1032184911,
+        946361932,
+        887907349,
+        143929960
+      ],
+      "alpha": 0.01
+    },
+    "final": {
+      "seeds": [
+        1307057391,
+        1656893935
+      ],
+      "alpha": 0.025
+    }
+  }
+}

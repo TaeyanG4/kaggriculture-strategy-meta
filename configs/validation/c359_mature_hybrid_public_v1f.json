@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "Closest attempt is c358: Local Best plus the V54 one-tile idle-worker wheat opening. It beat the sampled public frontier but went only 25-19 in 44 Public League games versus new One More Wheat. Historical feedrot and land expansion displaced productive tiles; c359 changes only the already-proven temporary tile and idle route, delaying harvest one day as the exact public One More Wheat mechanism.",
+    "design": "c359 versus submitted c358 on eight fresh seeds, both seats, eight current public frontier sources. The only candidate change is day-two harvest delay to day three for one additional wheat maturation.",
+    "gate": "Continue only if family-weighted paired point is nonnegative, mean margin and own cash are positive, W-L <=1, zero health failures, and the One More Wheat cell improves without a systematic top-family regression.",
+    "limits": "Current public-source panel and frozen live losses only; local evidence is not live leaderboard proof. Protected numeric blind 7240-7255 unused.",
+    "execution_revision": "v1f: exact same strategy, opponents, seeds, gates and owner-directed 12 workers. Public League remains stopped with zero league workers. v1e stopped on one transient c358 call at 1.023s (p99 .011s) in the first completed job; v1e is preserved and excluded. This is the sole clean 12-worker retry."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c359": {
+      "path": "agent/c359_localbest_mature_hybrid.py",
+      "sha256": "2d57aa8234987610db41ade9f9724c0a8a491dc0952fb531b0f3f3641387dbf8"
+    },
+    "c358": {
+      "path": "agent/c358_localbest_hybrid.py",
+      "sha256": "680a4f713d8d672dce3f13f5429df1f803626f408d76e1690eabe32152779196"
+    }
+  },
+  "opponents": {
+    "one_more_wheat": {
+      "path": "state/public_league/sources/e8917154ee8573db867849bc235864cd1e73a2888958700e14cea2ffb50697b2.py",
+      "sha256": "e8917154ee8573db867849bc235864cd1e73a2888958700e14cea2ffb50697b2",
+      "family": "one_more_wheat"
+    },
+    "localbest": {
+      "path": "state/public_league/sources/41dd60f718c701666f45b23f94e05922354a48189b931e6c6091134d3426fc25.py",
+      "sha256": "41dd60f718c701666f45b23f94e05922354a48189b931e6c6091134d3426fc25",
+      "family": "localbest"
+    },
+    "metav4_v13": {
+      "path": "state/public_league/sources/9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9.py",
+      "sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "family": "metav4"
+    },
+    "v54": {
+      "path": "state/public_league/sources/949e2eed410169f7a651e82bb37f6484a332a833d8c75937122701b90fc7658c.py",
+      "sha256": "949e2eed410169f7a651e82bb37f6484a332a833d8c75937122701b90fc7658c",
+      "family": "hybrid_opening"
+    },
+    "wheat_sales": {
+      "path": "state/public_league/sources/218d72b0a5ce40d23657b9bd6a1385f106948a9dd76d49f786d9cf04eba34b7d.py",
+      "sha256": "218d72b0a5ce40d23657b9bd6a1385f106948a9dd76d49f786d9cf04eba34b7d",
+      "family": "wheat_sales"
+    },
+    "g001": {
+      "path": "state/public_league/sources/fe52d1bbc14828a0a7e9c8c2edc582586f3623ebb019fcbeb1849a9b9da6fc67.py",
+      "sha256": "fe52d1bbc14828a0a7e9c8c2edc582586f3623ebb019fcbeb1849a9b9da6fc67",
+      "family": "own_g001"
+    },
+    "farming_score_v2": {
+      "path": "state/public_league/sources/177d78bdf00aa96579d98052558e18cd3081d29f855c8a6f20a2bbfebcdbda11.py",
+      "sha256": "177d78bdf00aa96579d98052558e18cd3081d29f855c8a6f20a2bbfebcdbda11",
+      "family": "farming_score"
+    },
+    "smaller_shock": {
+      "path": "state/public_league/sources/d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555.py",
+      "sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "family": "smaller_shock"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c359",
+      "parent": "c358",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1820232596,
+        1614747808,
+        1431131529,
+        485132828,
+        129048191,
+        840606973,
+        1904499108,
+        1138864982
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1121721258,
+        373036137,
+        936522320,
+        1037983589,
+        776606853,
+        1472370701,
+        1551919514,
+        1472902311
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        1376312543,
+        1855171151,
+        969532491,
+        1476913082,
+        336401725,
+        1726606410,
+        502594991,
+        78864643
+      ],
+      "alpha": 0.025
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c326 glut gate FAIL. New c327 corrects final own-action sales in rival event observation; 12 original histories have own25884/25884 and usable rival23396/23396 exact quantities after floor censoring. Same embedded physical helpers; no price gate, new predictor or threshold.",
+    "design": "16freshseeds x5executing sources xbothseats xcandidate/parent=320native. QA16:4on modepairs,4off identities. Last-price<=3 original skip retained; saturated book after market censored. Own premium purchases censored. Missing-event handling in existing scorer unchanged.",
+    "gate": "Screen/confirm require equal-source mean point95% seedbootstrap lower>0, own>=0, margin>0, no opponent pointdelta<-0.0625. Otherwise stop no retuning;32freshconfirm only onpass. No automatic submission.",
+    "limits": "Finite12-history observation proof; rival premium buys/hidden disposal can make gross sales unidentifiable. Current model observes net market inflow. Public sources sharelineage; no privateelite strength proof. Blind7240-7255 and priorreservedseeds untouched."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "candidate": {
+      "path": "state/c327/candidate.py",
+      "sha256": "591ed566cb5d53d43083f693d80ec7745193d0230295636c689e4d0260b1301c"
+    },
+    "v9": {
+      "path": "state/c324/v9_instrumented.py",
+      "sha256": "37b047c517948043bd63779e9c3da9583e9026857f711eeadd34dbd9e0a6ff02"
+    }
+  },
+  "opponents": {
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49_family"
+    },
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006_family"
+    },
+    "o240": {
+      "path": "state/c322/o240_telemetry.py",
+      "sha256": "e08393981a32b9e68b54839d08d5f0a41e60c5c88cdd5ce9f729a3cec99994c3",
+      "family": "own_tape"
+    },
+    "v9": {
+      "path": "state/c324/v9_instrumented.py",
+      "sha256": "37b047c517948043bd63779e9c3da9583e9026857f711eeadd34dbd9e0a6ff02",
+      "family": "tschinkel_v9"
+    },
+    "new": {
+      "path": "state/c324/new_instrumented.py",
+      "sha256": "5d584f994caf633d0e3c9dd5259c272d4e3937da50ae954d7ea24505f3954923",
+      "family": "new_public_v9_economy"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "candidate",
+      "parent": "v9",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "confirm": {
+      "seeds": [
+        306738872,
+        1599554434,
+        1002192620,
+        1748936157,
+        1504228150,
+        46850571,
+        1924347139,
+        11986634,
+        1815536582,
+        1061816132,
+        1371628942,
+        1583610446,
+        873798114,
+        1564224734,
+        1494065262,
+        465418969,
+        1606357219,
+        963084485,
+        110449066,
+        1445371163,
+        1744845235,
+        1842698013,
+        82627492,
+        918680466,
+        798960367,
+        1911833635,
+        506951565,
+        1375999042,
+        799094510,
+        699896638,
+        1233568630,
+        24758518
+      ],
+      "alpha": 0.015
+    },
+    "screen": {
+      "seeds": [
+        1761421934,
+        728898988,
+        183526310,
+        106695660,
+        1781586013,
+        283538288,
+        2030587583,
+        413602454,
+        2098454038,
+        2120179920,
+        966304946,
+        1669445613,
+        2145450335,
+        1616740819,
+        540189424,
+        585353358
+      ],
+      "alpha": 0.01
+    },
+    "final": {
+      "seeds": [
+        1062270451,
+        101151735,
+        754861393,
+        805736689,
+        1138801661,
+        136086084,
+        1039568519,
+        644972728,
+        437709178,
+        830304081,
+        1978667943,
+        890836112,
+        440982771,
+        1876590287,
+        2113175284,
+        1245017893,
+        725154317,
+        649598993,
+        513243473,
+        1982096013,
+        797455249,
+        1802541724,
+        1603966587,
+        414893521,
+        1010743421,
+        1103523491,
+        507863323,
+        604141142,
+        1271506926,
+        1077684944,
+        568830165,
+        493750566
+      ],
+      "alpha": 0.025
+    }
+  }
+}

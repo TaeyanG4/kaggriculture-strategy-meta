@@ -1,0 +1,40 @@
+{
+  "rules_version": "public_league_v1",
+  "competition": "kaggriculture",
+  "collection": {
+    "sorts": ["scoreDescending", "dateRun"],
+    "page_size": 200,
+    "pull_limit_per_cycle": 40,
+    "preserve_all_versions": true
+  },
+  "identity": {
+    "deduplicate_by": "canonical_lf_full_source_sha256",
+    "group_duplicate_notebook_titles_and_urls": true,
+    "treat_any_code_change_as_distinct_agent": true,
+    "behavior_fingerprint_is_identity": false
+  },
+  "league": {
+    "mode": "native_reacting",
+    "seats": [0, 1],
+    "seeds_per_pair_per_cycle": 1,
+    "scheduler": "game_deficit_balanced_pairing",
+    "workers": 8,
+    "max_matches_per_cycle": 240,
+    "top_k": 50,
+    "challenger_slots": 10,
+    "newcomer_priority_until_games": 32,
+    "minimum_games_for_active": 8,
+    "runtime_failure_quarantine_threshold": 2
+  },
+  "ranking": {
+    "primary": "batch_elo",
+    "uncertainty": "wilson_95_score_rate_ties_half",
+    "invalid_matches_count": false,
+    "public_notebook_score_is_local_rating_prior": false
+  },
+  "retention": {
+    "delete_duplicate_originals": false,
+    "delete_archived_agents": false,
+    "delete_match_history": false
+  }
+}

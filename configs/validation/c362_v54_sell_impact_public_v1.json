@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c361 full six-layer market stack had a strong screen but failed fresh confirm (point +1.56pp, CI crosses zero, margin -101, W->L20). Historical Local Best selected-loss ablation worsened when the outer sell-impact layer was removed.",
+    "design": "c362 is exact V54 plus only Local Best outer sell_impact_reorder. This stateless operator changes neither quantities nor non-SELL positions and directly ranks same-turn sales by own price-impact loss. Fresh seeds and the same eight strong sources.",
+    "gate": "Continue only if point delta >0 with 99% CI lower >=0, margin and own >0, W->L<=1, health0/max<=1s, and no systematic Metav4/Pipe16/LocalBest/c358 regression. If effect is only small cash or CI includes zero, stop.",
+    "limits": "Current public panel only; protected blind 7240-7255 unused.",
+    "worker_contract": "8 workers; Public League battle stopped."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c362": {
+      "path": "agent/c362_v54_sell_impact.py",
+      "sha256": "a66075e1cc7b6a1fd419375f2876ded23d22ed109358cabc907d70647ff7429c"
+    },
+    "v54": {
+      "path": "state/public_league/sources/949e2eed410169f7a651e82bb37f6484a332a833d8c75937122701b90fc7658c.py",
+      "sha256": "949e2eed410169f7a651e82bb37f6484a332a833d8c75937122701b90fc7658c"
+    }
+  },
+  "opponents": {
+    "metav4_v13": {
+      "path": "state/public_league/sources/9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9.py",
+      "sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "family": "metav4"
+    },
+    "pipe16": {
+      "path": "state/public_league/sources/827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181.py",
+      "sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "family": "pipe16"
+    },
+    "localbest": {
+      "path": "state/public_league/sources/41dd60f718c701666f45b23f94e05922354a48189b931e6c6091134d3426fc25.py",
+      "sha256": "41dd60f718c701666f45b23f94e05922354a48189b931e6c6091134d3426fc25",
+      "family": "localbest"
+    },
+    "one_more_wheat": {
+      "path": "state/public_league/sources/e8917154ee8573db867849bc235864cd1e73a2888958700e14cea2ffb50697b2.py",
+      "sha256": "e8917154ee8573db867849bc235864cd1e73a2888958700e14cea2ffb50697b2",
+      "family": "one_more_wheat"
+    },
+    "more_wheat": {
+      "path": "state/public_league/sources/218d72b0a5ce40d23657b9bd6a1385f106948a9dd76d49f786d9cf04eba34b7d.py",
+      "sha256": "218d72b0a5ce40d23657b9bd6a1385f106948a9dd76d49f786d9cf04eba34b7d",
+      "family": "more_wheat"
+    },
+    "farming_score_v2": {
+      "path": "state/public_league/sources/177d78bdf00aa96579d98052558e18cd3081d29f855c8a6f20a2bbfebcdbda11.py",
+      "sha256": "177d78bdf00aa96579d98052558e18cd3081d29f855c8a6f20a2bbfebcdbda11",
+      "family": "farming_score"
+    },
+    "g001": {
+      "path": "state/public_league/sources/fe52d1bbc14828a0a7e9c8c2edc582586f3623ebb019fcbeb1849a9b9da6fc67.py",
+      "sha256": "fe52d1bbc14828a0a7e9c8c2edc582586f3623ebb019fcbeb1849a9b9da6fc67",
+      "family": "own_g001"
+    },
+    "c358_submitted": {
+      "path": "agent/c358_localbest_hybrid.py",
+      "sha256": "680a4f713d8d672dce3f13f5429df1f803626f408d76e1690eabe32152779196",
+      "family": "our_submitted"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c362",
+      "parent": "v54",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1026417037,
+        142044801,
+        1387049058,
+        1094687054,
+        869743225,
+        1804012670,
+        659906465,
+        1831015203
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1587435871,
+        387707413,
+        449053718,
+        132966079,
+        335388490,
+        1534646100,
+        385213765,
+        955503403
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        168759233,
+        186831094,
+        1665648775,
+        447032143,
+        2027837559,
+        349465067,
+        923221805,
+        2015005366
+      ],
+      "alpha": 0.025
+    }
+  }
+}

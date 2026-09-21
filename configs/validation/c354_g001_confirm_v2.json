@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c326/327/329 short-sale mechanisms and c318 slot sorting; G layers add scheduled 1-2step physical-stock advance. Raw baseline prefix unchanged. G history repeatedly reused c31216+16worlds with two G000 bytes, no independent current-version confirm.",
+    "design": "Freeze g000safe1ac340/g0016f596/v9; QA32;16freshseeds x6sources x2seats x3models=576native,12workers. Old4 plus ed89 and o239, related pairs family-halfweighted. Two primary comparisons corrected by runner alpha/2, G001-G000 descriptive. No resubmit as owner says both already submitted.",
+    "gate": "Independent confirm only for candidates with primary family-point CI lower>0, meanmargin>0, each opponent pointdelta>=-0.0625, no health failures; worst-tail diagnostics reported separately. Same gate on confirm, then one frozen final set if justified. Never declare current top strength from public-family panel.",
+    "limits": "Known public sources remain correlated; private elite unmodeled. No price-impact computation in G001 suffix; it is a milk-exclusion rule. Original all-report diagnostics exposed, actions unchanged QA required. Protected blind untouched; old G runner results preserved.",
+    "execution_subset": {
+      "source_config": "configs\\validation\\c354_gemini_audit_v2.json",
+      "source_sha256": "e25695be80971c372e0321897b8e2c37c6e804a09c74a95a929a3ff4a1354150",
+      "reason": "Only g001 passes screen. g000 is not reevaluated or reconsidered. Models/seed lists/gates unchanged for g001; halved stage alpha retains original per-hypothesis confidence."
+    },
+    "execution_fix": "c322 existing overflow_contract_errors -> overflow_contract_mismatch telemetry-only adapter; failing seed all 4 pairs identical. Original interrupted campaign preserved; candidates/seeds/gates unchanged."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "g001": {
+      "path": "state/c354/g001_instrumented_v2.py",
+      "sha256": "abf288eaf6a15e8685cabaff05dcd9c4eedf525df8608d407fe12fcdfd631a1e"
+    },
+    "v9": {
+      "path": "state/c324/v9_instrumented.py",
+      "sha256": "37b047c517948043bd63779e9c3da9583e9026857f711eeadd34dbd9e0a6ff02"
+    }
+  },
+  "opponents": {
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49_family"
+    },
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006_family"
+    },
+    "o240": {
+      "path": "state/c322/o240_telemetry.py",
+      "sha256": "e08393981a32b9e68b54839d08d5f0a41e60c5c88cdd5ce9f729a3cec99994c3",
+      "family": "own_tape"
+    },
+    "v9": {
+      "path": "state/c324/v9_instrumented.py",
+      "sha256": "37b047c517948043bd63779e9c3da9583e9026857f711eeadd34dbd9e0a6ff02",
+      "family": "tschinkel_v9"
+    },
+    "ed89": {
+      "path": "state/c324/new_instrumented.py",
+      "sha256": "5d584f994caf633d0e3c9dd5259c272d4e3937da50ae954d7ea24505f3954923",
+      "family": "v49_family"
+    },
+    "o239": {
+      "path": "state/c354/o239_telemetry.py",
+      "sha256": "1c1f8411b28cf1827812dafccd29bdeaa1f06d848616d5c84f58a400ade4c4ff",
+      "family": "own_tape"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "g001",
+      "parent": "v9",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "confirm": {
+      "seeds": [
+        1870121159,
+        1295461143,
+        591982602,
+        1621422060,
+        923111546,
+        11238576,
+        739789854,
+        937406028,
+        362684042,
+        412878374,
+        759821988,
+        1798909277,
+        1644599732,
+        1213189844,
+        1601556496,
+        2095181795
+      ],
+      "alpha": 0.0075
+    },
+    "screen": {
+      "seeds": [
+        1290863566,
+        1357746400,
+        1540709088,
+        2138709474,
+        1797218109,
+        1353116848,
+        1194361325,
+        218397659,
+        1402499500,
+        867760607,
+        1097970040,
+        1523318197,
+        1119536339,
+        994503981,
+        873516783,
+        2010516911
+      ],
+      "alpha": 0.005
+    },
+    "final": {
+      "seeds": [
+        539182573,
+        781177607,
+        291123472,
+        788798499,
+        912728240,
+        1709403694,
+        990348387,
+        1407333088,
+        1460622741,
+        311253578,
+        1836810382,
+        866470574,
+        31275163,
+        1066026483,
+        1813794710,
+        1874253036
+      ],
+      "alpha": 0.0125
+    }
+  }
+}

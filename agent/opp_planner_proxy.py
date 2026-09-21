@@ -12,6 +12,14 @@ MILK_SHOPS = ('PIZZA_SHOP', 'ICE_CREAM_SHOP', 'SMOOTHIE_SHOP')
 EGG_SHOPS = ('BAKERY', 'BRUNCH_SPOT')
 SHED = [(4, 4), (5, 4), (4, 5), (5, 5)]
 PRODUCTS = ('WHEAT', 'CARROT', 'TOMATO', 'STRAWBERRY', 'MELON', 'EGG', 'MILK', 'WOOL', 'FERTILIZER')
+SHOP_PRODUCTS = {
+    'BAKERY': ('EGG', 'WHEAT'), 'PIZZA_SHOP': ('MILK', 'TOMATO', 'WHEAT'),
+    'BRUNCH_SPOT': ('EGG', 'WHEAT', 'STRAWBERRY'), 'YARN_STORE': ('WOOL',),
+    'ICE_CREAM_SHOP': ('STRAWBERRY', 'MILK', 'WHEAT'), 'PET_CAFE': ('CARROT',),
+    'SMOOTHIE_SHOP': ('STRAWBERRY', 'MILK'), 'FARMERS_MARKET': ('WHEAT', 'CARROT', 'TOMATO', 'STRAWBERRY'),
+}
+SMALL_FLOOR_X = {'MILK': 76, 'WOOL': 59, 'STRAWBERRY': 62, 'MELON': 158}
+ANIMAL_PRODUCT = {'COW': 'MILK', 'SHEEP': 'WOOL', 'GOOSE': 'EGG'}
 CROP_FIRST = {'WHEAT': 2, 'CARROT': 2, 'TOMATO': 8, 'STRAWBERRY': 10, 'MELON': 10}
 CROP_LAST = {'WHEAT': 4, 'CARROT': 3, 'MELON': 12}
 ONGOING = {'TOMATO': 1, 'STRAWBERRY': 2}
@@ -33,15 +41,46 @@ def world_bucket(shops):
     return 'milk%d' % min(3, sum(s in MILK_SHOPS for s in shops[:3]))
 
 
+def _ticks_left(step, interval):
+    first = step + (-step % interval)
+    return 0 if first > 718 else (718 - first) // interval + 1
+
+
+def market_room(obs, item):
+    """Units the currently visible market can absorb before this small market reaches $1."""
+    floor_x = SMALL_FLOOR_X[item]
+    x = obs['market']['inventory'].get(item, 10000) - 10000
+    step = int(obs['step'])
+    per_shop_tick = 0
+    for shop in obs['town'].get('unlocked_shops', []) or []:
+        products = SHOP_PRODUCTS.get(shop, ())
+        if item in products:
+            per_shop_tick += 2 if len(products) == 1 else 1
+    absorb = per_shop_tick * _ticks_left(step, 4)
+    if item != 'FERTILIZER':
+        absorb += _ticks_left(step, 24)
+    return max(0, floor_x - x + absorb)
+
+
 ANIMAL_TOTALS = {'yarn': {'SHEEP': 12, 'COW': 6}, 'milk0': {'GOOSE': 4, 'COW': 6, 'SHEEP': 5}, 'milk1': {'GOOSE': 2, 'COW': 8, 'SHEEP': 4},
                  'milk2': {'GOOSE': 1, 'COW': 10, 'SHEEP': 4}, 'milk3': {'COW': 13, 'SHEEP': 3}}   # dict order = purchase order (geese pay back in days)
 
 
-def animal_plan(bucket, day, have):
+def animal_plan(bucket, day, have, obs=None):
     """Shortfall to Majkel's peak herd by world, bought from day 6 as cash allows (order: the world's main product first)."""
     if day < 6 or day > 18:
         return {}   # herd shortfall is still worth closing until d18 (a d15 cow/sheep repays 2x before d30)
-    tot = ANIMAL_TOTALS.get(bucket, ANIMAL_TOTALS['milk1'])
+    tot = dict(ANIMAL_TOTALS.get(bucket, ANIMAL_TOTALS['milk1']))
+    if obs is not None:
+        # Keep herd/feed/labour at or below the baseline; freed tiles fall through to wheat.
+        for kind in ('COW', 'SHEEP'):
+            item = ANIMAL_PRODUCT[kind]
+            stock = obs['private']['shed'].get(item, 0) + sum((inv or {}).get(item, 0) for inv in (obs['private'].get('inventories') or []))
+            room = max(0, int(0.72 * market_room(obs, item)) - stock)
+            units_per_new = max(6, 30 - day - ANIMAL_FIRST[kind])
+            cap = max(have.get(kind, 0), room // units_per_new)
+            old = tot.get(kind, 0)
+            tot[kind] = min(old, cap)
     return {k: v - have.get(k, 0) for k, v in tot.items() if v - have.get(k, 0) > 0}
 
 
@@ -140,8 +179,11 @@ class Proxy:
                 have[k] = have.get(k, 0) + shed.get(k, 0) + sum((inv or {}).get(k, 0) for inv in invs)
             pri += [('LAND', None, 1)]
             straw_have = seeds.get('STRAWBERRY', 0) + sum(1 for row in farm['tiles'] for t in row if isinstance(t, dict) and t.get('crop') == 'STRAWBERRY')
-            straw_item = [('SEED', 'STRAWBERRY', max(0, min(int(_KNOBS.get('straw', 26)) - straw_have, 11 if day == 6 else (4 if day <= 9 else 3))))] if day <= 12 else []
-            anim_items = [('ANIMAL', k, n) for k, n in animal_plan(bucket, day, have).items()]
+            straw_stock = shed.get('STRAWBERRY', 0) + sum((inv or {}).get('STRAWBERRY', 0) for inv in invs)
+            straw_room = max(0, int(0.72 * market_room(obs, 'STRAWBERRY')) - straw_stock)
+            straw_cap = max(8, min(int(_KNOBS.get('straw', 26)), straw_room // 6))
+            straw_item = [('SEED', 'STRAWBERRY', max(0, min(straw_cap - straw_have, 11 if day == 6 else (4 if day <= 9 else 3))))] if day <= 12 else []
+            anim_items = [('ANIMAL', k, n) for k, n in animal_plan(bucket, day, have, obs).items()]
             pri += (anim_items + straw_item) if ('anim6' in _FLAGS and day <= 8) else (straw_item + anim_items)
             if day >= 9:
                 pri += [('SEED', 'WHEAT', max(0, free - sum(int(v) for v in seeds.values())))]
@@ -239,7 +281,7 @@ class Proxy:
                             out.append(((0 if hour >= 16 else 1) if must else (2 if hour >= 12 else 3), (x, y), ['WATER'], None))
                     fert_ok = t.get('fertilized_until_day', -1) < day
                     if fert_ok and crop in ONGOING and age >= CROP_FIRST[crop] - 1 and (age - (CROP_FIRST[crop] - 1)) % ONGOING[crop] == 0:
-                        out.append((2, (x, y), ['FERTILIZE'], 'FERTILIZER'))   # on production days (fertilizer lasts day..day+2 -> covers two strawberry productions)
+                        out.append((0 if crop == 'STRAWBERRY' else 2, (x, y), ['FERTILIZE'], 'FERTILIZER'))   # strawberries first (c207): the age-9/13 dose must land before the production watering
                     elif fert_ok and crop == 'WHEAT' and age == 2:
                         out.append((3, (x, y), ['FERTILIZE'], 'FERTILIZER'))   # age 2 covers all three window waterings (3 -> 6 units)
                 elif t.get('animal'):
@@ -312,7 +354,8 @@ class Proxy:
         animal_tiles = {t[1] for t in tasks if t[2][0] in ('FEED', 'CARE', 'COLLECT_FERTILIZER') or (t[2][0] == 'HARVEST' and isinstance(farm['tiles'][t[1][1]][t[1][0]], dict) and farm['tiles'][t[1][1]][t[1][0]].get('animal'))}
         n_animals = sum(1 for row in farm['tiles'] for t in row if isinstance(t, dict) and t.get('animal'))
         n_animals += sum(priv['shed'].get(k, 0) for k in ANIMAL_STRUCT) + sum((inv or {}).get(k, 0) for inv in invs for k in ANIMAL_STRUCT)
-        n_feeders = min(max(1, n_workers - 3), max(1, int(round(n_animals / float(_KNOBS.get('feed', 4.5 if 'feed45' in _FLAGS else 3.6)))))) if n_animals else 0
+        feed_ratio = float(_KNOBS.get('feed', {'milk0': 6.0, 'milk1': 6.0, 'milk2': 5.0, 'milk3': 4.5, 'yarn': 5.0}.get(bucket, 5.0)))   # world table from c206 (holdout +2.4k)
+        n_feeders = min(max(1, n_workers - 3), max(1, int(round(n_animals / feed_ratio)))) if n_animals else 0
         quads = {}
         for y, row in enumerate(farm['tiles']):
             for x, t in enumerate(row):

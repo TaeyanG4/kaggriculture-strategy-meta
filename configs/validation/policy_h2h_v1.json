@@ -1,0 +1,118 @@
+{
+ "schema": 1,
+ "workers": 8,
+ "timeout_seconds": 240,
+ "configuration": {
+  "episodeSteps": 720
+ },
+ "arena_meta": {
+  "name": "policy_h2h_v1",
+  "version": "1.0",
+  "created": "2026-09-19",
+  "description": "Diagnostic only: the three policies also as opponents (3 self-play + 6 cross cells x 2 seats). Not part of the main score; mirror/clone detections are flagged. Seeds = the policy_compare_v1 stage seeds on purpose (same worlds).",
+  "blind_seeds_reserved": "7240-7255 untouched"
+ },
+ "engine": {
+  "version": "1.32.7",
+  "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+  "files": {
+   "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+   "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+   "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+   "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+   "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+  }
+ },
+ "models": {
+  "base19-planner": {
+   "path": "state/o_dev/p000_base19.py",
+   "sha256": "53d803424d2e9686a1474c04af7827945ec1a08fce5c71df2b6334dcc3f31290"
+  },
+  "v46-exact": {
+   "path": "state/o_dev/v46_public.py",
+   "sha256": "735c370383b70d3bf3aac792f2c147e0afc99166fc9f253ede10e8a030acedb6"
+  },
+  "tschinkel-router-v5": {
+   "path": "state/o_dev/datasets/donor_agents/agents/tschinkel-router-v5.py",
+   "sha256": "b87a27ed614a33329be85f1b662e51cf4078a019fee937afcebbbbf2f51f8522"
+  }
+ },
+ "opponents": {
+  "opp-base19-planner": {
+   "path": "state/o_dev/p000_base19.py",
+   "sha256": "53d803424d2e9686a1474c04af7827945ec1a08fce5c71df2b6334dcc3f31290",
+   "family": "self_base19"
+  },
+  "opp-v46-exact": {
+   "path": "state/o_dev/v46_public.py",
+   "sha256": "735c370383b70d3bf3aac792f2c147e0afc99166fc9f253ede10e8a030acedb6",
+   "family": "self_v46"
+  },
+  "opp-tschinkel-router-v5": {
+   "path": "state/o_dev/datasets/donor_agents/agents/tschinkel-router-v5.py",
+   "sha256": "b87a27ed614a33329be85f1b662e51cf4078a019fee937afcebbbbf2f51f8522",
+   "family": "self_router_v5"
+  }
+ },
+ "comparisons": [
+  {
+   "candidate": "v46-exact",
+   "parent": "base19-planner",
+   "primary": true
+  },
+  {
+   "candidate": "tschinkel-router-v5",
+   "parent": "base19-planner",
+   "primary": true
+  }
+ ],
+ "stages": {
+  "screen": {
+   "seeds": [
+    1360408755,
+    211221630,
+    1731695924,
+    753666044,
+    299387588,
+    1692877162,
+    1406320235,
+    1607321654
+   ],
+   "alpha": 0.01
+  },
+  "confirm": {
+   "seeds": [
+    2123141811,
+    1750783264,
+    1645646950,
+    727065759,
+    863774942,
+    1546655756,
+    1203423100,
+    601752748
+   ],
+   "alpha": 0.015
+  },
+  "final": {
+   "seeds": [
+    119059566,
+    1880029133,
+    134376825,
+    919164306,
+    199629467,
+    1155206970,
+    48262182,
+    2018712653,
+    682956804,
+    1264765038,
+    2048232782,
+    1474056416,
+    50426424,
+    823249496,
+    8148738,
+    77960040
+   ],
+   "alpha": 0.025
+  }
+ }
+}

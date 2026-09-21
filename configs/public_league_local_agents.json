@@ -1,0 +1,81 @@
+{
+  "agents": [
+    {
+      "name": "c129_feed_liquidity",
+      "title": "[우리] c129 Feed Liquidity",
+      "path": "agent/c129_feed_liquidity.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56209242",
+      "published_at": "2026-09-14T00:00:00+09:00"
+    },
+    {
+      "name": "o219_tomato2",
+      "title": "[우리] o219 Tomato2",
+      "path": "agent/o219_o218_c180_tomato2.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56258013",
+      "published_at": "2026-09-16T00:38:00+09:00"
+    },
+    {
+      "name": "o227_stealth_drop",
+      "title": "[우리] o227 Stealth Drop",
+      "path": "agent/o227_stealth_drop.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56264950",
+      "published_at": "2026-09-16T09:00:00+09:00"
+    },
+    {
+      "name": "o238_open_roundtrip",
+      "title": "[우리] o238 Open Roundtrip",
+      "path": "agent/o238_open_roundtrip.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56275029",
+      "published_at": "2026-09-17T18:50:00+09:00"
+    },
+    {
+      "name": "o239_open_roundtrip_50",
+      "title": "[우리] o239 Open Roundtrip 50",
+      "path": "agent/o239_open_roundtrip_50.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56278146",
+      "published_at": "2026-09-18T01:45:00+09:00"
+    },
+    {
+      "name": "o240_sale_race",
+      "title": "[우리] o240 Sale Race",
+      "path": "agent/o240_sale_race.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56293679",
+      "published_at": "2026-09-19T13:00:00+09:00"
+    },
+    {
+      "name": "g000_apex_frontier",
+      "title": "[우리] g000 Apex Frontier",
+      "path": "agent/g000_apex_frontier.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56363144",
+      "published_at": "2026-09-20T00:30:00+09:00"
+    },
+    {
+      "name": "g001_dynamic_liquidation",
+      "title": "[우리] g001 Dynamic Liquidation",
+      "path": "agent/g001_dynamic_liquidation.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56364496",
+      "published_at": "2026-09-20T01:05:00+09:00"
+    },
+    {
+      "name": "c358_localbest_hybrid",
+      "title": "[우리] c358 Local Best + Hybrid Opening",
+      "path": "agent/c358_localbest_hybrid.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56402500",
+      "published_at": "2026-09-21T02:31:41+09:00"
+    },
+    {
+      "name": "c365_feed_reserve",
+      "title": "[우리] c365 CARROT2 Feed Reserve",
+      "path": "agent/c365_feed_reserve.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56407947",
+      "published_at": "2026-09-21T07:51:00+09:00"
+    }
+  ],
+  "excluded_exact_duplicates": [
+    {
+      "name": "c312_public_v9_4",
+      "path": "state/c312/public_v9_4.py",
+      "reason": "Exact source already represented by the public v9/4 group (SHA-256 bfee70e9...)."
+    }
+  ]
+}

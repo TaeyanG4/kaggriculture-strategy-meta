@@ -1,0 +1,146 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "purpose": "Frontier elite arena evaluating candidates against verified H2H champion V48 and elite reacting opponents (o239_50, V48, V49, V9).",
+    "prior": "g000/g001 failed on live ladder because they were compared against stale public_v9_4 and old 2300-2400 opponents. True competitive frontier is V48 (2560-2760) and o239_50 (2660-2754).",
+    "design": "Candidate vs V48 primary comparison, reacting opponents o239_50, v48, v49, v9; disjoint screen (16 seeds), confirm (16 seeds), final (32 seeds); 12 workers.",
+    "gate": "Positive paired points with descriptive 95% seed-cluster CI lower > 0 and mean margin > 0.",
+    "limits": "Protected blind untouched."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "g002": {
+      "path": "agent/g002_route_certified_turnover.py",
+      "sha256": "c1a8aef3c5c0c8ccef757fe43d427d19b99d035e15da4fad84c04aaa0ec6f866"
+    },
+    "v48": {
+      "path": "agent/p005_v48_exact.py",
+      "sha256": "4b5402888feeb4170dce38f34bebe56788b62ca287139fce7db72df8eb89bb96"
+    }
+  },
+  "opponents": {
+    "o239_50": {
+      "path": "agent/o239_open_roundtrip_50.py",
+      "sha256": "4e8bdfa3621eba05806e029fbd6e1b48a62d23d41c0062b35caba3516e925a74",
+      "family": "own_tape"
+    },
+    "v48": {
+      "path": "agent/p005_v48_exact.py",
+      "sha256": "4b5402888feeb4170dce38f34bebe56788b62ca287139fce7db72df8eb89bb96",
+      "family": "ahmed_v48"
+    },
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "ahmed_v49"
+    },
+    "v9": {
+      "path": "state/c312/public_v9_4.py",
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7",
+      "family": "tschinkel_v9"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "g002",
+      "parent": "v48",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1542303036,
+        1384849883,
+        458410889,
+        1101525775,
+        287049605,
+        1869390184,
+        1822423521,
+        1626853671,
+        1468257305,
+        931118787,
+        572378660,
+        1606616802,
+        492309603,
+        1016436360,
+        1181567501,
+        1556571517
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        416733134,
+        72899028,
+        1285421069,
+        2046830887,
+        163122924,
+        1338889189,
+        1813471382,
+        1767444271,
+        69374944,
+        2110375724,
+        705117755,
+        729160656,
+        793543132,
+        2085406454,
+        31842087,
+        1871889787
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        1202080888,
+        862463893,
+        1891289304,
+        76893227,
+        607076379,
+        1947732077,
+        893119641,
+        884310211,
+        1907514662,
+        22312153,
+        713129461,
+        1148677622,
+        496959445,
+        802733626,
+        77412185,
+        1120971791,
+        1457052802,
+        1768566902,
+        1107418273,
+        1766859096,
+        1112104156,
+        1964542290,
+        182307460,
+        1009830949,
+        2030437148,
+        97228571,
+        625342240,
+        683726639,
+        525953432,
+        803584967,
+        129381133,
+        381416731
+      ],
+      "alpha": 0.025
+    }
+  }
+}

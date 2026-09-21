@@ -1,0 +1,196 @@
+{
+ "schema": 1,
+ "workers": 8,
+ "timeout_seconds": 240,
+ "configuration": {
+  "episodeSteps": 720
+ },
+ "arena_meta": {
+  "name": "live_weighted_arena_v1c_p001mx2",
+  "version": "1.0",
+  "created": "2026-09-18",
+  "description": "v1 arena applied to the p001_mx2 candidate vs the base19 parent: same seeds, opponents, both seats; declared rules in reports/o-p001-mx2-arena-plan-2026-09-18.ko.md | v1b (2026-09-18 21:35): execution fix only - dmitrii-lb2700 replaced by its behaviour-equal single-file bundle; every other opponent, weight, seed and rule unchanged. | v1c (2026-09-18 22:00): execution fix only - o227-stealth wrapped for telemetry; behaviour-equal; nothing else changed.",
+  "cluster_weights": {
+   "cluster1_elite_planners": 0.35,
+   "cluster2_hard_reacting_forks": 0.3,
+   "cluster3_modern_fast_climbers": 0.15,
+   "cluster4_fragile_exact_tapes": 0.1,
+   "cluster5_historical_anchors": 0.1
+  },
+  "correlation_benchmarks": {
+   "ge2600_only_wr_spearman": 0.9762,
+   "lineage_weighted_score_spearman": 0.9048,
+   "rating_weighted_wr_spearman": 0.8095,
+   "equal_weight_margin_spearman": 0.2381,
+   "equal_weight_wr_spearman": 0.1905,
+   "o227_delta_spearman": -0.2619
+  },
+  "gate_criteria": {
+   "stage1_fragile_derail_gate": "Win Rate >= 0.95 vs Cluster 4 (avoids sub-1600 TrueSkill collapse)",
+   "stage2_hard_volume_gate": "Paired Margin >= +1500 and Cash Volume >= 0 vs Cluster 2 & 3",
+   "stage3_elite_ladder_gate": "Lineage-Weighted Score > 0 and Margin >= +2500 vs Cluster 1"
+  },
+  "derived_from": "live_weighted_arena_v1b_p001mx2.json (final stage aborted by o227 diagnostic telemetry)"
+ },
+ "engine": {
+  "version": "1.32.7",
+  "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+  "files": {
+   "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+   "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+   "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+   "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+   "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+  }
+ },
+ "models": {
+  "base19-planner": {
+   "path": "state/o_dev/p000_base19.py",
+   "sha256": "53d803424d2e9686a1474c04af7827945ec1a08fce5c71df2b6334dcc3f31290"
+  },
+  "p001-mx2": {
+   "path": "state/o_dev/p001_mx2.py",
+   "sha256": "448d61158356e211b38fe41db66a5eb4bb281bd44d46ae5f621757a84ca46331"
+  }
+ },
+ "opponents": {
+  "nagata-scheduler": {
+   "path": "state/agent_experiments/championship_p0_20260913/opponents/nagata/output/main.py",
+   "sha256": "dc7ca1d50af10c4aa5be494fdaf03b09729bf365982f027bee3b6bdce44ae7a8",
+   "family": "nagata_scheduler",
+   "cluster": "cluster1_elite_planners",
+   "rating_band": ">=2800",
+   "weight": 0.175
+  },
+  "dmitrii-lb2700": {
+   "path": "state/o_dev/opponents/dmitrii_lb2700_bundle.py",
+   "sha256": "2e8f5652f2c2e46bda2bc3bab63f8e8b5de533573b0dc45beac9045f9be6bed0",
+   "family": "dmitrii_market",
+   "cluster": "cluster1_elite_planners",
+   "rating_band": ">=2800",
+   "weight": 0.175,
+   "note": "v1b: single-file bundle of the same donor agent (router.py + actions.json inlined + settings sale_horizon 3); the directory version cannot run under the runner's single-file snapshot (FileNotFoundError at step 0, campaign arena_p001mx2_screen failed 0/320). Action-level equality with the directory version verified on 7000/7001 x both seats (state/o_dev/opponents/dmitrii_lb2700_bundle.check.json)."
+  },
+  "v46-reacting": {
+   "path": "state/o_dev/v46_public.py",
+   "sha256": "735c370383b70d3bf3aac792f2c147e0afc99166fc9f253ede10e8a030acedb6",
+   "family": "reacting_fork_v46",
+   "cluster": "cluster2_hard_reacting_forks",
+   "rating_band": "2600-2800",
+   "weight": 0.15
+  },
+  "jaxa-k0006": {
+   "path": "state/o_dev/jaxa_k0006.py",
+   "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+   "family": "jaxa_microstructure",
+   "cluster": "cluster2_hard_reacting_forks",
+   "rating_band": "2600-2800",
+   "weight": 0.15
+  },
+  "v48-fast-climber": {
+   "path": "state/o_dev/v48_public.py",
+   "sha256": "dadee25a9840313218384208c53b2c4752f82c3209cc654632e0b96c65e2664a",
+   "family": "hybrid_fast_climber_v48",
+   "cluster": "cluster3_modern_fast_climbers",
+   "rating_band": "2400-2600",
+   "weight": 0.075
+  },
+  "shop-router-v5": {
+   "path": "state/parallel-handoffs/collaboration-20260914/public-latest-live/shop-router-v5/extracted_main.py",
+   "sha256": "7c821bdf746ce1c0bb6c8c5f4af82b53232251e2e4edd51d36f265eab861e3ea",
+   "family": "related_public_router",
+   "cluster": "cluster3_modern_fast_climbers",
+   "rating_band": "2400-2600",
+   "weight": 0.075
+  },
+  "v37-more-yield": {
+   "path": "agent/public_v37_more_yield.py",
+   "sha256": "94c1c2c05ae7cde8fca9ee3957b01112c1cbab82c7434aae6a5f24fa7485bc4c",
+   "family": "exact_budget_tape_v37",
+   "cluster": "cluster4_fragile_exact_tapes",
+   "rating_band": "1600-2400",
+   "weight": 0.05
+  },
+  "ahmed-v38": {
+   "path": "state/o_dev/datasets/donor_agents/agents/ahmedberatozer-v38-smarter-feed-stronger-margins.py",
+   "sha256": "a2047ebd8ca5720221e1421529655d9c67a7b2fedb74e874c7d3c55a8970ac7e",
+   "family": "ahmed_tape",
+   "cluster": "cluster4_fragile_exact_tapes",
+   "rating_band": "1600-2400",
+   "weight": 0.05
+  },
+  "c129-benchmark": {
+   "path": "agent/c129_feed_liquidity.py",
+   "sha256": "e9973586cbe2c0bbb034243f3d3e4c9fdcac4fcac432c0de32b0ba0e61f7ca61",
+   "family": "historical_champion",
+   "cluster": "cluster5_historical_anchors",
+   "rating_band": "benchmark",
+   "weight": 0.05
+  },
+  "o227-stealth": {
+   "path": "state/o_dev/opponents/o227_stealth_arena.py",
+   "sha256": "a5cc5546d266b9cb416bb0271cdc50f9a6ef9df037354360df530a595c601c8e",
+   "family": "historical_tape_o227",
+   "cluster": "cluster5_historical_anchors",
+   "rating_band": "benchmark",
+   "weight": 0.05,
+   "note": "v1c: agent/o227_stealth_drop.py verbatim + telemetry wrapper renaming the diagnostic self-check key overflow_contract_errors (not a runtime error; fired in v1b final seed 1382149642 seat 0 and aborted the stage at 437/640 under the runner health rule). Behaviour equality with the original verified on 7000/7001 x both seats (state/o_dev/opponents/o227_stealth_arena.check.json)."
+  }
+ },
+ "comparisons": [
+  {
+   "candidate": "p001-mx2",
+   "parent": "base19-planner",
+   "primary": true
+  }
+ ],
+ "stages": {
+  "screen": {
+   "seeds": [
+    1625539473,
+    1586028097,
+    2090999193,
+    1272922664,
+    580849671,
+    362472315,
+    1615351505,
+    371762023
+   ],
+   "alpha": 0.01
+  },
+  "confirm": {
+   "seeds": [
+    1000042050,
+    1994067836,
+    2050499842,
+    247358301,
+    1510547617,
+    1947389970,
+    992929310,
+    980329645
+   ],
+   "alpha": 0.015
+  },
+  "final": {
+   "seeds": [
+    188715143,
+    871180085,
+    943832320,
+    1014400926,
+    660772056,
+    280123421,
+    940764637,
+    1596963362,
+    36441497,
+    1936313177,
+    1382149642,
+    44142014,
+    1635627691,
+    1447631165,
+    1316054357,
+    1229589118
+   ],
+   "alpha": 0.025
+  }
+ }
+}

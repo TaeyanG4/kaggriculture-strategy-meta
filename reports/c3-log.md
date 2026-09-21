@@ -1,0 +1,26 @@
+﻿# c3 WP3 log
+
+- c3-000: strawberry seed slot accounting (d2-10); sel paired +527 (se 266), worse 0/32 -> reject (< +1500).
+- c3-001: feeder fertilizer opportunistic shed handoff; sel paired -400 (se 729), worse 14/32 -> reject.
+- c3-002: restrict strawberry fertilizer to age 9/13 only; sel paired -300 (se 302), worse 16/32 -> reject (age 11/15 were rescue doses after missed essential doses).
+- c3-003: reserve shed fertilizer from wheat while strawberry priority-0 fert tasks exist; sel paired +976 (se 518), worse 10/32 -> reject (< +1500), positive signal.
+- c3-004: c3-003 fertilizer reservation + c3-000 strawberry seed slot accounting; sel paired +1149 (se 568), worse 10/32 -> reject (< +1500), positive.
+- c3-005: exact fertilizer return/pick amounts during essential strawberry fert; sel paired -5228 (se 644), worse 28/32 -> reject (shed return/re-pick churn).
+- c3-006: c3-004 + clear stale assignment for fertilizer carriers when priority-0 strawberry fert remains in same zone; sel paired +2612 (se 725), worse 10/32 -> selection PASS.
+- c3-006 holdout: paired +115 (se 404), worse 12/32 -> FINAL reject (selection had +2612; did not generalize). No holdout-guided retuning.
+- c3-007: track spent strawberry tiles and priority-0 DIG as soon as they become WEED, no wheat overbuy; sel paired -1821 (se 226), worse 27/32 -> reject (DIG task-slot cost dominates).
+- c3-008: reserve fertilizer from wheat + when essential strawberry fert exists, strip owner picks only essential dose count (no return action); sel paired +1068 (se 617), worse 11/32 -> reject.
+- c3-009: c3-008 + strawberry seed slot accounting; sel paired +801 (se 586), worse 11/32 -> reject.
+- c3-009: c3-008 + strawberry seed slot accounting; sel paired +801 (se 586), worse 11/32 -> reject.
+- c3-010: d2-10 after h20, remaining strawberry PLANT tasks priority 0; sel paired -1935 (se 795), worse 17/32 -> reject (evening water/harvest conflict).
+- c3-011: d12-18, if already on shed with strawberry inventory, PLACE strawberry immediately; sel paired +274 (se 97), worse 1/32 -> reject (< +1500), stable positive.
+- c3-012: c3-011 + one-step shed detour when carrying >=4 strawberries; sel paired +36 (se 214), worse 6/32 -> reject (detour cost erases gain).
+- c3-013: c3-011 + d12-18 strawberry production WATER priority 1; sel paired -61 (se 287), worse 12/32 -> reject.
+- c3-014: reserve shed fertilizer for due strawberry strips + clear stale assignment only when previous task priority>0 + natural shed strawberry deposit; sel paired +1964 (se 674), worse 7/32 -> selection PASS.
+- c3-014 holdout: paired +1424 (se 557), worse 7/32 -> FINAL reject (< +1500 by 76; no holdout-guided retuning).
+- c3-015: c3-014 + strawberry seed slot accounting; sel paired +1709 (se 676), worse 9/32 -> selection PASS.
+- c3-015 holdout: paired +1080 (se 571), worse 9/32 -> FINAL reject.
+- c3-016: core only (reserve shed fertilizer for due strawberry strips + clear stale assignment only when prev priority>0); sel paired +1667 (se 651), worse 8/32 -> selection PASS.
+- c3-016 holdout: paired +1091 (se 521), worse 9/32 -> FINAL reject.
+- c3-017: reserve fertilizer + release stale only when prior task is wheat FERTILIZE; sel paired +976 (se 518), worse 10/32 -> reject; identical to reservation-only signal.
+- c3-017: reserve fertilizer + release stale only when prior task is wheat FERTILIZE; sel paired +976 (se 518), worse 10/32 -> reject.

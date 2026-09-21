@@ -1,0 +1,177 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c313 tomato lifetime repair, c317/c319 conversion failure, c146/c305/c306 wheat->carrot. Novel action space is one carrot crop after tomato expiry using remaining stationary visits, not refitted conversion gate.",
+    "design": "16new seeds x4executing sources(v9,V49,K0006,Enhanced) x2seats x3models=384native. KEEP vs original c177 gate+c179+c313 vs same plus c320. Preserve original c177 economic thresholds and8/10tranche. Do not select a crop-size/model after results.",
+    "mechanism": "All prior156tile schedules preserve64tomatoes and admit at most33carrots with13assumed extra seeds, no new movement/workers/land. Actual candidate uses current tile/own inventory only. Bound does not guarantee unchanged future routes or funding.",
+    "gate": "For independent confirmation, require tail-KEEP mean point>0 and margin>=500, tail-gate margin>=200 and own>0 and point>=0; point gain on at least2opponent sources including a non-v9 source; no execution failure. Otherwise stop whole macro; retain a tail subcomponent only as measured mechanism, never as qualified policy. Report seed95%CI; confirm must have tail-KEEP point CI lower>0 and positive margin and repeat mechanism direction.",
+    "checks": "Full hashes before/after, all384valid, offQA4/4 action/state equality, inactive-tail vs gate full action hashes/rewards equality, decision prefix/state across3choices equality. Report actual seed/plant/harvest and same-shop counts. Counters are requests unless explicitly verified by state/engine.",
+    "limits": "Related public sources, not current private top10. Historical tile/QA cases development only. Native action changes may change future shops; do not attribute all profit to carrot. No protected blind or submission."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "keep": {
+      "path": "state/c317/agents/keep.py",
+      "sha256": "9e59cf032dda1ed7f9d6ff08eeaa6e00c5b5538b0c13280cc9157b0e71e7cf88"
+    },
+    "gate": {
+      "path": "state/c320/gate.py",
+      "sha256": "8b91c9c4d1f52c6362eab4c28294325ca02cf2a0a6f393f46f321125fb412d9c"
+    },
+    "tail": {
+      "path": "state/c320/tail.py",
+      "sha256": "84a253ad8909f1c2e039b946985bdfe12175246cfd722eb645330ee072e3c5c5"
+    }
+  },
+  "opponents": {
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006"
+    },
+    "v9": {
+      "path": "state/c312/public_v9_4.py",
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7",
+      "family": "tschinkel_v9"
+    },
+    "enh": {
+      "path": "state/c318/enhanced_instrumented.py",
+      "sha256": "21445200893ab1d48749507fa8b17737f4ccffd4a2dae465aa84e949ca981976",
+      "family": "enhanced_k0006"
+    },
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "tail",
+      "parent": "keep",
+      "primary": true
+    },
+    {
+      "candidate": "tail",
+      "parent": "gate",
+      "primary": false
+    },
+    {
+      "candidate": "gate",
+      "parent": "keep",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1691693816,
+        801718602,
+        168936008,
+        1886712520,
+        1600678091,
+        1745960649,
+        208791377,
+        1373546904,
+        885453367,
+        1284821848,
+        1592785893,
+        1782191815,
+        1224496534,
+        801842016,
+        250567651,
+        230605184
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1880601071,
+        1591882640,
+        985912126,
+        877421126,
+        288399382,
+        559490759,
+        24374135,
+        528060341,
+        1873059530,
+        2106298108,
+        1665819966,
+        436820098,
+        598204288,
+        1185976536,
+        68600242,
+        194910481,
+        1411078672,
+        954252703,
+        481070627,
+        704676606,
+        857417232,
+        1075373955,
+        1299163488,
+        1008096731,
+        1204095510,
+        1407682412,
+        719094949,
+        1216282868,
+        1393814984,
+        263416260,
+        710919817,
+        496383123
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        192333077,
+        863852571,
+        2085772667,
+        1815508064,
+        386761088,
+        1411944959,
+        1442018734,
+        108598154,
+        1227356245,
+        1370407477,
+        768979609,
+        1496528091,
+        738985637,
+        1377992658,
+        1418332575,
+        649455767,
+        296496492,
+        323928170,
+        144161276,
+        18529510,
+        470328034,
+        673222277,
+        1085114647,
+        1489867459,
+        1567717662,
+        255433140,
+        874851810,
+        275281630,
+        1414776142,
+        1652139221,
+        2117205674,
+        354939298
+      ],
+      "alpha": 0.025
+    }
+  }
+}

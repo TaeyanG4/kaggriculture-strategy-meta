@@ -1,0 +1,50 @@
+{
+  "rules_version": "public_league_v2",
+  "competition": "kaggriculture",
+  "collection": {
+    "sorts": ["scoreDescending", "dateRun"],
+    "page_size": 200,
+    "pull_limit_per_cycle": 40,
+    "preserve_all_versions": true,
+    "declared_dataset_limit_bytes": 104857600,
+    "dataset_listing_pagination": true,
+    "dataset_download_completion_marker": true,
+    "preserve_submission_sidecar_files": true
+  },
+  "identity": {
+    "single_main_py": "canonical_lf_source_sha256",
+    "multi_file": "sorted_member_path_and_content_sha256",
+    "compiled_cpp_runtime_files": ["main.py", "agent.so"],
+    "group_exact_artifact_duplicates": true,
+    "micro_edits_are_distinct": true
+  },
+  "league": {
+    "mode": "native_reacting",
+    "engine_version": "1.32.7",
+    "episode_steps": 720,
+    "seats": [0, 1],
+    "workers": 8,
+    "max_matches_per_cycle": 240,
+    "top_k": 50,
+    "challenger_slots": 10,
+    "newcomer_priority_until_games": 32,
+    "minimum_games_for_active": 8,
+    "scheduler": "sample_deficit_then_near_bradley_terry_rating",
+    "external_wall_timeout_seconds": 1220,
+    "official_done_timing_is_valid": true,
+    "runtime_code_failure_quarantine_threshold": 2
+  },
+  "ranking": {
+    "primary": "regularized_bradley_terry",
+    "display_scale": "1500_plus_400_over_ln10_times_ability",
+    "ties": 0.5,
+    "uncertainty": "wilson_95_score_rate_ties_half",
+    "invalid_matches_count": false,
+    "public_notebook_score_is_local_rating_prior": false
+  },
+  "retention": {
+    "delete_duplicate_originals": false,
+    "delete_archived_agents": false,
+    "delete_match_history": false
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "purpose": "16games,8conditions. InstrumentedKEEP vs original full action/reward identity. No strategy strength interpretation."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "keep": {
+      "path": "state/c317/agents/keep.py",
+      "sha256": "9e59cf032dda1ed7f9d6ff08eeaa6e00c5b5538b0c13280cc9157b0e71e7cf88"
+    },
+    "parent": {
+      "path": "state/c312/public_v9_4.py",
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7"
+    }
+  },
+  "opponents": {
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49"
+    },
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "keep",
+      "parent": "parent",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        7000,
+        7001
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        131703008,
+        260334620,
+        328912816,
+        562081185,
+        1750547475,
+        774349774,
+        464371096,
+        1779940898,
+        250413231,
+        1963810534,
+        994525644,
+        943647094,
+        431193691,
+        529167853,
+        973379807,
+        437230487,
+        346209563,
+        1172396326,
+        1010489215,
+        1026254016,
+        1135650485,
+        1222644394,
+        260066861,
+        317827274,
+        649441515,
+        1288947885,
+        188655466,
+        1809817061,
+        1525644861,
+        1039165625,
+        1353626329,
+        1921930770
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        823128176,
+        1036057368,
+        837106156,
+        1094353323,
+        1302300970,
+        1673109036,
+        394613322,
+        375263996,
+        950916918,
+        184141844,
+        1126015168,
+        240987204,
+        36749286,
+        282358746,
+        598205080,
+        1934989489,
+        1496285174,
+        488483940,
+        749462839,
+        1648213394,
+        1990582916,
+        1061155510,
+        146825917,
+        1289743508,
+        2088071533,
+        61761542,
+        94635558,
+        1926959079,
+        511985021,
+        1639317198,
+        165289164,
+        1126877259
+      ],
+      "alpha": 0.025
+    }
+  }
+}

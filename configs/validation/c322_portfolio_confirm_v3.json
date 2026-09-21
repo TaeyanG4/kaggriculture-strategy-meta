@@ -1,0 +1,197 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "source": "state/c322/search_manifest_v2.json",
+    "selected_trial": 30,
+    "training": {
+      "point": 0.0625,
+      "margin": 1088.40625,
+      "own": 1064.125,
+      "softwin": 0.09477257921076886,
+      "by_opponent": {
+        "demand": {
+          "point": 0.125,
+          "margin": 1213.5,
+          "own": 1177.25
+        },
+        "enh": {
+          "point": 0.0,
+          "margin": 982.75,
+          "own": 1008.625
+        },
+        "k0006": {
+          "point": 0.0,
+          "margin": 907.125,
+          "own": 890.375
+        },
+        "v49": {
+          "point": 0.125,
+          "margin": 1250.25,
+          "own": 1180.25
+        }
+      },
+      "counters": {
+        "c321_funded_lanes": 232,
+        "c321_unconfirmed_lanes": 0,
+        "c321_plants_failed": 0,
+        "c321_seed_shortage_slots": 0
+      },
+      "eligible": true
+    },
+    "scope": "24pre-reserved unseen seeds x6executing sources x2seats x2policies=576native. Exactly one genome selected before looking, no alternative or retuning after failure. v9 and o240 absent from training. Source identities not independent families.",
+    "gate": "One chosen frozen genotype vs full v9 on24unseen seeds, both seats, the4training sources plus v9 and heldout o240. Native canonical v2, require positive point95%seed CI lower bound, positive margin and own, positive non-v9 pooled point, no source point delta<-0.0625 and execution health. No tuning or replacement winner after look.",
+    "limits": "4source files not4independent lineages, no private elite policy access. Local screen/confirm cannot prove leaderboard #1. Generated library covers only known route calendars. No protected blind or submission. Search includes previously negative component plans but tests new heterogeneous whole allocations on new training worlds.",
+    "genes": [
+      2,
+      2,
+      5,
+      3,
+      1,
+      3,
+      3,
+      0,
+      5,
+      2,
+      3,
+      1,
+      1,
+      2,
+      5,
+      1,
+      3,
+      0,
+      0,
+      4,
+      3,
+      4,
+      0,
+      3,
+      1,
+      1,
+      0,
+      1,
+      0,
+      5,
+      5,
+      5,
+      5,
+      0,
+      0,
+      3,
+      0,
+      0
+    ],
+    "schema_revision": "Initial prepare rejected before any jobs because canonical v2 requires all3stage declarations. Added disjoint unused screen/final reservations solely for schema; only original24seed confirm executes. Candidate/opponents/confirm seeds/gate unchanged.",
+    "execution_repair": "Only o240 telemetry key overflow_contract_errors renamed to overflow_contract_mismatch, reused historical adapter; 8 native full-stream pairs identical including interrupted condition. Original incomplete campaign retained. Candidate/seeds/strategic opponents/gate unchanged."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "keep": {
+      "path": "state/c312/public_v9_4.py",
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7"
+    },
+    "candidate": {
+      "path": "state/c322/candidate.py",
+      "sha256": "cd4807842ff40275b1dae82155b28b4963f16762b2534a37663865ed7f43d803"
+    }
+  },
+  "opponents": {
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49_family"
+    },
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006_family"
+    },
+    "enh": {
+      "path": "state/c318/enhanced_instrumented.py",
+      "sha256": "21445200893ab1d48749507fa8b17737f4ccffd4a2dae465aa84e949ca981976",
+      "family": "k0006_family"
+    },
+    "demand": {
+      "path": "state/c322/demand.py",
+      "sha256": "95b02b9b7ca124c92844b7c2907b4ceacf2cce7773890cdf32aba84f20eababe",
+      "family": "v49_family"
+    },
+    "v9": {
+      "path": "state/c312/public_v9_4.py",
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7",
+      "family": "tschinkel_v9"
+    },
+    "o240": {
+      "path": "state/c322/o240_telemetry.py",
+      "sha256": "e08393981a32b9e68b54839d08d5f0a41e60c5c88cdd5ce9f729a3cec99994c3",
+      "family": "own_tape"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "candidate",
+      "parent": "keep",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "confirm": {
+      "seeds": [
+        1536122863,
+        374551817,
+        1397074470,
+        447321132,
+        773519058,
+        1829170389,
+        1349168442,
+        618601497,
+        874582407,
+        1084390285,
+        88789177,
+        394723442,
+        1666351214,
+        623017724,
+        515694056,
+        37714709,
+        1282951184,
+        155791207,
+        1688155800,
+        1101544374,
+        801829136,
+        927438244,
+        1252469861,
+        927614221
+      ],
+      "alpha": 0.025
+    },
+    "screen": {
+      "seeds": [
+        965734409,
+        1732251124
+      ],
+      "alpha": 0.005
+    },
+    "final": {
+      "seeds": [
+        1888876758,
+        704462984
+      ],
+      "alpha": 0.02
+    }
+  }
+}

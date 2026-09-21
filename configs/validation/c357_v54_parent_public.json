@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "Closest prior c324 compared a new public whole policy to v9 and failed uncertainty/margin gates. Public League snapshot 2026-09-21 now identifies V54 HybridOpening as a new bounded productive-idle mechanism on Metav4 v13; Pipe16 is near-identical and excluded as independent evidence.",
+    "design": "Fresh deterministic non-overlapping seeds. V54 and exact Metav4 parent, both seats, eight current strong distinct public policies, canonical native reacting. Screen=256 games. Confirm/final reserved before screen; no protected numeric blind block.",
+    "gate": "Promote parent only if paired family-weighted point delta bootstrap lower>0, mean margin>0, no family collapse, zero health failures. Then freeze one extension candidate separately; local evidence is not live proof.",
+    "limits": "League Elo/public scores are opponent/time dependent. Most public sources share ancestry; family labels denote current executable policy variants. Pipe16 excluded because its HybridOpening execution is near-identical to V54."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "v54": {
+      "path": "state/public_league/sources/949e2eed410169f7a651e82bb37f6484a332a833d8c75937122701b90fc7658c.py",
+      "sha256": "949e2eed410169f7a651e82bb37f6484a332a833d8c75937122701b90fc7658c"
+    },
+    "metav4": {
+      "path": "state/public_league/sources/9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9.py",
+      "sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9"
+    }
+  },
+  "opponents": {
+    "metav4_v13": {
+      "path": "state/public_league/sources/9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9.py",
+      "sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "family": "metav4_v13"
+    },
+    "local_best": {
+      "path": "state/public_league/sources/41dd60f718c701666f45b23f94e05922354a48189b931e6c6091134d3426fc25.py",
+      "sha256": "41dd60f718c701666f45b23f94e05922354a48189b931e6c6091134d3426fc25",
+      "family": "local_best"
+    },
+    "g001": {
+      "path": "state/public_league/sources/fe52d1bbc14828a0a7e9c8c2edc582586f3623ebb019fcbeb1849a9b9da6fc67.py",
+      "sha256": "fe52d1bbc14828a0a7e9c8c2edc582586f3623ebb019fcbeb1849a9b9da6fc67",
+      "family": "own_g001"
+    },
+    "wheat_sales": {
+      "path": "state/public_league/sources/218d72b0a5ce40d23657b9bd6a1385f106948a9dd76d49f786d9cf04eba34b7d.py",
+      "sha256": "218d72b0a5ce40d23657b9bd6a1385f106948a9dd76d49f786d9cf04eba34b7d",
+      "family": "wheat_sales"
+    },
+    "v52": {
+      "path": "state/public_league/sources/8c0f7d90db965a676bd0e211e0250aa9b9235d64d43ff0b4e3852a71d1ef7c24.py",
+      "sha256": "8c0f7d90db965a676bd0e211e0250aa9b9235d64d43ff0b4e3852a71d1ef7c24",
+      "family": "v52"
+    },
+    "farming_score_v2": {
+      "path": "state/public_league/sources/177d78bdf00aa96579d98052558e18cd3081d29f855c8a6f20a2bbfebcdbda11.py",
+      "sha256": "177d78bdf00aa96579d98052558e18cd3081d29f855c8a6f20a2bbfebcdbda11",
+      "family": "farming_score"
+    },
+    "master_engine_v3": {
+      "path": "state/public_league/sources/dbc709febaef6b7b3f77ce8ee7dd2466548be0bd52763aa89905f61940f153b7.py",
+      "sha256": "dbc709febaef6b7b3f77ce8ee7dd2466548be0bd52763aa89905f61940f153b7",
+      "family": "master_v3"
+    },
+    "smaller_shock": {
+      "path": "state/public_league/sources/d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555.py",
+      "sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "family": "smaller_shock"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "v54",
+      "parent": "metav4",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1720720155,
+        1838852094,
+        843401184,
+        768175360,
+        46041429,
+        723250741,
+        395422029,
+        1130452656
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1753516790,
+        385066310,
+        1771382209,
+        226522720,
+        1914393536,
+        2023637443,
+        684535591,
+        2043509287
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        801380342,
+        1518471316,
+        1026365766,
+        1895007670,
+        984824488,
+        517092926,
+        1198893341,
+        732995778
+      ],
+      "alpha": 0.025
+    }
+  }
+}

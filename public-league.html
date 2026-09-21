@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Kaggriculture Public League 실행</title>
+  <style>
+    :root{color-scheme:dark;--bg:#09110d;--card:#111d17;--line:#284034;--text:#e9f3ec;--muted:#9db0a4;--green:#56d489;--blue:#76c8ff}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--text);font:16px system-ui,sans-serif}
+    main{width:min(620px,calc(100% - 32px));padding:28px;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 18px 60px #0008}
+    h1{margin:0 0 10px;font-size:28px}.muted{color:var(--muted);line-height:1.6}button,a.button{display:inline-block;margin-top:18px;padding:12px 18px;border:0;border-radius:9px;background:#247849;color:white;font-weight:700;text-decoration:none;cursor:pointer}
+    #status{margin-top:18px;padding:12px;border-radius:8px;background:#09110d;color:var(--muted)}code{color:var(--blue)}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Kaggriculture Public League</h1>
+  <p class="muted">숨김 서버를 시작하고 로컬 리그 대시보드를 엽니다. 첫 실행에서 브라우저가 외부 앱 열기를 물으면 허용하세요.</p>
+  <button id="launch" type="button">리그 시작/열기</button>
+  <div id="status">서버 상태를 확인하는 중…</div>
+  <p class="muted">직접 실행: <code>public-league.vbs</code> 더블클릭</p>
+</main>
+<script>
+const DASHBOARD='http://127.0.0.1:8791/';
+const STATUS='http://127.0.0.1:8791/api/status';
+const message=document.getElementById('status');
+const launch=document.getElementById('launch');
+const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function online(){try{let r=await fetch(STATUS,{cache:'no-store'});return r.ok}catch(_){return false}}
+async function openLeague(){
+  launch.disabled=true;
+  if(await online()){message.textContent='서버가 실행 중입니다. 대시보드로 이동합니다.';location.href=DASHBOARD;return}
+  message.textContent='숨김 서버를 시작하는 중입니다…';
+  location.href='kaggriculture-league://start';
+  for(let i=0;i<40;i++){
+    await delay(500);
+    if(await online()){location.href=DASHBOARD;return}
+  }
+  message.innerHTML='서버를 시작하지 못했습니다. <code>public-league.vbs</code>를 더블클릭한 뒤 다시 누르세요.';
+  launch.disabled=false;
+}
+launch.addEventListener('click',openLeague);
+online().then(ok=>{message.textContent=ok?'서버가 실행 중입니다. 버튼을 누르면 바로 이동합니다.':'서버가 꺼져 있습니다. 버튼을 누르면 숨김으로 시작합니다.'});
+</script>
+</body>
+</html>

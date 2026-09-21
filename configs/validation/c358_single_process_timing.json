@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "workers": 1,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c358 8-worker 960 valid games max decision .965s, one discarded 12-worker contention run had 1.0106s",
+    "design": "single-process timing audit on two prior slow worlds against LocalBest and Pipe16, both seats, candidate and parent",
+    "gate": "candidate max decision <1s, no health failures",
+    "limits": "runtime QA only; worlds already observed and not performance evidence"
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c358": {
+      "path": "agent/c358_localbest_hybrid.py",
+      "sha256": "680a4f713d8d672dce3f13f5429df1f803626f408d76e1690eabe32152779196"
+    },
+    "localbest": {
+      "path": "state/public_league/sources/41dd60f718c701666f45b23f94e05922354a48189b931e6c6091134d3426fc25.py",
+      "sha256": "41dd60f718c701666f45b23f94e05922354a48189b931e6c6091134d3426fc25"
+    }
+  },
+  "opponents": {
+    "localbest": {
+      "path": "state/public_league/sources/41dd60f718c701666f45b23f94e05922354a48189b931e6c6091134d3426fc25.py",
+      "sha256": "41dd60f718c701666f45b23f94e05922354a48189b931e6c6091134d3426fc25",
+      "family": "timing"
+    },
+    "pipe16": {
+      "path": "state/public_league/sources/827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181.py",
+      "sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "family": "timing2"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c358",
+      "parent": "localbest",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        2109129016,
+        927578448
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        868627356,
+        939020036
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        1841124736,
+        1796354055
+      ],
+      "alpha": 0.025
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "purpose": "Current executable frontier audit, not new strategy tuning or submission gate. Screen only after execution QA.",
+    "prior": "HANDOFF archived o240 claims improved timing vs K0006/V46/o239. c309/c310 omitted it. Current source raw b7de2d7b and LF-normalized ddf22d3c do not match archived a0c03048; historical score is not assigned to this file.",
+    "novelty": "Reconcile omitted existing own-source alternative on same fresh native seeds against V49, o239, K0006 and o240; both seats, no frozen rivals.",
+    "analysis": "Family equal weight across own_tape (o239/o240 split), v49, k0006. Cluster descriptive CI by seed. Report direct head-to-head separately. Mirrored policy pair executions are not independent evidence.",
+    "gate": "Screen only; retain V49 unless o240 has positive paired point and margin gain with positive seed-cluster point CI. Regardless of mean retain genuinely complementary opponents. No live strength claim without source-matched contemporary live evidence.",
+    "safety": "Source hash drift or QA failure stops launch. Protected blind untouched. No modifications to old policies, contracts or search thresholds."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "o240": {
+      "path": "agent/o240_sale_race.py",
+      "sha256": "b7de2d7b882727417c568bdb6f89fc3c2625b4855af66ad43dbb0ca2deb88f1c"
+    },
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960"
+    }
+  },
+  "opponents": {
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49"
+    },
+    "o239": {
+      "path": "agent/o239_open_roundtrip_50.py",
+      "sha256": "4e8bdfa3621eba05806e029fbd6e1b48a62d23d41c0062b35caba3516e925a74",
+      "family": "own_tape"
+    },
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006"
+    },
+    "o240": {
+      "path": "agent/o240_sale_race.py",
+      "sha256": "b7de2d7b882727417c568bdb6f89fc3c2625b4855af66ad43dbb0ca2deb88f1c",
+      "family": "own_tape"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "o240",
+      "parent": "v49",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1076595533,
+        71910691,
+        1875079409,
+        1918430332,
+        1239789226,
+        733044096,
+        398542332,
+        2086342561,
+        1984706507,
+        230500809,
+        1599276844,
+        909211580,
+        1295318010,
+        1781034434,
+        383655917,
+        463751873
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        395710779,
+        1249228429,
+        711103601,
+        1514528115,
+        328657495,
+        431788249,
+        1066802180,
+        451230708,
+        343753039,
+        1471143460,
+        238015919,
+        1805857419,
+        1927992117,
+        534475573,
+        460128163,
+        999763914
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        813455077,
+        1047370397,
+        766243618,
+        756082940,
+        369196572,
+        1052999644,
+        1351527516,
+        1075344654,
+        139512543,
+        1193768972,
+        606079655,
+        788347033,
+        486008300,
+        491885245,
+        1778650764,
+        2125698487,
+        1389221879,
+        542832898,
+        367806411,
+        865421034,
+        568125973,
+        1939019989,
+        1677370207,
+        1258891344,
+        35312349,
+        580480085,
+        1864020390,
+        1861121148,
+        67904742,
+        1100999683,
+        819598360,
+        1331165015
+      ],
+      "alpha": 0.025
+    }
+  }
+}

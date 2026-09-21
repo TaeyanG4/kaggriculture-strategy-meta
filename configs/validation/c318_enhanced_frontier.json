@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "purpose": "New public Enhancedv2 vs current v9/4,16newseeds x4executing source opponents x2seats x2models=256native. Source qualification, not own improvement/submission.",
+    "prior": "c312 newly public v9/4 beat V49; c317 learning failed. Newly published zihengedie/best-version not previously executed here. Original posted54d02878 digest verified. Not a retry of K0006 baseline under a new name: complete additional market policy is inspected and preserved.",
+    "gate": "Development-parent consideration only if equal-source paired point95%seedCI lower>0 and meanmargin>0; then independent frozen confirm. Negative/inconclusive => retain only as measured opponent, no same-source tuning. Report directh2h and regressions. No automatic final.",
+    "limits": "Related public sources; no private currentelite representation or live source identity yet. Author91.67% claim/engine1.32.4 not our evidence. Original-byte vs telemetry-only identityQA before evaluation. Protected blind untouched."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "enh": {
+      "path": "state/c318/enhanced_instrumented.py",
+      "sha256": "21445200893ab1d48749507fa8b17737f4ccffd4a2dae465aa84e949ca981976"
+    },
+    "v9": {
+      "path": "state/c312/public_v9_4.py",
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7"
+    }
+  },
+  "opponents": {
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006"
+    },
+    "o240": {
+      "path": "agent/o240_sale_race.py",
+      "sha256": "b7de2d7b882727417c568bdb6f89fc3c2625b4855af66ad43dbb0ca2deb88f1c",
+      "family": "own_tape"
+    },
+    "v9": {
+      "path": "state/c312/public_v9_4.py",
+      "sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7",
+      "family": "tschinkel_v9"
+    },
+    "enh": {
+      "path": "state/c318/enhanced_instrumented.py",
+      "sha256": "21445200893ab1d48749507fa8b17737f4ccffd4a2dae465aa84e949ca981976",
+      "family": "enhanced_k0006"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "enh",
+      "parent": "v9",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1298034022,
+        1046578489,
+        538851745,
+        264628688,
+        195753341,
+        608825789,
+        1260676063,
+        39033512,
+        1798336476,
+        533944695,
+        483496908,
+        1731504999,
+        336148900,
+        856914489,
+        1991002137,
+        918336068
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1797653427,
+        1319534812,
+        856946733,
+        1138781016,
+        84561906,
+        1524415842,
+        1368140527,
+        1506832146,
+        878593192,
+        1338347379,
+        711827546,
+        913866329,
+        799605929,
+        2076313433,
+        310433143,
+        1677821768
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        97661283,
+        1200910114,
+        1517884355,
+        1135601563,
+        192961171,
+        1710593957,
+        280506356,
+        2019374698,
+        1677278137,
+        95257181,
+        723898243,
+        459122896,
+        1659700370,
+        41817047,
+        1799694453,
+        1623803052,
+        1597959392,
+        19408293,
+        2060869830,
+        993232873,
+        1347494031,
+        515969876,
+        1019267484,
+        1678856279,
+        939161432,
+        1333754604,
+        1810882725,
+        1298649642,
+        91514483,
+        995132437,
+        161882060,
+        215943984
+      ],
+      "alpha": 0.025
+    }
+  }
+}

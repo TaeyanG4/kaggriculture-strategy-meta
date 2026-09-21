@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c365 composition/mechanism QA after c320/c321/c359/c361 audit",
+    "design": "Observed diagnostic worlds only; raw c358/off/c365 against exact One More Wheat, both seats.",
+    "gate": "off action hashes and rewards equal c358; c365 feed_days=1, ca_feed_block decreases and swaps increase in at least one observed world; health0/max<=1s. Strength is not judged here.",
+    "limits": "QA/development cases only; these worlds were already inspected and cannot support promotion. Protected blind 7240-7255 unused.",
+    "worker_contract": "8 workers per latest owner instruction."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c358": {
+      "path": "agent/c358_localbest_hybrid.py",
+      "sha256": "680a4f713d8d672dce3f13f5429df1f803626f408d76e1690eabe32152779196"
+    },
+    "off": {
+      "path": "state/c365/c365_disabled.py",
+      "sha256": "5ee780999afa627b5ce5bfcc1b446407cd0d129402a9db320bce201198c5fe29"
+    },
+    "c365": {
+      "path": "agent/c365_feed_reserve.py",
+      "sha256": "d48e66c3c5aec21a55be8101d7544278d5303fc6a1b1a487d9a2df055c82e72f"
+    }
+  },
+  "opponents": {
+    "one_more_wheat": {
+      "path": "state/public_league/sources/e8917154ee8573db867849bc235864cd1e73a2888958700e14cea2ffb50697b2.py",
+      "sha256": "e8917154ee8573db867849bc235864cd1e73a2888958700e14cea2ffb50697b2",
+      "family": "qa"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "off",
+      "parent": "c358",
+      "primary": true
+    },
+    {
+      "candidate": "c365",
+      "parent": "c358",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1056137939,
+        1177892056
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        260605548,
+        1647470041
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        712034236,
+        1859488615
+      ],
+      "alpha": 0.025
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "name": "c309_plan_choice_training",
+    "purpose": "Generate whole-plan counterfactual outcomes for supervised selection; screen only, not promotion.",
+    "prior": "H05/o209 changes species slots, c171 fixed shop routing, base19 oracle small knobs. Here seven coherent pre-existing full production plans share the exact 144-action prefix and are evaluated on executing opponents.",
+    "inputs": "Observation immediately before d6 decision; no seed/team/future/shop outcome/label inputs. Assert all branches have identical decision-state and own action-prefix hashes.",
+    "selection": "KEEP plus seven routes chosen by distinct pre-result animal portfolios, no ranking from game results.",
+    "learning": "Seed-group out-of-fold RandomForestRegressor,64 trees,max_depth4,min_samples_leaf4,max_features1.0,random_state309,n_jobs12. Predict per-action final point difference; tie-break learned margin only for predicted-positive alternatives; otherwise KEEP. Feature schema frozen before reading outcomes.",
+    "gate": "First verify KEEP behavior and common decision-state. Offline oracle is only action-space diagnosis. Require out-of-seed learned point and margin improvements before independent deployment screen; otherwise stop/record no selection evidence.",
+    "boundaries": "8 independent training seeds, four executable source labels not four certified unrelated lineages; same native seed can branch future shop RNG. Protected blind untouched. confirm/final not auto-run."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "keep": {
+      "path": "state/c309/agents/keep.py",
+      "sha256": "abefdfa14a34be1e2ab2170fb9dd48b8eba7e7ab5d7d5f623ffc6896744558e7"
+    },
+    "r100": {
+      "path": "state/c309/agents/r100.py",
+      "sha256": "813b496aff6eae610049aaba594f570dc0df50c0c286735467ff5f1199e225cf"
+    },
+    "r101": {
+      "path": "state/c309/agents/r101.py",
+      "sha256": "ed1d5931abff9c3dfcdd4c3c1ea733a3b314dc8f0b60260cd5f64aa464d3ce57"
+    },
+    "r109": {
+      "path": "state/c309/agents/r109.py",
+      "sha256": "70e4ea5f14745456f1fa59ba3c1a6e2d992739822541b948f1e539e38cc794af"
+    },
+    "r110": {
+      "path": "state/c309/agents/r110.py",
+      "sha256": "6039058e6045ff706b6d7810675920c4d706718fd0d7181171fb03f3e6183e83"
+    },
+    "r114": {
+      "path": "state/c309/agents/r114.py",
+      "sha256": "90bf6a7474d1d65090e8bf1f5f965aa5d3725c5e51aed147e82b1896d727a9cd"
+    },
+    "r123": {
+      "path": "state/c309/agents/r123.py",
+      "sha256": "c09dfda4bdd3cf60d669f2c733208d8bb378988fe484b4d27ef34e13c53f121b"
+    },
+    "r12": {
+      "path": "state/c309/agents/r12.py",
+      "sha256": "c628cad65c6143089cf9663285250c617692e91a70314be705e70e5a63192696"
+    }
+  },
+  "opponents": {
+    "v49": {
+      "path": "state/c300/public_research_20260919/v49/extracted_main.py",
+      "sha256": "7d5777978465a2dd18b85fbef9d354d3cc9e008c279630e7655e5a517058b960",
+      "family": "v49"
+    },
+    "o239": {
+      "path": "agent/o239_open_roundtrip_50.py",
+      "sha256": "4e8bdfa3621eba05806e029fbd6e1b48a62d23d41c0062b35caba3516e925a74",
+      "family": "o239"
+    },
+    "k0006": {
+      "path": "state/o_dev/jaxa_k0006.py",
+      "sha256": "944aa64c5ae1296a9a17eb7961ed8d5a96d0b80183d41e954389983d73420a56",
+      "family": "k0006"
+    },
+    "router_v5": {
+      "path": "state/o_dev/datasets/donor_agents/agents/tschinkel-router-v5.py",
+      "sha256": "b87a27ed614a33329be85f1b662e51cf4078a019fee937afcebbbbf2f51f8522",
+      "family": "router_v5"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "r100",
+      "parent": "keep",
+      "primary": true
+    },
+    {
+      "candidate": "r101",
+      "parent": "keep",
+      "primary": true
+    },
+    {
+      "candidate": "r109",
+      "parent": "keep",
+      "primary": true
+    },
+    {
+      "candidate": "r110",
+      "parent": "keep",
+      "primary": true
+    },
+    {
+      "candidate": "r114",
+      "parent": "keep",
+      "primary": true
+    },
+    {
+      "candidate": "r123",
+      "parent": "keep",
+      "primary": true
+    },
+    {
+      "candidate": "r12",
+      "parent": "keep",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1274458634,
+        1442654801,
+        1896350920,
+        408186498,
+        663719927,
+        1689176946,
+        1335421529,
+        1788433052
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1961139801,
+        704935412,
+        795223779,
+        365236925,
+        1225267116,
+        615555410,
+        466367532,
+        1489232423
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        1266992349,
+        961950662,
+        2063738340,
+        1271579987,
+        31167421,
+        535013456,
+        803151002,
+        724283502,
+        2124820374,
+        1416731326,
+        858016597,
+        1518289505,
+        1057612939,
+        270671521,
+        1543075171,
+        1882107449
+      ],
+      "alpha": 0.025
+    }
+  }
+}

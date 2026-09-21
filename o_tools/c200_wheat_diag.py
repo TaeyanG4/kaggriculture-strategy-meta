@@ -45,11 +45,18 @@ def run(path, opp, seed, seat, shops):
 
     plants = [0] * 30
     buys = [0] * 30
+    crop_plants = {c: 0 for c in ('WHEAT', 'STRAWBERRY', 'MELON', 'CARROT', 'TOMATO')}
+    sells = {p: 0 for p in ('WHEAT', 'STRAWBERRY', 'MELON', 'CARROT', 'TOMATO', 'MILK', 'WOOL', 'EGG', 'FERTILIZER')}
+    crop_ops = {c: {'WATER': 0, 'HARVEST': 0, 'FERTILIZE': 0} for c in crop_plants}
     moves = works = passes = 0
     for k, frame in enumerate(env.steps):
         action = frame[seat].action or {}
         day = min(29, k // 24)
-        for cmd in [action.get('farmer')] + (action.get('hands') or []):
+        actor_cmds = [action.get('farmer')] + (action.get('hands') or [])
+        obs_now = frame[seat].observation
+        farm_now = obs_now['farms'][seat]
+        actor_pos = [tuple(farm_now['farmer'])] + [tuple(p) for p in farm_now.get('hands', [])]
+        for ai, cmd in enumerate(actor_cmds):
             if not cmd or cmd[0] == 'PASS':
                 passes += 1
             elif cmd[0] in ('NORTH', 'SOUTH', 'EAST', 'WEST'):
@@ -58,9 +65,18 @@ def run(path, opp, seed, seat, shops):
                 works += 1
             if cmd and len(cmd) >= 2 and cmd[0] == 'PLANT' and cmd[1] == 'WHEAT':
                 plants[day] += 1
+            if cmd and len(cmd) >= 2 and cmd[0] == 'PLANT' and cmd[1] in crop_plants:
+                crop_plants[cmd[1]] += 1
+            if cmd and cmd[0] in ('WATER', 'HARVEST', 'FERTILIZE') and ai < len(actor_pos):
+                x, y = actor_pos[ai]
+                tile = farm_now['tiles'][y][x]
+                if isinstance(tile, dict) and tile.get('crop') in crop_ops:
+                    crop_ops[tile['crop']][cmd[0]] += 1
         for order in action.get('market') or []:
             if order and len(order) >= 3 and order[0] == 'BUY_SEED' and order[1] == 'WHEAT':
                 buys[day] += int(order[2])
+            if order and len(order) >= 3 and order[0] == 'SELL' and order[1] in sells:
+                sells[order[1]] += max(0, int(order[2]))
 
     daily = []
     fed_sum = cared_sum = animal_sum = 0
@@ -89,6 +105,9 @@ def run(path, opp, seed, seat, shops):
         'fed_sum': fed_sum,
         'cared_sum': cared_sum,
         'animal_sum': animal_sum,
+        'crop_plants': crop_plants,
+        'sells': sells,
+        'crop_ops': crop_ops,
     }
 
 
@@ -122,6 +141,13 @@ def main():
     print(f"ACTIONS move={mv:.0f} work={wk:.0f} pass={ps:.0f} move_share={mv/max(1,mv+wk+ps):.3f}")
     fed = sum(r['fed_sum'] for r in rows); cared = sum(r['cared_sum'] for r in rows); animals = sum(r['animal_sum'] for r in rows)
     print(f"ANIMAL_DAY feed={fed/max(1,animals):.3f} care={cared/max(1,animals):.3f} observations={animals}")
+    for key in ('WHEAT', 'STRAWBERRY', 'MELON', 'CARROT', 'TOMATO'):
+        water = statistics.mean(r['crop_ops'][key]['WATER'] for r in rows)
+        harvest = statistics.mean(r['crop_ops'][key]['HARVEST'] for r in rows)
+        fert = statistics.mean(r['crop_ops'][key]['FERTILIZE'] for r in rows)
+        print(f"CROP {key:10s} plants={statistics.mean(r['crop_plants'][key] for r in rows):6.1f} water={water:6.1f} harvest={harvest:6.1f} fert={fert:6.1f} sell_orders={statistics.mean(r['sells'][key] for r in rows):7.1f}")
+    for key in ('MILK', 'WOOL', 'EGG', 'FERTILIZER'):
+        print(f"PRODUCT {key:10s} sell_orders={statistics.mean(r['sells'][key] for r in rows):7.1f}")
 
 
 if __name__ == '__main__':
