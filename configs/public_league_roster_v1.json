@@ -1,0 +1,7 @@
+{
+  "policy": "public_league_roster_v1",
+  "top_k": 120,
+  "challenger_slots": 10,
+  "retirement": "Owner-selected local agents are excluded from new matchmaking and active slots; source, QA, history and rating observations remain preserved.",
+  "local_candidate_admission": "New research candidates need measured slight or substantial improvement, unless the owner explicitly requests registration. Uncertain/no-op candidates are not automatically admitted."
+}

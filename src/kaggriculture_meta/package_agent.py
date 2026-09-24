@@ -36,10 +36,13 @@ def source_audit(source):
             'note': 'Static capability screen, not a security proof; official-loader matches are a separate gate'}
 
 
-def package(source_path, out):
-    content = Path(source_path).read_bytes()
+def archive_bytes(content):
+    """Deterministic, read-back-verified main.py archive; no capability verdict.
+
+    Exact-parent candidate builders may use this after their own source identity
+    and execution QA. The public package() path still requires source_audit().
+    """
     compile(content, 'main.py', 'exec')
-    audit = source_audit(content.decode('utf-8'))
     archive = io.BytesIO()
     with gzip.GzipFile(filename='', fileobj=archive, mode='wb', mtime=0) as compressed:
         with tarfile.open(fileobj=compressed, mode='w', format=tarfile.USTAR_FORMAT) as tar:
@@ -52,6 +55,14 @@ def package(source_path, out):
     with tarfile.open(fileobj=io.BytesIO(payload), mode='r:gz') as tar:
         if tar.getnames() != ['main.py'] or tar.extractfile('main.py').read() != content:
             raise ValueError('Package readback mismatch')
+    return payload
+
+
+def package(source_path, out):
+    content = Path(source_path).read_bytes()
+    compile(content, 'main.py', 'exec')
+    audit = source_audit(content.decode('utf-8'))
+    payload = archive_bytes(content)
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     for name, data in [('main.py', content), ('submission.tar.gz', payload)]:

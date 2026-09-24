@@ -1,0 +1,10 @@
+{
+  "version": "bt_provisional_v3",
+  "regularization": 1.0,
+  "initial_regularization_fraction": 0.25,
+  "normal_after_games": 128,
+  "transition": "linear_in_valid_games",
+  "newcomer_refresh_every_valid_results": 16,
+  "match_contract": "public_league_v2",
+  "notes": "Rating-only policy. Refit stored valid results; no synthetic wins, public-score prior, or duplicate reset."
+}

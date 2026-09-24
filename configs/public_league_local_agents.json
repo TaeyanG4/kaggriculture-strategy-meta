@@ -69,6 +69,13 @@
       "path": "agent/c365_feed_reserve.py",
       "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56407947",
       "published_at": "2026-09-21T07:51:00+09:00"
+    },
+    {
+      "name": "c368_terminal_seed_budget",
+      "title": "[우리] c368 Terminal Seed Budget",
+      "path": "agent/c368_terminal_seed_budget.py",
+      "url": "https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=56432202",
+      "published_at": "2026-09-21T22:57:25+09:00"
     }
   ],
   "excluded_exact_duplicates": [

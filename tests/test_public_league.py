@@ -665,15 +665,40 @@ class PublicLeagueTests(unittest.TestCase):
         with self.store.db:
             for rank, aid in enumerate(veterans):
                 self.store.db.execute(
-                    "UPDATE agents SET status='active',games=80,rating=? WHERE id=?",
+                    "UPDATE agents SET status='active',games=300,rating=? WHERE id=?",
                     (1800-rank, aid))
             self.store.db.execute(
-                "UPDATE agents SET status='archived',games=30,rating=900 WHERE id=?",
-                (newcomer,))
+                "UPDATE agents SET status='archived',games=?,rating=900 WHERE id=?",
+                (league.NEWCOMER_PRIORITY_GAMES - 2, newcomer))
         with patch.object(league, "engine_sha", return_value="engine"):
             jobs = league.schedule_matches(self.store, top_k=12, max_matches=24)
         appearances = sum(newcomer in (job["agent_a"], job["agent_b"]) for job in jobs)
         self.assertEqual(appearances, 2)
+
+    def test_archived_provisional_finishes_even_beyond_old_32_game_limit(self):
+        veterans = [self.seed_agent(f"{i:064x}", f"Veteran {i}") for i in range(1, 13)]
+        newcomer = self.seed_agent("f" * 64, "Archived after early losses")
+        with self.store.db:
+            for aid in veterans:
+                self.store.db.execute("UPDATE agents SET status='active',games=300 WHERE id=?", (aid,))
+            self.store.db.execute("UPDATE agents SET status='archived',games=96,rating=800 WHERE id=?", (newcomer,))
+        self.assertEqual(league.NEWCOMER_PRIORITY_GAMES, 128)
+        with patch.object(league, "engine_sha", return_value="engine"):
+            jobs = league.schedule_matches(self.store, top_k=12, max_matches=48)
+        self.assertEqual(sum(newcomer in (j['agent_a'], j['agent_b']) for j in jobs), 32)
+
+    def test_archived_provisional_not_capped_by_young_field_median(self):
+        veterans = [self.seed_agent(f"{i:064x}", f"Young active {i}") for i in range(1, 13)]
+        # Win the otherwise-equal catch-up tie, so this tests the median gate
+        # rather than waiting a refresh for the bounded challenger slots.
+        newcomer = self.seed_agent("0" * 64, "Archived at field median")
+        with self.store.db:
+            for aid in veterans:
+                self.store.db.execute("UPDATE agents SET status='active',games=40 WHERE id=?", (aid,))
+            self.store.db.execute("UPDATE agents SET status='archived',games=40,rating=800 WHERE id=?", (newcomer,))
+        with patch.object(league, "engine_sha", return_value="engine"):
+            jobs = league.schedule_matches(self.store, top_k=12, max_matches=240)
+        self.assertTrue(any(newcomer in (j['agent_a'], j['agent_b']) for j in jobs))
 
     def test_battle_controller_starts_stopped(self):
         controller = league.BattleController(self.root / "battle-state")

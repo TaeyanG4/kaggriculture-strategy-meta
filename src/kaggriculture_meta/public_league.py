@@ -31,6 +31,7 @@ import tarfile
 import tempfile
 import threading
 import time
+import unicodedata
 import urllib.parse
 import urllib.request
 import zlib
@@ -50,16 +51,26 @@ SCHEMA_VERSION = 2
 RULES_VERSION = "public_league_v2"
 ENGINE_CONFIG = {"episodeSteps": 720}
 DEFAULT_SETTINGS = {"interval_hours": 3.0, "workers": 8, "max_matches": 240, "port": 8791,
-                    "auto_collect_enabled": True}
+                    "auto_collect_enabled": True, "battle_public_only": False,
+                    "focus_public_only": False}
 NONFATAL_TELEMETRY_FAILURES = {"overflow_contract_errors"}
 PUBLIC_LEAGUE_CODE_FAILURE_THRESHOLD = 2
 PUBLIC_LEAGUE_MATCH_TIMEOUT_SECONDS = 1220
 PUBLIC_LEAGUE_DOCKER_IMAGE = "kaggriculture-public-league:1.32.7"
 PUBLIC_LEAGUE_MAX_DATASET_BYTES = 100 * 1024 * 1024
-NEWCOMER_PRIORITY_GAMES = 32
-DEFAULT_TOP_K = 100
+RATING_POLICY = json.loads((ROOT / "configs/public_league_rating_v3.json").read_text(encoding="utf-8"))
+PROVISIONAL_RATING_GAMES = RATING_POLICY["normal_after_games"]
+# Keep provisional policies eligible until the same valid-game count used by BT.
+NEWCOMER_PRIORITY_GAMES = PROVISIONAL_RATING_GAMES
+PROVISIONAL_PRIOR_FRACTION = RATING_POLICY["initial_regularization_fraction"]
+PROVISIONAL_REFRESH_RESULTS = RATING_POLICY["newcomer_refresh_every_valid_results"]
+ROSTER_POLICY = json.loads((ROOT / "configs/public_league_roster_v1.json").read_text(encoding="utf-8"))
+DEFAULT_TOP_K = ROSTER_POLICY["top_k"]
 BROWSER_HEARTBEAT_TTL_SECONDS = 180
 BROWSER_CLOSE_GRACE_SECONDS = 5
+# Set only by the team gateway (tools/league_gateway.py); the server itself binds 127.0.0.1.
+LEAGUE_USER_HEADER = "X-League-User"
+PRESENCE_WINDOW_SECONDS = 90
 
 
 def utcnow() -> str:
@@ -114,9 +125,59 @@ def safe_component(value: str) -> str:
     return value[:100] or "unknown"
 
 
+def league_user(headers) -> str:
+    """Team-gateway nickname (percent-encoded UTF-8); empty for direct local use."""
+    raw = urllib.parse.unquote(str(headers.get(LEAGUE_USER_HEADER) or ""))
+    name = unicodedata.normalize("NFC", raw).strip()
+    return name if re.fullmatch(r"[\w.-]{1,32}", name) else ""
+
+
+def _pid_alive(pid) -> bool:
+    """Best-effort check that a lock owner still runs; unknown counts as alive."""
+    try:
+        pid = int(pid)
+    except (TypeError, ValueError):
+        return True
+    if pid <= 0:
+        return False
+    if os.name == "nt":
+        import ctypes
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        kernel32.OpenProcess.restype = ctypes.c_void_p
+        kernel32.OpenProcess.argtypes = (ctypes.c_uint32, ctypes.c_int, ctypes.c_uint32)
+        kernel32.GetExitCodeProcess.argtypes = (ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint32))
+        kernel32.CloseHandle.argtypes = (ctypes.c_void_p,)
+        handle = kernel32.OpenProcess(0x1000, False, pid)  # PROCESS_QUERY_LIMITED_INFORMATION
+        if not handle:
+            return ctypes.get_last_error() == 5  # access denied: the process exists
+        try:
+            code = ctypes.c_uint32()
+            return not kernel32.GetExitCodeProcess(handle, ctypes.byref(code)) or code.value == 259
+        finally:
+            kernel32.CloseHandle(handle)
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except OSError:
+        return True
+    return True
+
+
+def _lock_owner_alive(text: str) -> bool:
+    try:
+        return _pid_alive(json.loads(text).get("pid"))
+    except (ValueError, AttributeError):
+        return True  # still being written or unreadable: keep waiting
+
+
 @contextmanager
 def process_lock(path: Path, stale_seconds=8 * 3600):
-    """Cross-process single-cycle lock using an atomic lock-file create."""
+    """Cross-process single-cycle lock using an atomic lock-file create.
+
+    A lock whose owner process has died (killed server, crash) is reclaimed at
+    once instead of blocking battles or collection until it is 8 hours old.
+    """
     path = Path(path)
     acquired = False
     for _ in range(2):
@@ -126,8 +187,11 @@ def process_lock(path: Path, stale_seconds=8 * 3600):
             os.close(fd); acquired = True; break
         except FileExistsError:
             with contextlib.suppress(OSError):
-                if time.time() - path.stat().st_mtime > stale_seconds:
-                    path.unlink(); continue
+                owner = path.read_text(encoding="utf-8")
+                if (time.time() - path.stat().st_mtime > stale_seconds
+                        or not _lock_owner_alive(owner)):
+                    if path.read_text(encoding="utf-8") == owner:
+                        path.unlink(); continue
             break
     try:
         yield acquired
@@ -260,7 +324,8 @@ def runtime_settings(store: Store) -> dict:
     return {**DEFAULT_SETTINGS, **{k: saved[k] for k in DEFAULT_SETTINGS if k in saved}}
 
 
-def update_runtime_settings(store: Store, interval_hours, workers) -> dict:
+def update_runtime_settings(store: Store, interval_hours, workers,
+                            battle_public_only=None, focus_public_only=None) -> dict:
     interval_hours = float(interval_hours)
     workers = int(workers)
     if not 0.25 <= interval_hours <= 168:
@@ -268,6 +333,10 @@ def update_runtime_settings(store: Store, interval_hours, workers) -> dict:
     if workers not in range(1, 13):
         raise ValueError("workers must be between 1 and 12")
     current = runtime_settings(store)
+    filters = {"battle_public_only": battle_public_only, "focus_public_only": focus_public_only}
+    for name, value in filters.items():
+        if value is not None and not isinstance(value, bool):
+            raise ValueError(f"{name} must be a boolean")
     minutes = max(15, int(round(interval_hours * 60)))
     script = ROOT / "tools" / "configure-public-league-task.ps1"
     flags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
@@ -281,6 +350,7 @@ def update_runtime_settings(store: Store, interval_hours, workers) -> dict:
     if proc.returncode:
         raise RuntimeError((proc.stderr or proc.stdout or "scheduler update failed")[-1200:])
     updated = {**current, "interval_hours": minutes / 60, "workers": workers}
+    updated.update({k: v for k, v in filters.items() if v is not None})
     store.set_meta("runtime_settings", updated)
     store.event("settings", f"interval {minutes} minutes, workers {workers}", updated)
     return updated
@@ -920,6 +990,119 @@ def import_local_agents(store: Store, config_path=DEFAULT_LOCAL_AGENTS) -> dict:
         store.event("local_import", f"imported {imported}, skipped duplicate {duplicates}", summary,
                     "warning" if failed else "info")
     return summary
+
+
+def register_local_upload(store: Store, filename: str, payload: bytes, title="", url="",
+                          uploader="") -> dict:
+    """Import an owner-uploaded policy using the collector's identity and QA.
+
+    Uploads are local submissions only. Keep the original archive and every
+    runtime sidecar; an exact duplicate keeps its existing rating and games.
+    A team-gateway upload is credited to the uploader's nickname; the first
+    uploader of an exact artifact stays its author.
+    """
+    filename = str(filename).replace("\\", "/").rsplit("/", 1)[-1]
+    if not payload or len(payload) > PUBLIC_LEAGUE_MAX_DATASET_BYTES:
+        raise ValueError("파일은 0바이트 초과, 100 MiB 이하여야 합니다.")
+    if filename.lower().endswith(".py"):
+        files = {"main.py": canonical_source(payload)}
+    elif filename.lower().endswith((".tar.gz", ".tgz", ".tar")):
+        # The notebook recovery reader can skip irrelevant bad members. For a
+        # direct upload, reject them rather than silently changing the artifact.
+        with tarfile.open(fileobj=io.BytesIO(payload), mode="r:*") as archive:
+            seen, total = set(), 0
+            for index, member in enumerate(archive):
+                if index >= 4096:
+                    raise ValueError("압축 파일 항목은 4096개 이하여야 합니다.")
+                name = safe_relative_path(member.name.rstrip("/") if member.isdir() else member.name)
+                if member.isdir():
+                    continue
+                if not member.isfile() or name.casefold() in seen:
+                    raise ValueError("링크·특수 파일·중복 경로가 있는 압축은 등록할 수 없습니다.")
+                if any(":" in part or part.endswith((".", " ")) for part in name.split("/")):
+                    raise ValueError("지원하지 않는 압축 경로입니다.")
+                seen.add(name.casefold()); total += member.size
+                if total > PUBLIC_LEAGUE_MAX_DATASET_BYTES:
+                    raise ValueError("압축 해제 크기는 100 MiB 이하여야 합니다.")
+        artifacts = artifacts_from_archive_bytes(payload, filename)
+        if len(artifacts) != 1:
+            raise ValueError("압축 안에 실행 진입점 main.py가 정확히 하나 있어야 합니다.")
+        files = artifacts[0][1]
+    else:
+        raise ValueError(".py 또는 main.py가 포함된 .tar.gz/.tgz/.tar 파일을 선택하세요.")
+    requested_title = str(title).strip()[:200]
+    author = uploader or "Taeyang"
+    title = requested_title or (f"{uploader} · {filename}" if uploader else filename)
+    if url and (urllib.parse.urlparse(url).scheme != "https"
+                or urllib.parse.urlparse(url).hostname != "www.kaggle.com"):
+        raise ValueError("제출 링크는 https://www.kaggle.com 주소여야 합니다.")
+    digest, source, source_digest, artifact_files, platform = save_artifact(store, files)
+    prior = store.db.execute("SELECT * FROM agents WHERE sha256=?", (digest,)).fetchone()
+    if prior:
+        qa = {"ok": prior["qa_status"] == "pass", "entrypoint": prior["entrypoint"],
+              "error": prior["qa_error"]}
+    else:
+        try:
+            compile(source.read_bytes(), str(source), "exec")
+            qa = qa_source(source, execution_platform=platform)
+        except Exception as exc:
+            qa = {"ok": False, "error": f"{type(exc).__name__}: {exc}"}
+    now = utcnow()
+    folder = store.state / "uploads" / sha256(payload)
+    folder.mkdir(parents=True, exist_ok=True)
+    archive_path = folder / ("original.py" if filename.lower().endswith(".py") else "original.tar")
+    archive_path.write_bytes(payload)
+    ref = f"local/upload-{digest}"
+    version_key = "artifact-" + digest
+    metadata = {"filename": filename, "title": title, "url": url, "uploader": author,
+                "uploaded_at": now, "upload_sha256": sha256(payload)}
+    with store.db:
+        store.db.execute("""INSERT INTO notebooks
+            (ref,title,author,slug,url,origin,last_run,first_seen,last_seen,current_version_key)
+            VALUES(?,?,?,?,?,'local',?,?,?,?) ON CONFLICT(ref) DO NOTHING""",
+            (ref, title, author, ref.split("/", 1)[1], url, now, now, now, version_key))
+        nid = store.db.execute("SELECT id FROM notebooks WHERE ref=?", (ref,)).fetchone()[0]
+        store.db.execute("""INSERT OR IGNORE INTO notebook_versions
+            (notebook_id,version_key,metadata_json,archive_path,status,error,first_seen,pulled_at)
+            VALUES(?,?,?,?,?,?,?,?)""", (nid, version_key, json.dumps(metadata, ensure_ascii=False),
+            str(archive_path), "extracted" if qa["ok"] else "quarantine", qa.get("error"), now, now))
+        vid = store.db.execute("SELECT id FROM notebook_versions WHERE notebook_id=? AND version_key=?",
+                              (nid, version_key)).fetchone()[0]
+        store.db.execute("""INSERT OR IGNORE INTO agents
+            (sha256,source_path,source_sha256,artifact_files_json,execution_platform,
+             qa_status,entrypoint,qa_error,created_at,status) VALUES(?,?,?,?,?,?,?,?,?,?)""",
+            (digest, str(source), source_digest, json.dumps(artifact_files), platform,
+             "pass" if qa["ok"] else "failed", qa.get("entrypoint"), qa.get("error"), now,
+             "candidate" if qa["ok"] else "quarantine"))
+        agent = store.db.execute("SELECT id,status,qa_status,games FROM agents WHERE sha256=?", (digest,)).fetchone()
+        store.db.execute("""INSERT OR IGNORE INTO aliases
+            (agent_id,version_id,notebook_title,notebook_url,author,ref,is_current,discovered_at)
+            VALUES(?,?,?,?,?,?,1,?)""", (agent["id"], vid, title, url, author, ref, now))
+        registered_by = store.db.execute("SELECT author FROM notebooks WHERE id=?", (nid,)).fetchone()[0]
+        # An exact local re-upload can attach its later Kaggle submission link.
+        # Only owner-upload metadata changes; rating, games and NEW age stay put.
+        if prior and (requested_title or url):
+            store.db.execute("""UPDATE notebooks SET
+                title=CASE WHEN ?!='' THEN ? ELSE title END,
+                url=CASE WHEN ?!='' THEN ? ELSE url END,last_seen=? WHERE id=?""",
+                (requested_title, requested_title, url, url, now, nid))
+            store.db.execute("""UPDATE aliases SET
+                notebook_title=CASE WHEN ?!='' THEN ? ELSE notebook_title END,
+                notebook_url=CASE WHEN ?!='' THEN ? ELSE notebook_url END
+                WHERE agent_id=? AND version_id=?""",
+                (requested_title, requested_title, url, url, agent["id"], vid))
+    duplicate_type = ("exact_source_duplicate" if len(artifact_files) == 1 else "exact_artifact_duplicate") if prior else "unique_artifact"
+    detail = ("완전히 동일한 실행 파일입니다. 기존 점수·경기 수를 유지합니다." if prior else
+              "고유 실행 파일입니다. 미세 수정본도 별도 모델로 등록합니다.")
+    if agent["qa_status"] != "pass":
+        detail += " 실행 검사 실패로 격리했습니다: " + str(qa.get("error") or agent["status"])
+    result = {"agent_id": agent["id"], "title": title, "sha256": digest,
+              "status": agent["status"], "qa_status": agent["qa_status"], "games": agent["games"],
+              "duplicate_type": duplicate_type, "duplicate_detail": detail,
+              "artifact_files": artifact_files, "execution_platform": platform,
+              "uploader": author, "registered_by": registered_by}
+    store.event("local_upload", f"{'[' + uploader + '] ' if uploader else ''}{title}: {duplicate_type}", result)
+    return result
 
 
 def _cell_source(cell: dict) -> str:
@@ -2059,20 +2242,53 @@ def match_key(eng: str, a_sha: str, b_sha: str, seed: int, seat_a: int) -> str:
     return sha256(f"{eng}|{a_sha}|{b_sha}|{seed}|{seat_a}".encode())
 
 
-def eligible_agents(store: Store):
-    return store.db.execute("""
+def retire_local_agents(store: Store, agent_ids, reason: str):
+    """Reversible owner retirement, distinct from code QA and exact duplication."""
+    ids = sorted({int(i) for i in agent_ids})
+    if not reason.strip():
+        raise ValueError("Retirement requires a reason")
+    retired = store.get_meta("retired_local_agents", {})
+    for ident in ids:
+        local = store.db.execute("""SELECT 1 FROM agents a JOIN aliases x ON x.agent_id=a.id
+            JOIN notebook_versions v ON v.id=x.version_id JOIN notebooks n ON n.id=v.notebook_id
+            WHERE a.id=? AND n.origin='local' LIMIT 1""", (ident,)).fetchone()
+        if not local:
+            raise ValueError(f"Not a registered local agent: {ident}")
+    for ident in ids:
+        retired[str(ident)] = {"reason": reason, "at": utcnow()}
+    store.set_meta("retired_local_agents", retired)
+    with store.db:
+        store.db.executemany("UPDATE agents SET status='retired' WHERE id=?", [(i,) for i in ids])
+    store.event("roster", "Owner retired local agents: " + ", ".join(map(str, ids)),
+                {"ids": ids, "reason": reason})
+    return {"retired_ids": ids, "reason": reason}
+
+
+def eligible_agents(store: Store, include_retired=False):
+    rows = store.db.execute("""
       SELECT a.*,MAX(n.public_score) AS public_score,MAX(n.last_run) AS last_run,
-        MAX(CASE WHEN n.origin='local' THEN 1 ELSE 0 END) AS is_local
+        MAX(CASE WHEN n.origin='local' THEN 1 ELSE 0 END) AS is_local,
+        MAX(CASE WHEN n.origin!='local' THEN 1 ELSE 0 END) AS is_public
       FROM agents a JOIN aliases x ON x.agent_id=a.id JOIN notebook_versions v ON v.id=x.version_id
       JOIN notebooks n ON n.id=v.notebook_id WHERE a.qa_status='pass'
       GROUP BY a.id ORDER BY a.rating DESC,a.id DESC
     """).fetchall()
+    retired = store.get_meta("retired_local_agents", {})
+    return rows if include_retired else [r for r in rows if str(r["id"]) not in retired]
 
 
 def schedule_matches(store: Store, top_k=DEFAULT_TOP_K, seeds_per_pair=1, max_matches=240,
                      newcomer_priority_games=NEWCOMER_PRIORITY_GAMES,
-                     focus_agent_id=None) -> list[dict]:
+                     focus_agent_id=None, public_only=False) -> list[dict]:
     agents = eligible_agents(store)
+    if focus_agent_id is not None:
+        focus_agent_id = int(focus_agent_id)
+        if not any(x["id"] == focus_agent_id for x in agents):
+            raise ValueError(f"focus agent is not eligible: {focus_agent_id}")
+    if public_only:
+        # Public aliases of an exact local duplicate remain public opponents.
+        # The selected focus target is retained even when it is local-only.
+        agents = [x for x in agents if x["is_public"] or x["id"] == focus_agent_id]
     if len(agents) < 2:
         return []
     # Keep a bounded challenger pool. Existing active policies remain, then current
@@ -2083,21 +2299,15 @@ def schedule_matches(store: Store, top_k=DEFAULT_TOP_K, seeds_per_pair=1, max_ma
     key = lambda x: (x["public_score"] if x["public_score"] is not None else -1, x["id"])
     # Reserve challenger slots even after the top-K fills, so newly published
     # notebooks are never permanently starved by incumbents.
-    challenger_slots = min(10, top_k)
+    challenger_slots = min(ROSTER_POLICY["challenger_slots"], top_k)
     pool_map = {x["id"]: x for x in active[:max(0, top_k-challenger_slots)]}
 
-    # A policy remains in catch-up rotation across refresh cycles until its game
-    # count reaches the established field's median.  This is intentionally based
-    # on evidence count rather than status: update_rankings may archive a weak
-    # newcomer after its first batch, but that must not stop the promised sample
-    # catch-up.  Zero-game candidates lead the queue; local controls break equal
-    # deficits because they are explicitly requested comparison baselines.
-    active_games = sorted(int(x["games"]) for x in active)
-    field_median = active_games[len(active_games) // 2] if active_games else 0
-    catchup_target = min(field_median, newcomer_priority_games)
+    # Archiving after early losses must not end a provisional policy's sample.
+    # Use the full valid-game target even in a young field with a lower median.
+    # Failed QA and owner-retired policies remain excluded by eligible_agents.
+    # Zero-game policies lead; local controls break otherwise equal deficits.
     catchup = [x for x in agents if x["id"] not in pool_map and
-               ((x["status"] == "candidate" and int(x["games"]) < newcomer_priority_games)
-                or int(x["games"]) < catchup_target)]
+               int(x["games"]) < newcomer_priority_games]
     catchup.sort(key=lambda x: (int(x["games"]), -int(x["is_local"]),
                                 -(x["public_score"] if x["public_score"] is not None else -1),
                                 x["sha256"]))
@@ -2225,6 +2435,7 @@ def schedule_matches(store: Store, top_k=DEFAULT_TOP_K, seeds_per_pair=1, max_ma
 
 def quarantine_runtime_failures(store: Store, threshold=None) -> dict:
     code_threshold = PUBLIC_LEAGUE_CODE_FAILURE_THRESHOLD if threshold is None else int(threshold)
+    retired = store.get_meta("retired_local_agents", {})
     counts = {}
     examples = {}
     watermarks = {}
@@ -2250,6 +2461,8 @@ def quarantine_runtime_failures(store: Store, threshold=None) -> dict:
     quarantined = []
     with store.db:
         for agent_id in counts:
+            if str(agent_id) in retired:
+                continue
             code_count = counts.get(agent_id, 0)
             if code_count < code_threshold:
                 continue
@@ -2447,17 +2660,20 @@ def repair_nonfatal_telemetry_matches(store: Store) -> dict:
 
 def run_league(store: Store, workers=8, top_k=DEFAULT_TOP_K, seeds_per_pair=1,
                max_matches=240, timeout=PUBLIC_LEAGUE_MATCH_TIMEOUT_SECONDS,
-               stop_event=None, focus_agent_id=None) -> dict:
+               stop_event=None, focus_agent_id=None, public_only=None) -> dict:
+    if public_only is None:
+        key = "focus_public_only" if focus_agent_id is not None else "battle_public_only"
+        public_only = bool(runtime_settings(store)[key])
     with process_lock(store.state / "league.lock") as acquired:
         if not acquired:
             return {"busy": True, "message": "another league cycle is already running"}
         return _run_league_unlocked(store, workers, top_k, seeds_per_pair,
-                                    max_matches, timeout, stop_event, focus_agent_id)
+                                    max_matches, timeout, stop_event, focus_agent_id, public_only)
 
 
 def _run_league_unlocked(store: Store, workers=8, top_k=DEFAULT_TOP_K, seeds_per_pair=1,
                          max_matches=240, timeout=PUBLIC_LEAGUE_MATCH_TIMEOUT_SECONDS, stop_event=None,
-                         focus_agent_id=None) -> dict:
+                         focus_agent_id=None, public_only=False) -> dict:
     if workers not in range(1, 13):
         raise ValueError("workers must be 1..12")
     if stop_event is not None and stop_event.is_set():
@@ -2468,7 +2684,7 @@ def _run_league_unlocked(store: Store, workers=8, top_k=DEFAULT_TOP_K, seeds_per
         store.db.execute("""UPDATE matches SET status='invalid',error='stale interrupted coordinator',completed_at=?
             WHERE status='running' AND created_at<?""", (utcnow(), stale))
     jobs = schedule_matches(store, top_k, seeds_per_pair, max_matches,
-                            focus_agent_id=focus_agent_id)
+                            focus_agent_id=focus_agent_id, public_only=public_only)
     if not jobs:
         update_rankings(store, top_k=top_k)
         return {"scheduled": 0, "completed": 0, "invalid": 0}
@@ -2482,6 +2698,10 @@ def _run_league_unlocked(store: Store, workers=8, top_k=DEFAULT_TOP_K, seeds_per
     pending = list(jobs)
     active = []
     completed = invalid = cancelled = 0
+    game_counts = {row["id"]: row["games"] for row in
+                   store.db.execute("SELECT id,games FROM agents")}
+    last_rating_refresh = 0
+    provisional_changed = False
     stopped = False
     try:
         while pending or active:
@@ -2538,6 +2758,9 @@ def _run_league_unlocked(store: Store, workers=8, top_k=DEFAULT_TOP_K, seeds_per
                     values = ("complete", score, ra, rb, ra-rb, result.get("seconds"), None,
                               json.dumps(result, ensure_ascii=False), utcnow(), job["match_key"])
                     completed += 1
+                    for ident in (job["agent_a"], job["agent_b"]):
+                        provisional_changed |= game_counts.get(ident, 0) < PROVISIONAL_RATING_GAMES
+                        game_counts[ident] = game_counts.get(ident, 0) + 1
                 else:
                     detail = None
                     if result:
@@ -2550,6 +2773,10 @@ def _run_league_unlocked(store: Store, workers=8, top_k=DEFAULT_TOP_K, seeds_per
                     store.db.execute("""UPDATE matches SET status=?,outcome_a=?,reward_a=?,reward_b=?,margin_a=?,
                         runtime=?,error=?,result_json=?,completed_at=? WHERE match_key=?""", values)
                 active.remove(item)
+            if provisional_changed and completed - last_rating_refresh >= PROVISIONAL_REFRESH_RESULTS:
+                update_rankings(store, top_k=top_k)
+                last_rating_refresh = completed
+                provisional_changed = False
             if active and not progressed:
                 time.sleep(.1)
     finally:
@@ -2564,7 +2791,7 @@ def _run_league_unlocked(store: Store, workers=8, top_k=DEFAULT_TOP_K, seeds_per
     summary = {"scheduled": len(jobs), "completed": completed, "invalid": invalid,
                "cancelled": cancelled, "stopped": stopped, "workers": workers,
                "top_k": top_k, "runtime_quarantine": quarantine["quarantined"],
-               "focus_agent_id": focus_agent_id}
+               "focus_agent_id": focus_agent_id, "public_only": public_only}
     store.set_meta("last_league", {"at": utcnow(), **summary})
     verb = "stopped" if stopped else "completed"
     store.event("league", f"{verb} {completed}/{len(jobs)}, invalid {invalid}, cancelled {cancelled}", summary,
@@ -2582,39 +2809,74 @@ def wilson(wins: float, games: int, z=1.96):
     return max(0, centre-half), min(1, centre+half)
 
 
-def bradley_terry_ratings(agent_ids, rows, regularization=1.0) -> dict[int, float]:
-    """Regularized batch Bradley-Terry fit, with ties contributing half a win."""
+def rating_prior_fraction(games, normal_after=PROVISIONAL_RATING_GAMES,
+                          initial=PROVISIONAL_PRIOR_FRACTION):
+    """Weaker neutral prior initially; smoothly restore the mature prior."""
+    if normal_after <= 0:
+        return 1.0
+    return initial + (1.0 - initial) * min(1.0, max(0, games) / normal_after)
+
+
+def bradley_terry_ratings(agent_ids, rows, regularization=1.0,
+                          provisional_games=PROVISIONAL_RATING_GAMES,
+                          initial_prior=PROVISIONAL_PRIOR_FRACTION) -> dict[int, float]:
+    """Batch BT with a count-dependent neutral prior, not an Elo K multiplier.
+
+    Only the prior is relaxed for newcomers; no wins are multiplied. Pair
+    aggregation preserves the likelihood while making mid-batch refits cheap.
+    Setting provisional_games=0 reproduces the fixed-prior rating policy.
+    """
+    if regularization <= 0 or not 0 < initial_prior <= 1:
+        raise ValueError("rating priors must be positive")
     ids = list(agent_ids)
     ability = {key: 0.0 for key in ids}
-    relevant = [(row["agent_a"], row["agent_b"], float(row["outcome_a"])) for row in rows
-                if row["agent_a"] in ability and row["agent_b"] in ability]
+    counts = dict.fromkeys(ids, 0)
+    pairs = {}
+    for row in rows:
+        a, b = row["agent_a"], row["agent_b"]
+        if a not in ability or b not in ability or a == b:
+            continue
+        counts[a] += 1; counts[b] += 1
+        outcome = float(row["outcome_a"])
+        if a > b:
+            a, b, outcome = b, a, 1.0 - outcome
+        pair = pairs.setdefault((a, b), [0, 0.0])
+        pair[0] += 1; pair[1] += outcome
+    relevant = [(a, b, n, wins) for (a, b), (n, wins) in pairs.items()]
     if not relevant:
         return {key: 1500.0 for key in ids}
+    priors = {key: regularization * rating_prior_fraction(counts[key], provisional_games, initial_prior)
+              for key in ids}
     for _ in range(300):
-        gradient = {key: -regularization * ability[key] for key in ids}
-        curvature = {key: regularization for key in ids}
-        for a, b, outcome in relevant:
+        gradient = {key: -priors[key] * ability[key] for key in ids}
+        curvature = dict(priors)
+        for a, b, n, wins in relevant:
             delta = max(-30.0, min(30.0, ability[a] - ability[b]))
             probability = 1.0 / (1.0 + math.exp(-delta))
-            residual = outcome - probability
-            weight = probability * (1.0 - probability)
+            residual = wins - n * probability
+            weight = n * probability * (1.0 - probability)
             gradient[a] += residual; gradient[b] -= residual
             curvature[a] += weight; curvature[b] += weight
         changes = {key: 0.5 * gradient[key] / curvature[key] for key in ids}
         maximum = max(abs(value) for value in changes.values())
         for key, value in changes.items(): ability[key] += value
-        mean = sum(ability.values()) / len(ability)
+        # The optimum has sum(lambda_i * ability_i)=0. An unweighted
+        # recenter would distort the likelihood when priors differ by count.
+        mean = sum(priors[key] * ability[key] for key in ids) / sum(priors.values())
         for key in ids: ability[key] -= mean
         if maximum < 1e-9:
             break
     scale = 400.0 / math.log(10.0)
-    return {key: 1500.0 + scale * ability[key] for key in ids}
+    return {key: 1500.0 + scale * ability[key] if counts[key] else 1500.0 for key in ids}
 
 
 def update_rankings(store: Store, top_k=DEFAULT_TOP_K, min_games=8):
-    agents = eligible_agents(store)
+    # Keep retired opponents in the historical BT fit; only future play/slots change.
+    agents = eligible_agents(store, include_retired=True)
+    retired = store.get_meta("retired_local_agents", {})
     rows = store.db.execute("SELECT * FROM matches WHERE status='complete' ORDER BY id").fetchall()
-    ratings = bradley_terry_ratings((x["id"] for x in agents), rows)
+    ratings = bradley_terry_ratings((x["id"] for x in agents), rows,
+                                   regularization=RATING_POLICY["regularization"])
     stats = {x["id"]: [0, 0, 0, 0, None] for x in agents}
     for row in rows:
         for ident, score in ((row["agent_a"], row["outcome_a"]),
@@ -2626,13 +2888,16 @@ def update_rankings(store: Store, top_k=DEFAULT_TOP_K, min_games=8):
             else: stats[ident][3] += 1
             stats[ident][4] = row["completed_at"]
     ranked = sorted(agents, key=lambda x: (ratings[x["id"]], stats[x["id"]][0]), reverse=True)
-    sufficiently_tested = [x for x in ranked if stats[x["id"]][0] >= min_games]
+    sufficiently_tested = [x for x in ranked if stats[x["id"]][0] >= min_games
+                           and str(x["id"]) not in retired]
     active_ids = {x["id"] for x in sufficiently_tested[:top_k]}
     with store.db:
         for agent in ranked:
             games, wins, losses, ties, last = stats[agent["id"]]
             low, high = wilson(wins + .5*ties, games)
-            if agent["id"] in active_ids:
+            if str(agent["id"]) in retired:
+                status = "retired"
+            elif agent["id"] in active_ids:
                 status = "active"
             elif games < min_games:
                 status = "candidate"
@@ -2641,6 +2906,7 @@ def update_rankings(store: Store, top_k=DEFAULT_TOP_K, min_games=8):
             store.db.execute("""UPDATE agents SET rating=?,games=?,wins=?,losses=?,ties=?,score_low=?,score_high=?,
                 status=?,last_played=? WHERE id=?""",
                 (ratings[agent["id"]], games, wins, losses, ties, low, high, status, last, agent["id"]))
+    store.set_meta("rating_policy", {**RATING_POLICY, "updated_at": utcnow()})
 
 
 def dashboard_snapshot(store: Store) -> dict:
@@ -2660,6 +2926,9 @@ def dashboard_snapshot(store: Store) -> dict:
         agents.append({**dict(row), "display_name": primary.get("notebook_title", row["sha256"][:12]),
                        "notebook_url": primary.get("notebook_url"), "author": primary.get("author"),
                        "published_at": primary.get("last_run"),
+                       "rating_provisional": row["qa_status"] == "pass" and row["games"] < PROVISIONAL_RATING_GAMES,
+                       "rating_normal_after": PROVISIONAL_RATING_GAMES,
+                       "rating_prior_fraction": rating_prior_fraction(row["games"]),
                        "public_score": max(current_scores) if current_scores else None,
                        "best_public_score": max(best_scores) if best_scores else None,
                        "is_new": any((x.get("discovered_at") or "") > new_baseline and
@@ -2680,13 +2949,16 @@ def dashboard_snapshot(store: Store) -> dict:
     return {"generated_at": utcnow(), "state": str(store.state),
             "summary": {"notebooks": notebooks, "versions": versions, "agents": len(agents),
                         "active": sum(x["status"] == "active" for x in agents),
+                        "active_capacity": DEFAULT_TOP_K,
+                        "retired": sum(x["status"] == "retired" for x in agents),
                         "valid_matches": valid_total},
             "last_crawl": store.get_meta("last_crawl"), "last_extract": store.get_meta("last_extract"),
             "last_league": store.get_meta("last_league"), "settings": runtime_settings(store), "agents": agents,
+            "rating_policy": store.get_meta("rating_policy", RATING_POLICY),
             "matches": matches, "events": events, "unplayable_notebooks": unplayable}
 
 
-def agent_match_history(store: Store, agent_id: int, limit=500, offset=0) -> dict:
+def agent_match_history(store: Store, agent_id: int, limit=500, offset=0, opponent_id=None) -> dict:
     limit = max(1, min(int(limit), 1000))
     offset = max(0, int(offset))
     agent = store.db.execute(
@@ -2696,14 +2968,19 @@ def agent_match_history(store: Store, agent_id: int, limit=500, offset=0) -> dic
         raise ValueError(f"unknown agent id: {agent_id}")
     alias = store.db.execute("""SELECT notebook_title,notebook_url FROM aliases WHERE agent_id=?
         ORDER BY is_current DESC,id DESC LIMIT 1""", (agent["id"],)).fetchone()
-    rows = store.db.execute("""SELECT m.*,aa.sha256 AS a_sha,bb.sha256 AS b_sha,
+    where, params = "(m.agent_a=? OR m.agent_b=?)", [agent["id"], agent["id"]]
+    if opponent_id is not None:
+        opponent_id = int(opponent_id)
+        where = "((m.agent_a=? AND m.agent_b=?) OR (m.agent_a=? AND m.agent_b=?))"
+        params = [agent["id"], opponent_id, opponent_id, agent["id"]]
+    rows = store.db.execute(f"""SELECT m.*,aa.sha256 AS a_sha,bb.sha256 AS b_sha,
         COALESCE((SELECT notebook_title FROM aliases WHERE agent_id=m.agent_a
                   ORDER BY is_current DESC,id DESC LIMIT 1),aa.sha256) AS a_name,
         COALESCE((SELECT notebook_title FROM aliases WHERE agent_id=m.agent_b
                   ORDER BY is_current DESC,id DESC LIMIT 1),bb.sha256) AS b_name
         FROM matches m JOIN agents aa ON aa.id=m.agent_a JOIN agents bb ON bb.id=m.agent_b
-        WHERE m.agent_a=? OR m.agent_b=? ORDER BY m.id DESC LIMIT ? OFFSET ?""",
-        (agent["id"], agent["id"], limit, offset)).fetchall()
+        WHERE {where} ORDER BY m.id DESC LIMIT ? OFFSET ?""",
+        (*params, limit, offset)).fetchall()
     matches = []
     for row in rows:
         is_a = row["agent_a"] == agent["id"]
@@ -2731,13 +3008,98 @@ def agent_match_history(store: Store, agent_id: int, limit=500, offset=0) -> dic
             "runtime": row["runtime"], "error": row["error"],
             "created_at": row["created_at"], "completed_at": row["completed_at"],
         })
-    total = store.db.execute(
-        "SELECT COUNT(*) FROM matches WHERE agent_a=? OR agent_b=?",
-        (agent["id"], agent["id"])).fetchone()[0]
+    total = store.db.execute(f"SELECT COUNT(*) FROM matches m WHERE {where}", params).fetchone()[0]
     return {"agent": {**dict(agent),
                       "display_name": alias["notebook_title"] if alias else agent["sha256"][:12],
                       "notebook_url": alias["notebook_url"] if alias else ""},
-            "matches": matches, "total": total, "limit": limit, "offset": offset}
+            "matches": matches, "total": total, "limit": limit, "offset": offset,
+            "opponent_id": opponent_id}
+
+
+def agent_opponent_records(store: Store, agent_id: int) -> dict:
+    """Valid-game record of one agent against each opponent artifact.
+
+    Notebooks with an identical artifact share one row and are listed together.
+    """
+    agent = store.db.execute(
+        "SELECT id,sha256,rating,games,wins,losses,ties,status FROM agents WHERE id=?",
+        (int(agent_id),)).fetchone()
+    if not agent:
+        raise ValueError(f"unknown agent id: {agent_id}")
+    rows = store.db.execute("""SELECT
+        CASE WHEN m.agent_a=:id THEN m.agent_b ELSE m.agent_a END AS opponent_id,
+        COUNT(*) AS games,
+        SUM(CASE WHEN m.agent_a=:id THEN m.outcome_a ELSE 1-m.outcome_a END) AS points,
+        SUM(CASE WHEN (m.agent_a=:id AND m.outcome_a=1) OR (m.agent_b=:id AND m.outcome_a=0)
+            THEN 1 ELSE 0 END) AS wins,
+        SUM(CASE WHEN m.outcome_a=.5 THEN 1 ELSE 0 END) AS ties,
+        AVG(CASE WHEN m.agent_a=:id THEN m.margin_a ELSE -m.margin_a END) AS avg_margin,
+        AVG(CASE WHEN m.agent_a=:id THEN m.reward_a ELSE m.reward_b END) AS avg_own,
+        AVG(CASE WHEN m.agent_a=:id THEN m.reward_b ELSE m.reward_a END) AS avg_opponent,
+        MAX(m.completed_at) AS last_played
+        FROM matches m WHERE m.status='complete' AND (m.agent_a=:id OR m.agent_b=:id)
+        GROUP BY opponent_id""", {"id": agent["id"]}).fetchall()
+    ids = [row["opponent_id"] for row in rows]
+    info, notebooks = {}, {}
+    if ids:
+        marks = ",".join("?" * len(ids))
+        info = {r["id"]: r for r in store.db.execute(
+            f"SELECT id,sha256,rating,status FROM agents WHERE id IN ({marks})", ids)}
+        for r in store.db.execute(f"""SELECT agent_id,notebook_title,notebook_url,author FROM aliases
+                WHERE agent_id IN ({marks}) ORDER BY agent_id,is_current DESC,id DESC""", ids):
+            notebooks.setdefault(r["agent_id"], []).append(
+                {"title": r["notebook_title"], "url": r["notebook_url"], "author": r["author"]})
+    opponents = []
+    for row in rows:
+        ident, games = row["opponent_id"], row["games"]
+        meta, books = info.get(ident), notebooks.get(ident, [])
+        primary = books[0] if books else {}
+        low, high = wilson(row["points"], games)
+        opponents.append({
+            "opponent_id": ident, "notebooks": books,
+            "name": primary.get("title") or (meta["sha256"][:12] if meta else str(ident)),
+            "url": primary.get("url") or "", "author": primary.get("author") or "",
+            "sha": meta["sha256"] if meta else "", "rating": meta["rating"] if meta else None,
+            "status": meta["status"] if meta else "", "games": games, "wins": row["wins"],
+            "losses": games - row["wins"] - row["ties"], "ties": row["ties"],
+            "score_rate": row["points"] / games, "score_low": low, "score_high": high,
+            "avg_margin": row["avg_margin"], "avg_own": row["avg_own"],
+            "avg_opponent": row["avg_opponent"], "last_played": row["last_played"]})
+    opponents.sort(key=lambda x: (x["rating"] is None, -(x["rating"] or 0), x["opponent_id"]))
+    alias = store.db.execute("""SELECT notebook_title FROM aliases WHERE agent_id=?
+        ORDER BY is_current DESC,id DESC LIMIT 1""", (agent["id"],)).fetchone()
+    return {"agent": {**dict(agent), "display_name": alias[0] if alias else agent["sha256"][:12]},
+            "opponents": opponents}
+
+
+def agent_download(store: Store, agent_id: int) -> tuple[str, bytes, str]:
+    """Exact runtime files of one agent: main.py as .py, or every file as .tar.gz."""
+    row = store.db.execute("SELECT id,sha256,source_path,artifact_files_json FROM agents WHERE id=?",
+                           (int(agent_id),)).fetchone()
+    if not row:
+        raise ValueError(f"unknown agent id: {agent_id}")
+    alias = store.db.execute("""SELECT notebook_title FROM aliases WHERE agent_id=?
+        ORDER BY is_current DESC,id DESC LIMIT 1""", (row["id"],)).fetchone()
+    title = re.sub(r"\.(py|tar\.gz|tgz|tar)$", "", alias[0] if alias else "", flags=re.I)
+    stem = re.sub(r'[\\/:*?"<>|\s·]+', "-", title).strip("-.")[:60] or "agent"
+    name = f"{stem}-{row['sha256'][:8]}"
+    source = Path(row["source_path"])
+    files = json.loads(row["artifact_files_json"] or '["main.py"]')
+    if files == ["main.py"]:
+        return name + ".py", source.read_bytes(), "text/x-python; charset=utf-8"
+    folder = source.parent.resolve()
+    buffer = io.BytesIO()
+    with gzip.GzipFile(filename="", fileobj=buffer, mode="wb", mtime=0) as packed:
+        with tarfile.open(fileobj=packed, mode="w", format=tarfile.PAX_FORMAT) as archive:
+            for member_name in sorted(files):
+                path = (folder / safe_relative_path(member_name)).resolve()
+                if folder not in path.parents:
+                    raise ValueError(f"artifact path escapes its folder: {member_name}")
+                data = path.read_bytes()
+                member = tarfile.TarInfo(member_name)
+                member.size, member.mode, member.mtime = len(data), 0o644, 0
+                archive.addfile(member, io.BytesIO(data))
+    return name + ".tar.gz", buffer.getvalue(), "application/gzip"
 
 
 def league_progress(store: Store) -> dict:
@@ -2770,16 +3132,14 @@ class BattleController:
         self.focus_agent_id = None
         self.focus_target_games = None
         self.focus_completed_games = 0
+        self.started_by = ""
+        self.public_only = False
 
     def snapshot(self):
         with self.lock:
-            return {"phase": self.phase, "cycles": self.cycles,
-                    "last_result": self.last_result, "last_error": self.last_error,
-                    "focus_agent_id": self.focus_agent_id,
-                    "focus_target_games": self.focus_target_games,
-                    "focus_completed_games": self.focus_completed_games}
+            return self.snapshot_unlocked()
 
-    def _start_unlocked(self, focus_agent_id=None, focus_target_games=None):
+    def _start_unlocked(self, focus_agent_id=None, focus_target_games=None, actor=""):
         self.stop_event = threading.Event()
         self.phase = "running"
         self.cycles = 0
@@ -2788,24 +3148,31 @@ class BattleController:
         self.focus_agent_id = focus_agent_id
         self.focus_target_games = focus_target_games
         self.focus_completed_games = 0
+        self.started_by = actor
         self.thread = threading.Thread(target=self._loop, name="public-league-battle", daemon=True)
         self.thread.start()
         return {**self.snapshot_unlocked(), "action": "started"}
 
-    def toggle(self):
+    def toggle(self, actor=""):
         with self.lock:
             alive = bool(self.thread and self.thread.is_alive())
             if alive:
                 self.phase = "stopping"
                 self.stop_event.set()
                 return {**self.snapshot_unlocked(), "action": "stop_requested"}
-            return self._start_unlocked()
+            return self._start_unlocked(actor=actor)
 
-    def focus(self, agent_id, games=500):
+    def focus(self, agent_id, games=500, actor=""):
         agent_id = int(agent_id)
         games = int(games)
         if games < 2 or games > 10000 or games % 2:
             raise ValueError("focus games must be an even number from 2 to 10000")
+        local = Store(self.state_path)
+        try:
+            if str(agent_id) in local.get_meta("retired_local_agents", {}):
+                raise ValueError("사용자가 대전에서 제외한 모델입니다. 전적만 조회할 수 있습니다.")
+        finally:
+            local.close()
         with self.lock:
             alive = bool(self.thread and self.thread.is_alive())
             if alive and self.focus_agent_id == agent_id:
@@ -2817,14 +3184,16 @@ class BattleController:
         with self.lock:
             if self.thread and self.thread.is_alive():
                 raise RuntimeError("current battle did not stop in time")
-            return self._start_unlocked(agent_id, games)
+            return self._start_unlocked(agent_id, games, actor)
 
     def snapshot_unlocked(self):
         return {"phase": self.phase, "cycles": self.cycles,
                 "last_result": self.last_result, "last_error": self.last_error,
                 "focus_agent_id": self.focus_agent_id,
                 "focus_target_games": self.focus_target_games,
-                "focus_completed_games": self.focus_completed_games}
+                "focus_completed_games": self.focus_completed_games,
+                "public_only": self.public_only,
+                "started_by": self.started_by}
 
     def stop(self, wait=False, timeout=10):
         with self.lock:
@@ -2846,6 +3215,8 @@ class BattleController:
                         focus_agent_id = self.focus_agent_id
                         focus_target_games = self.focus_target_games
                         focus_completed_games = self.focus_completed_games
+                        key = "focus_public_only" if focus_agent_id is not None else "battle_public_only"
+                        self.public_only = public_only = bool(settings[key])
                     max_matches = int(settings["max_matches"])
                     if focus_agent_id is not None and focus_target_games is not None:
                         remaining = focus_target_games - focus_completed_games
@@ -2855,11 +3226,14 @@ class BattleController:
                     result = run_league(store, workers=int(settings["workers"]),
                                         max_matches=max_matches,
                                         stop_event=self.stop_event,
-                                        focus_agent_id=focus_agent_id)
+                                        focus_agent_id=focus_agent_id, public_only=public_only)
                 finally:
                     store.close()
                 with self.lock:
                     self.last_result = result
+                    if not result.get("busy") and not result.get("stopped") and not result.get("scheduled"):
+                        self.last_error = "현재 상대 설정으로 편성 가능한 대진이 없습니다."
+                        break
                     if not result.get("busy") and not result.get("stopped"):
                         self.cycles += 1
                         if focus_agent_id is not None:
@@ -2889,15 +3263,17 @@ class BrowserSessionTracker:
         self.started = self.last_seen = time.monotonic()
         self.had_session = False
         self.sessions = {}
+        self.users = {}
         self.last_explicit_close = None
         self.lock = threading.Lock()
 
-    def touch(self, session_id: str, now=None):
+    def touch(self, session_id: str, now=None, user=""):
         if not session_id or len(session_id) > 200:
             raise ValueError("invalid browser session")
         now = time.monotonic() if now is None else now
         with self.lock:
             self.sessions[session_id] = now
+            self.users[session_id] = user
             self.last_seen = now
             self.had_session = True
             self.last_explicit_close = None
@@ -2906,8 +3282,27 @@ class BrowserSessionTracker:
         now = time.monotonic() if now is None else now
         with self.lock:
             self.sessions.pop(session_id, None)
+            self.users.pop(session_id, None)
             if not self.sessions:
                 self.last_explicit_close = now
+
+    def presence(self, window=PRESENCE_WINDOW_SECONDS, now=None) -> list[dict]:
+        """Who has an open dashboard tab; an empty nickname is a direct local browser."""
+        now = time.monotonic() if now is None else now
+        people = {}
+        with self.lock:
+            for key in [k for k, seen in self.sessions.items()
+                        if now - seen > BROWSER_HEARTBEAT_TTL_SECONDS]:
+                self.sessions.pop(key, None)
+                self.users.pop(key, None)
+            for key, seen in self.sessions.items():
+                if now - seen <= window:
+                    name = self.users.get(key, "")
+                    tabs, last = people.get(name, (0, seen))
+                    people[name] = (tabs + 1, max(last, seen))
+        return [{"nickname": name, "tabs": tabs, "idle_seconds": int(now - last)}
+                for name, (tabs, last) in sorted(people.items(),
+                                                 key=lambda x: (x[0] == "", x[0].casefold()))]
 
     def should_exit(self, idle_seconds=BROWSER_HEARTBEAT_TTL_SECONDS,
                     startup_grace=45, close_grace=BROWSER_CLOSE_GRACE_SECONDS,
@@ -2931,42 +3326,57 @@ class BrowserSessionTracker:
 DASHBOARD = r'''<!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Kaggriculture Public League</title>
 <style>
-:root{color-scheme:dark;--bg:#09110d;--card:#111d17;--line:#284034;--text:#e9f3ec;--muted:#9db0a4;--green:#56d489;--gold:#efc464;--red:#ef7b74}*{box-sizing:border-box}body{margin:0;font:14px system-ui;background:var(--bg);color:var(--text)}main{width:100%;max-width:1800px;margin:auto;padding:16px}h1{margin:0 0 4px;font-size:28px}.muted{color:var(--muted)}.bar,.cards,.settings,.legend{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;align-items:center}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px}.metric{font-size:22px;font-weight:700;color:var(--green)}button{background:#1f6c42;color:white;border:0;border-radius:7px;padding:8px 11px;cursor:pointer}button.stop,button.toggle-off{background:#8b3434}button:disabled{opacity:.5}input{width:90px;background:#09110d;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:7px}table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line)}th,td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left}th{position:sticky;top:0;background:#16251d}a{color:#76c8ff}.active{color:var(--green)}.candidate{color:var(--gold)}.archived{color:var(--muted)}.quarantine{color:var(--red)}.new{display:inline-block;margin-left:5px;padding:2px 5px;border-radius:999px;background:#efc464;color:#182017;font-size:10px;font-weight:800;vertical-align:middle}details{max-width:100%}code{font-size:11px}.tabs button{background:#17281f}.tabs button.on{background:#276a46}.panel{display:none}.panel.on{display:block}.scroll{max-height:72vh;overflow:auto}.legend .card{flex:1 1 0;max-width:none;min-width:220px;align-self:stretch}.legend b{display:block;margin-bottom:4px}#rank table{table-layout:fixed;min-width:1280px}#rank th:nth-child(1){width:3.5%}#rank th:nth-child(2){width:20%}#rank th:nth-child(3){width:8%}#rank th:nth-child(4){width:6%}#rank th:nth-child(5){width:6%}#rank th:nth-child(6){width:5%}#rank th:nth-child(7){width:8%}#rank th:nth-child(8){width:8%}#rank th:nth-child(9){width:8%}#rank th:nth-child(10){width:7%}#rank th:nth-child(11){width:12.5%}#rank th:nth-child(12){width:8%}#rank td{overflow-wrap:anywhere}.rowactions{display:flex;gap:3px;flex-wrap:nowrap}.rowactions button{white-space:nowrap;padding:6px 7px;font-size:11px}.focusbtn{min-width:72px}</style></head><body><main>
-<h1>Kaggriculture Public League</h1><div class="muted" id="stamp">불러오는 중…</div>
+:root{color-scheme:dark;--bg:#09110d;--card:#111d17;--line:#284034;--text:#e9f3ec;--muted:#9db0a4;--green:#56d489;--gold:#efc464;--red:#ef7b74}*{box-sizing:border-box}body{margin:0;font:14px system-ui;background:var(--bg);color:var(--text)}main{width:100%;max-width:1800px;margin:auto;padding:16px}h1{margin:0 0 4px;font-size:28px}.muted{color:var(--muted)}.bar,.cards,.settings,.legend{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;align-items:center}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px}.metric{font-size:22px;font-weight:700;color:var(--green)}button{background:#1f6c42;color:white;border:0;border-radius:7px;padding:8px 11px;cursor:pointer}button.stop,button.toggle-off{background:#8b3434}button:disabled{opacity:.5}input{width:90px;background:#09110d;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:7px}table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line)}th,td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left}th{position:sticky;top:0;background:#16251d}a{color:#76c8ff}.active{color:var(--green)}.candidate{color:var(--gold)}.archived,.retired{color:var(--muted)}#showRetired,input[type=checkbox]{width:auto}.quarantine{color:var(--red)}.new{display:inline-block;margin-left:5px;padding:2px 5px;border-radius:999px;background:#efc464;color:#182017;font-size:10px;font-weight:800;vertical-align:middle}details{max-width:100%}code{font-size:11px}.tabs button{background:#17281f}.tabs button.on{background:#276a46}.panel{display:none}.panel.on{display:block}.scroll{max-height:72vh;overflow:auto}.legend .card{flex:1 1 0;max-width:none;min-width:220px;align-self:stretch}.legend b{display:block;margin-bottom:4px}#rank table{table-layout:fixed;min-width:1280px}#rank th:nth-child(1){width:3.5%}#rank th:nth-child(2){width:17%}#rank th:nth-child(3){width:8%}#rank th:nth-child(4){width:6%}#rank th:nth-child(5){width:6%}#rank th:nth-child(6){width:5%}#rank th:nth-child(7){width:8%}#rank th:nth-child(8){width:8%}#rank th:nth-child(9){width:8%}#rank th:nth-child(10){width:7%}#rank th:nth-child(11){width:15.5%}#rank th:nth-child(12){width:8%}#rank td{overflow-wrap:anywhere}.rowactions{display:flex;gap:3px;flex-wrap:nowrap}.rowactions button{white-space:nowrap;padding:6px 7px;font-size:11px}.focusbtn{min-width:72px}
+.who{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0;min-height:26px}.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;background:#17281f;border:1px solid var(--line);font-size:12px}.chip.me{border-color:var(--green)}.dot{width:7px;height:7px;border-radius:50%;background:var(--green)}.dot.idle{background:var(--gold)}.who form{display:inline;margin:0}.who button{padding:4px 9px;font-size:12px}.drop{border:2px dashed var(--line);border-radius:10px;padding:20px 12px;text-align:center;cursor:pointer;margin:10px 0}.drop.over,.drop:focus{border-color:var(--green);background:#133021;outline:none}.drop b{display:block;margin-bottom:4px}#dropOverlay{position:fixed;inset:0;display:none;place-items:center;z-index:50;background:#09110dd9;border:3px dashed var(--green);font-size:22px;font-weight:700;pointer-events:none}#dropOverlay.on{display:grid}.subtabs button{background:#17281f}.subtabs button.on{background:#276a46}th[data-sort]{cursor:pointer;user-select:none}td.num{text-align:right}</style></head><body><main>
+<h1>Kaggriculture Public League</h1><div class="muted" id="stamp">불러오는 중…</div><div class="who"><span class="who" id="whoList"></span><span class="who" id="whoMe"></span></div>
 <div class="muted">표의 순위는 로컬 native 리그의 정규화 Bradley–Terry(BT) 점수입니다. Kaggle 현재/최고 점수는 시점 의존 참고값으로 별도 표시됩니다. NEW는 기준선 이후 새 노트북 버전이 편입된 뒤 12시간 동안 표시됩니다.</div>
-<div class="bar"><button id="collectButton" onclick="collectNow()">지금 수집</button><button id="battleButton" onclick="toggleBattle()">연속 대결 OFF · 시작</button><span class="muted">ON이면 수동 중지까지 계속 대결</span><button onclick="load()">화면 새로고침</button><span id="action"></span></div>
-<div class="card settings"><b>자동 수집·대결 설정</b><button id="autoCollectButton" onclick="toggleAutoCollect()">자동 수집 확인 중…</button><label>수집 주기(시간) <input id="intervalHours" type="number" min="0.25" max="168" step="0.25"></label><label>대결 워커 수 <input id="workers" type="number" min="1" max="12" step="1"></label><button onclick="saveSettings()">설정 저장</button><span class="muted" id="settingsResult">수집은 예약 실행, 대결 워커는 다음 배치부터 적용</span></div>
+<div class="bar"><button id="collectButton" onclick="collectNow()">지금 수집</button><button id="battleButton" onclick="toggleBattle()">연속 대결 OFF · 시작</button><span class="muted">ON이면 수동 중지까지 계속 대결</span><button onclick="openLocalUpload()">내 모델 등록</button><button onclick="load()">화면 새로고침</button><span id="action"></span></div>
+<div class="card settings"><b>자동 수집·대결 설정</b><button id="autoCollectButton" class="adminonly" onclick="toggleAutoCollect()">자동 수집 확인 중…</button><label>수집 주기(시간) <input id="intervalHours" class="adminonly" type="number" min="0.25" max="168" step="0.25"></label><label>대결 워커 수 <input id="workers" class="adminonly" type="number" min="1" max="12" step="1"></label><label><input id="battlePublicOnly" class="adminonly" type="checkbox" onchange="settingsDirty=true">일반 대결: 내 모델 제외</label><label><input id="focusPublicOnly" class="adminonly" type="checkbox" onchange="settingsDirty=true">집중 상대: 내 모델 제외</label><button class="adminonly" onclick="saveSettings()">설정 저장</button><span class="muted" id="settingsResult">저장 후 다음 대진 묶음부터 적용 · 집중 대상은 유지 · 공개 동일 소스 별칭은 상대에 포함</span></div>
 <div class="card settings"><b>노트북 검색·직접 추가</b><input id="searchQuery" style="width:min(520px,70vw)" placeholder="제목 검색 또는 https://www.kaggle.com/code/author/slug"><button onclick="searchNotebooks()">검색</button><label>집중 추가 유효 경기 수 <input id="focusGames" type="number" min="2" max="10000" step="2" value="500"></label><span class="muted" id="searchResultText">기존 누적 경기와 별도로 추가 측정 · 양 좌석 묶음 때문에 최대 1경기 초과 가능</span></div>
 <div id="searchResults" class="card" style="display:none"></div>
-<details class="card"><summary><b>현재 매칭 방식</b></summary><p>일반 대결은 QA-pass agent 중 상위 active와 신규 challenger를 최대 100개 풀로 잡습니다. 표본이 부족한 모델을 먼저 고르고, 경기 수와 상대 전적이 비슷하면 BT 점수가 가까운 상대를 우선합니다. 신규 모델은 32경기까지 catch-up하며 세 번째 대진마다 경험 많은 강자를 섞습니다. 집중 측정은 선택한 agent를 모든 경기에 고정합니다. 같은 결정적 seed를 양 좌석으로 실행하며 동일 계약·두 artifact·seed·좌석은 다시 돌리지 않습니다. 240경기는 내부 재편성 묶음이고 유효 경기만 BT·승점률에 반영합니다. main.py와 모든 제출 부속파일이 같은 artifact만 별칭으로 묶습니다.</p></details>
+<dialog id="localUploadDialog" class="card" style="width:min(560px,94vw);color:var(--text)"><h2>내 모델 등록</h2><p>로컬 리그에 등록합니다. <span class="muted" id="localUploader"></span></p><div id="localDrop" class="drop" tabindex="0" role="button" aria-label="모델 파일 선택"><b>여기에 파일을 끌어다 놓거나 눌러서 선택</b><span class="muted" id="localDropName">선택된 파일 없음</span></div><input id="localModelFile" aria-label="모델 파일" type="file" accept=".py,.tar.gz,.tgz,.tar" hidden><p><label>모델 이름 <input id="localModelTitle" style="width:100%" maxlength="200" placeholder="비워두면 파일 이름 사용"></label></p><p><label>Kaggle 제출 링크 (선택) <input id="localModelUrl" type="url" style="width:100%" placeholder="https://www.kaggle.com/competitions/..."></label></p><p class="muted">.py 또는 main.py가 든 압축 파일 · 최대 100 MiB<br>실행 검사 후 등록하며, 동일 파일은 기존 전적을 공유합니다.</p><div class="bar"><button id="localUploadButton" onclick="submitLocalAgent()">파일 등록</button><button onclick="document.getElementById('localUploadDialog').close()">닫기</button></div><p id="localUploadResult" style="overflow-wrap:anywhere"></p><div id="localUploadActions" class="bar"></div></dialog>
+<details class="card"><summary><b>현재 매칭 방식</b></summary><p>일반 대결은 QA-pass agent 중 상위 active와 신규 challenger를 최대 120개 풀로 잡습니다. 표본이 부족한 모델을 먼저 고르고, 경기 수와 상대 전적이 비슷하면 BT 점수가 가까운 상대를 우선합니다. 신규 모델은 32경기까지 catch-up하며 세 번째 대진마다 경험 많은 강자를 섞습니다. 집중 측정은 선택한 agent를 모든 경기에 고정합니다. 같은 결정적 seed를 양 좌석으로 실행하며 동일 계약·두 artifact·seed·좌석은 다시 돌리지 않습니다. 240경기는 내부 재편성 묶음이고 유효 경기만 BT·승점률에 반영합니다. 신규 BT는 1500점에 묶어 두는 힘을 처음 ¼로 낮춰 승패를 더 빠르게 반영하며, 128 유효 경기에 걸쳐 기존 강도로 돌아옵니다. 잠정 모델이 대전하면 16개 유효 결과마다 점수도 중간 갱신합니다. 강한 모델뿐 아니라 약한 모델의 하락도 빨라지고, 128경기 전 점수에는 잠정 표시가 붙습니다. main.py와 모든 제출 부속파일이 같은 artifact만 별칭으로 묶습니다.</p></details>
 <div class="cards" id="cards"></div><div class="tabs"><button class="on" onclick="tab('rank',this)">랭킹</button> <button id="agentMatchTab" onclick="tab('agentmatches',this)">선택 agent 전적</button> <button onclick="tab('unplayable',this)">수집됨·대전 불가</button> <button onclick="tab('events',this)">수집 기록</button> <button onclick="tab('matches',this)">최근 경기</button></div>
-<div class="legend"><div class="card"><b class="active">active</b>최소 8개 유효 경기를 마치고 현재 상위 100에 든 agent.</div><div class="card"><b class="candidate">candidate</b>실제 첫 행동 QA를 통과했지만 아직 표본이 부족하거나 도전자 대기열에 있는 agent.</div><div class="card"><b class="archived">archived</b>검증은 끝났지만 현재 상위 100 밖인 agent. 파일과 전적은 보존된다.</div><div class="card"><b class="quarantine">quarantine</b>컴파일·loader·첫 행동 QA 실패 또는 반복 코드 예외가 확인된 agent. 공식 DONE 경기의 로컬 시간 경고만으로 격리하지 않는다.</div></div>
-<section id="rank" class="panel on scroll"><table><thead><tr><th>로컬 #</th><th>공유 노트북</th><th>작성자</th><th>게시/갱신</th><th>상태</th><th>로컬 BT</th><th>Kaggle 현재/최고</th><th>W-L-T</th><th>승점률 95% CI</th><th>artifact</th><th>측정·전적</th><th>동일 artifact 별칭</th></tr></thead><tbody id="agents"></tbody></table></section>
-<section id="agentmatches" class="panel scroll"><div class="card" id="agentmatchsummary">순위표에서 <b>전적 보기</b>를 누르세요.</div><table><thead><tr><th>시각 (KST)</th><th>상대</th><th>시드·좌석</th><th>결과</th><th>우리/상대 현금</th><th>마진</th><th>상태·오류</th></tr></thead><tbody id="agentmatchrows"></tbody></table></section>
+<div class="legend"><div class="card"><b class="active">active</b>최소 8개 유효 경기를 마치고 현재 상위 120에 든 agent.</div><div class="card"><b class="candidate">candidate</b>실제 첫 행동 QA를 통과했지만 아직 표본이 부족하거나 도전자 대기열에 있는 agent.</div><div class="card"><b class="archived">archived</b>검증은 끝났지만 현재 상위 120 밖인 agent. 파일과 전적은 보존된다.</div><div class="card"><b class="quarantine">quarantine</b>컴파일·loader·첫 행동 QA 실패 또는 반복 코드 예외가 확인된 agent. 공식 DONE 경기의 로컬 시간 경고만으로 격리하지 않는다.</div></div>
+<section id="rank" class="panel on scroll"><label class="muted"><input type="checkbox" id="showRetired" onchange="load()"> 대전 제외 모델 보기 (소스·전적 보존)</label><table><thead><tr><th>로컬 #</th><th>공유 노트북</th><th>작성자</th><th>게시/갱신</th><th>상태</th><th>로컬 BT</th><th>Kaggle 현재/최고</th><th>W-L-T</th><th>승점률 95% CI</th><th>artifact</th><th>측정·전적</th><th>동일 artifact 별칭</th></tr></thead><tbody id="agents"></tbody></table></section>
+<section id="agentmatches" class="panel scroll"><div class="card" id="agentmatchsummary">순위표에서 <b>전적 보기</b>를 누르세요.</div><div class="bar subtabs"><button id="oppViewButton" class="on" onclick="agentView('opp')">상대 노트북별 전적</button><button id="listViewButton" onclick="agentView('list')">경기 목록</button><span class="muted" id="agentViewNote"></span></div><table id="agentopptable"><thead><tr><th data-sort="name" data-label="상대 노트북" onclick="sortOpp('name')">상대 노트북</th><th>작성자</th><th data-sort="rating" data-label="상대 BT·상태" onclick="sortOpp('rating')">상대 BT·상태</th><th data-sort="games" data-label="경기" onclick="sortOpp('games')">경기</th><th>W-L-T</th><th data-sort="rate" data-label="승점률 (95% CI)" onclick="sortOpp('rate')">승점률 (95% CI)</th><th data-sort="margin" data-label="평균 마진" onclick="sortOpp('margin')">평균 마진</th><th>평균 현금 우리/상대</th><th data-sort="last" data-label="최근 경기 (KST)" onclick="sortOpp('last')">최근 경기 (KST)</th><th></th></tr></thead><tbody id="agentopprows"></tbody></table><table id="agentmatchtable" style="display:none"><thead><tr><th>시각 (KST)</th><th>상대</th><th>시드·좌석</th><th>결과</th><th>우리/상대 현금</th><th>마진</th><th>상태·오류</th></tr></thead><tbody id="agentmatchrows"></tbody></table></section>
 <section id="unplayable" class="panel scroll"><p class="muted">목록과 파일은 수집했지만 실행 가능한 agent 소스를 찾지 못했거나 추출을 완료하지 못한 최신 버전입니다. 로컬 대전에는 넣지 않습니다.</p><table><thead><tr><th>공유 노트북</th><th>작성자</th><th>게시/갱신</th><th>Kaggle 현재/최고</th><th>수집 상태</th><th>이유</th></tr></thead><tbody id="unplayablerows"></tbody></table></section>
 <section id="events" class="panel scroll"><table><thead><tr><th>시각 (KST)</th><th>종류</th><th>내용</th></tr></thead><tbody id="eventrows"></tbody></table></section>
 <section id="matches" class="panel scroll"><table><thead><tr><th>시각 (KST)</th><th>A/B</th><th>시드·좌석</th><th>상태</th><th>마진 A</th></tr></thead><tbody id="matchrows"></tbody></table></section>
+<div id="dropOverlay">파일을 놓으면 모델 등록 창이 열립니다</div>
 </main><script>
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmtTime=s=>{if(!s)return '—';let d=new Date(s);if(Number.isNaN(d.getTime()))return String(s);return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(d)};
 let lastGeneratedAt='—',agentNames={};
+let me=null,adminOnly=false,uploadFile=null,currentAgent=null,oppRows=[],oppSortKey='rating',oppSortDir=-1;
+async function loadMe(){try{let r=await fetch('/gateway/me',{cache:'no-store'});me=r.ok?await r.json():null}catch(_){me=null}adminOnly=!!me&&me.role!=='admin';document.querySelectorAll('.adminonly').forEach(x=>{x.disabled=adminOnly;x.title=adminOnly?'관리자 전용':''});document.getElementById('whoMe').innerHTML=me?`<span class=muted>· 나: <b>${esc(me.nickname)}</b>${me.role==='admin'?' (관리자)':''}</span><form method=post action="/gateway/logout"><button>로그아웃</button></form>`:''}
+function renderWho(list){document.getElementById('whoList').innerHTML=`<span class=muted>접속 중 ${list.length}명</span>`+list.map(p=>`<span class="chip${me&&p.nickname===me.nickname?' me':''}" title="열린 탭 ${p.tabs}개 · 마지막 신호 ${p.idle_seconds}초 전"><span class="dot${p.idle_seconds>30?' idle':''}"></span>${esc(p.nickname||'로컬(이 PC)')}${p.tabs>1?` ×${p.tabs}`:''}</span>`).join('')}
 const browserSession=sessionStorage.getItem('publicLeagueSession')||crypto.randomUUID();sessionStorage.setItem('publicLeagueSession',browserSession);
 const pulse=()=>fetch('/api/session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:browserSession}),keepalive:true}).catch(()=>{});pulse();setInterval(pulse,5000);addEventListener('pagehide',()=>navigator.sendBeacon('/api/session/close',JSON.stringify({id:browserSession})));
 function tab(id,b){document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');b.classList.add('on')}
-async function load(){let d=await fetch('/api/status').then(r=>r.json());agentNames=Object.fromEntries(d.agents.map(a=>[a.id,a.display_name]));lastGeneratedAt=fmtTime(d.generated_at);document.getElementById('stamp').textContent='갱신 '+lastGeneratedAt+' · 상태 확인 중';let s=d.summary;document.getElementById('cards').innerHTML=`<div class=card id=cyclecard><div class=metric>—</div>현재 대전 확인 중</div><div class=card><div class=metric>${s.notebooks}</div>노트북</div><div class=card><div class=metric>${s.agents}</div>고유 agent</div><div class=card><div class=metric>${s.active}</div>활성 리그</div><div class=card><div class=metric>${s.valid_matches}</div>누적 유효 경기</div>`;if(document.activeElement.id!=='intervalHours')document.getElementById('intervalHours').value=d.settings.interval_hours;if(document.activeElement.id!=='workers')document.getElementById('workers').value=d.settings.workers;
-document.getElementById('agents').innerHTML=d.agents.map((a,i)=>{let rate=a.games?((a.wins+.5*a.ties)/a.games*100).toFixed(1):'—';let ci=a.score_low==null?'—':`${(a.score_low*100).toFixed(1)}–${(a.score_high*100).toFixed(1)}%`;let ps=a.public_score==null?'—':a.public_score.toFixed(1),bs=a.best_public_score==null?'—':a.best_public_score.toFixed(1),date=a.published_at?String(a.published_at).slice(0,10):'—';let als=a.aliases.map(x=>`<div><a target=_blank href="${esc(x.notebook_url)}">${esc(x.notebook_title)}</a> · ${esc(x.author)} · ${esc((x.last_run||'—').slice(0,10))} · Kaggle ${x.public_score==null?'—':Number(x.public_score).toFixed(1)}</div>`).join('');let files=(()=>{try{return JSON.parse(a.artifact_files_json||'[]').length}catch(_){return 1}})();return `<tr><td>${i+1}</td><td><a target=_blank href="${esc(a.notebook_url)}">${esc(a.display_name)}</a>${a.is_new?'<span class=new>NEW</span>':''}</td><td>${esc(a.author)}</td><td>${esc(date)}</td><td class=${esc(a.status)}>${esc(a.status)}</td><td>${a.rating.toFixed(0)}</td><td>${ps} / ${bs}</td><td>${a.wins}-${a.losses}-${a.ties} (${rate}%)</td><td>${ci}</td><td><code>${a.sha256.slice(0,12)}</code><div class=muted>${esc(a.execution_platform)} · ${files}파일</div></td><td><div class="rowactions"><button class="focusbtn" data-focus-agent="${a.id}" onclick="focusAgent(${a.id})">집중 측정</button><button onclick="showAgentMatches(${a.id})">전적 보기</button></div></td><td><details><summary>동일 artifact ${a.aliases.length}개</summary>${als}</details></td></tr>`}).join('');
+let settingsDirty=false;
+async function load(){let d=await fetch('/api/status').then(r=>r.json());agentNames=Object.fromEntries(d.agents.map(a=>[a.id,a.display_name]));lastGeneratedAt=fmtTime(d.generated_at);document.getElementById('stamp').textContent='갱신 '+lastGeneratedAt+' · 상태 확인 중';let s=d.summary;document.getElementById('cards').innerHTML=`<div class=card id=cyclecard><div class=metric>—</div>현재 대전 확인 중</div><div class=card><div class=metric>${s.notebooks}</div>노트북</div><div class=card><div class=metric>${s.agents}</div>고유 agent</div><div class=card><div class=metric>${s.active}</div>활성 리그</div><div class=card><div class=metric>${s.valid_matches}</div>누적 유효 경기</div>`;if(document.activeElement.id!=='intervalHours')document.getElementById('intervalHours').value=d.settings.interval_hours;if(document.activeElement.id!=='workers')document.getElementById('workers').value=d.settings.workers;if(!settingsDirty){document.getElementById('battlePublicOnly').checked=!!d.settings.battle_public_only;document.getElementById('focusPublicOnly').checked=!!d.settings.focus_public_only}
+document.getElementById('agents').innerHTML=d.agents.filter(a=>a.status!=='retired'||document.getElementById('showRetired').checked).map((a,i)=>{let rate=a.games?((a.wins+.5*a.ties)/a.games*100).toFixed(1):'—';let ci=a.score_low==null?'—':`${(a.score_low*100).toFixed(1)}–${(a.score_high*100).toFixed(1)}%`;let ps=a.public_score==null?'—':a.public_score.toFixed(1),bs=a.best_public_score==null?'—':a.best_public_score.toFixed(1),date=a.published_at?String(a.published_at).slice(0,10):'—';let als=a.aliases.map(x=>`<div><a target=_blank href="${esc(x.notebook_url)}">${esc(x.notebook_title)}</a> · ${esc(x.author)} · ${esc((x.last_run||'—').slice(0,10))} · Kaggle ${x.public_score==null?'—':Number(x.public_score).toFixed(1)}</div>`).join('');let files=(()=>{try{return JSON.parse(a.artifact_files_json||'[]').length}catch(_){return 1}})();return `<tr><td>${i+1}</td><td><a target=_blank href="${esc(a.notebook_url)}">${esc(a.display_name)}</a>${a.is_new?'<span class=new>NEW</span>':''}</td><td>${esc(a.author)}</td><td>${esc(date)}</td><td class=${esc(a.status)}>${esc(a.status)}</td><td>${a.rating.toFixed(0)}${a.rating_provisional?`<div class="candidate" title="초반에는 점수가 더 크게 움직입니다. ${a.rating_normal_after} 유효 경기부터 기존 기준 적용">잠정 ${a.games}/${a.rating_normal_after}</div>`:''}</td><td>${ps} / ${bs}</td><td>${a.wins}-${a.losses}-${a.ties} (${rate}%)</td><td>${ci}</td><td><code>${a.sha256.slice(0,12)}</code><div class=muted>${esc(a.execution_platform)} · ${files}파일</div></td><td><div class="rowactions"><button class="focusbtn" data-focus-agent="${a.id}" ${a.status==='retired'?'data-retired':''} onclick="focusAgent(${a.id})" ${a.status==='retired'?'disabled':''}>집중 측정</button><button onclick="showAgentMatches(${a.id})">전적 보기</button><button onclick="downloadAgent(${a.id})" title="실행 파일 받기">코드</button></div></td><td><details><summary>동일 artifact ${a.aliases.length}개</summary>${als}</details></td></tr>`}).join('');
 document.getElementById('unplayablerows').innerHTML=(d.unplayable_notebooks||[]).map(x=>`<tr><td><a target=_blank href="${esc(x.url)}">${esc(x.title)}</a></td><td>${esc(x.author)}</td><td>${esc(fmtTime(x.last_run))}</td><td>${x.public_score==null?'—':Number(x.public_score).toFixed(1)} / ${x.best_public_score==null?'—':Number(x.best_public_score).toFixed(1)}</td><td>${esc(x.extraction_status)}</td><td>${esc(x.error||'실행 가능한 agent 소스 없음')}</td></tr>`).join('');
 document.getElementById('eventrows').innerHTML=d.events.map(x=>`<tr><td>${esc(fmtTime(x.created_at))}</td><td>${esc(x.kind)}</td><td>${esc(x.message)}</td></tr>`).join('');document.getElementById('matchrows').innerHTML=d.matches.map(x=>`<tr><td>${esc(fmtTime(x.completed_at||x.created_at))}</td><td><code>${x.a_sha.slice(0,8)} / ${x.b_sha.slice(0,8)}</code></td><td>${x.seed} · ${x.seat_a}</td><td>${esc(x.status)}</td><td>${x.margin_a??'—'}</td></tr>`).join('');loadProgress()}
-async function loadProgress(){let box=document.getElementById('cyclecard'),stamp=document.getElementById('stamp'),battle=document.getElementById('battleButton'),collect=document.getElementById('collectButton'),auto=document.getElementById('autoCollectButton');if(!box)return;try{let d=await fetch('/api/progress',{cache:'no-store'}).then(r=>r.json()),b=d.battle||{phase:'stopped'},autoOn=!!d.auto_collect_enabled,focus=b.focus_agent_id,focusTarget=b.focus_target_games,focusDone=b.focus_completed_games||0,focusName=focus?(agentNames[focus]||`agent ${focus}`):'';collect.disabled=!!d.collecting;collect.textContent=d.collecting?'수집 중…':'지금 수집';auto.textContent=autoOn?'자동 수집 ON · 끄기':'자동 수집 OFF · 켜기';auto.classList.toggle('toggle-off',!autoOn);document.querySelectorAll('[data-focus-agent]').forEach(x=>{let on=b.phase!=='stopped'&&Number(x.dataset.focusAgent)===Number(focus);x.textContent=on?'집중 중지':'집중 측정';x.classList.toggle('stop',on);x.disabled=b.phase==='stopping'});battle.textContent=b.phase==='stopped'?'연속 대결 OFF · 시작':b.phase==='stopping'?'대결 중지 중…':focus?`${focusName} 집중 측정 ON · 중지`:'연속 대결 ON · 중지';battle.classList.toggle('stop',b.phase!=='stopped');battle.disabled=b.phase==='stopping';if(!d.cycle){if(b.phase==='running'){box.innerHTML=`<div class=metric>준비</div>${focus?esc(focusName)+` 집중 추가 ${focusDone}/${focusTarget}`:'다음 처리 묶음 편성'} · 완료 묶음 ${b.cycles}`;stamp.textContent=`갱신 ${lastGeneratedAt} · ${focus?esc(focusName)+` 집중 추가 ${focusDone}/${focusTarget}`:'수동 중지까지 연속 대결 중'}`}else if(b.phase==='stopping'){box.innerHTML='<div class=metric>중지</div>대전 프로세스 정리 중';stamp.textContent=`갱신 ${lastGeneratedAt} · 대전 중지 중`}else{box.innerHTML='<div class=metric>0</div>현재 대전 대기';stamp.textContent=`갱신 ${lastGeneratedAt} · 대기`}return}let c=d.cycle,focusLiveDone=focus?focusDone+(c.completed||0):focusDone;box.innerHTML=`<div class=metric>${c.done}/${c.total}</div>${focus?esc(focusName)+` 집중 추가 ${focusLiveDone}/${focusTarget}`:'현재 처리 묶음'} ${c.percent.toFixed(1)}% · 남음 ${c.remaining}<div class=muted>수동 중지까지 계속 · KST ${esc(fmtTime(c.started_at))}</div>`;stamp.textContent=`갱신 ${lastGeneratedAt} · ${b.phase==='stopping'?'대전 중지 중':focus?esc(focusName)+` 집중 추가 ${focusLiveDone}/${focusTarget}`:'연속 대결 중'} (${c.done}/${c.total})`}catch(_){box.innerHTML='<div class=metric>?</div>진행 상태 확인 실패';stamp.textContent=`갱신 ${lastGeneratedAt} · 상태 확인 실패`}}
+async function loadProgress(){let box=document.getElementById('cyclecard'),stamp=document.getElementById('stamp'),battle=document.getElementById('battleButton'),collect=document.getElementById('collectButton'),auto=document.getElementById('autoCollectButton');if(!box)return;try{let d=await fetch('/api/progress',{cache:'no-store'}).then(r=>r.json()),b=d.battle||{phase:'stopped'},autoOn=!!d.auto_collect_enabled,focus=b.focus_agent_id,focusTarget=b.focus_target_games,focusDone=b.focus_completed_games||0,focusName=focus?(agentNames[focus]||`agent ${focus}`):'';collect.disabled=!!d.collecting;renderWho(d.presence||[]);let by=(b.phase!=='stopped'&&b.started_by?' · 시작 '+b.started_by:'')+(b.phase!=='stopped'?(b.public_only?' · 공개 상대만':' · 전체 상대'):'');collect.textContent=d.collecting?'수집 중…':'지금 수집';auto.textContent=autoOn?'자동 수집 ON · 끄기':'자동 수집 OFF · 켜기';auto.classList.toggle('toggle-off',!autoOn);auto.disabled=adminOnly;document.querySelectorAll('[data-focus-agent]').forEach(x=>{let on=b.phase!=='stopped'&&Number(x.dataset.focusAgent)===Number(focus);x.textContent=on?'집중 중지':'집중 측정';x.classList.toggle('stop',on);x.disabled=x.hasAttribute('data-retired')||b.phase==='stopping'});battle.textContent=b.phase==='stopped'?'연속 대결 OFF · 시작':b.phase==='stopping'?'대결 중지 중…':focus?`${focusName} 집중 측정 ON · 중지`:'연속 대결 ON · 중지';battle.classList.toggle('stop',b.phase!=='stopped');battle.disabled=b.phase==='stopping';if(!d.cycle){if(b.phase==='running'){box.innerHTML=`<div class=metric>준비</div>${focus?esc(focusName)+` 집중 추가 ${focusDone}/${focusTarget}`:'다음 처리 묶음 편성'} · 완료 묶음 ${b.cycles}`;stamp.textContent=`갱신 ${lastGeneratedAt} · ${focus?esc(focusName)+` 집중 추가 ${focusDone}/${focusTarget}`:'수동 중지까지 연속 대결 중'}${by}`}else if(b.phase==='stopping'){box.innerHTML='<div class=metric>중지</div>대전 프로세스 정리 중';stamp.textContent=`갱신 ${lastGeneratedAt} · 대전 중지 중`}else{box.innerHTML='<div class=metric>0</div>현재 대전 대기';stamp.textContent=`갱신 ${lastGeneratedAt} · 대기`}return}let c=d.cycle,focusLiveDone=focus?focusDone+(c.completed||0):focusDone;box.innerHTML=`<div class=metric>${c.done}/${c.total}</div>${focus?esc(focusName)+` 집중 추가 ${focusLiveDone}/${focusTarget}`:'현재 처리 묶음'} ${c.percent.toFixed(1)}% · 남음 ${c.remaining}<div class=muted>수동 중지까지 계속 · KST ${esc(fmtTime(c.started_at))}${esc(by)}</div>`;stamp.textContent=`갱신 ${lastGeneratedAt} · ${b.phase==='stopping'?'대전 중지 중':focus?esc(focusName)+` 집중 추가 ${focusLiveDone}/${focusTarget}`:'연속 대결 중'} (${c.done}/${c.total})${by}`}catch(_){box.innerHTML='<div class=metric>?</div>진행 상태 확인 실패';stamp.textContent=`갱신 ${lastGeneratedAt} · 상태 확인 실패`}}
+function setUploadFile(file){uploadFile=file||null;document.getElementById('localDropName').textContent=file?`${file.name} · ${(file.size/1024).toFixed(1)} KiB`:'선택된 파일 없음';document.getElementById('localUploadResult').textContent='';document.getElementById('localUploadActions').replaceChildren()}
+function openLocalUpload(file){let dialog=document.getElementById('localUploadDialog');if(file instanceof File)setUploadFile(file);document.getElementById('localUploader').textContent=me?`등록자: ${me.nickname}`:'등록자: 이 PC(로컬)';document.getElementById('localModelTitle').placeholder=me?`비워두면 '${me.nickname} · 파일 이름'`:'비워두면 파일 이름 사용';if(!dialog.open)dialog.showModal();if(uploadFile)document.getElementById('localUploadButton').focus()}
+async function submitLocalAgent(){let file=uploadFile||document.getElementById('localModelFile').files[0],title=document.getElementById('localModelTitle').value.trim(),e=document.getElementById('localUploadResult'),b=document.getElementById('localUploadButton'),actions=document.getElementById('localUploadActions');actions.replaceChildren();if(!file){e.textContent='등록할 파일을 선택하세요.';return}if(file.size>100*1024*1024){e.textContent='파일은 100 MiB 이하여야 합니다.';return}b.disabled=true;e.textContent='파일 업로드·실행 검사 중…';try{let q=new URLSearchParams({filename:file.name,title,url:document.getElementById('localModelUrl').value.trim()}),r=await fetch('/api/upload-agent?'+q,{method:'POST',headers:{'Content-Type':'application/octet-stream','X-League-Upload':'1'},body:file}),d=await r.json();if(!r.ok)throw Error(d.error||'등록 실패');e.textContent=`${d.title}: ${d.duplicate_type} · ${d.duplicate_detail}${d.registered_by?' · 등록자 '+d.registered_by:''}`;uploadFile=null;document.getElementById('localModelFile').value='';document.getElementById('localDropName').textContent='등록 완료 · 다른 파일을 놓으면 이어서 등록합니다';if(d.qa_status==='pass'){for(let [label,fn] of [['전적 보기',()=>{document.getElementById('localUploadDialog').close();showAgentMatches(d.agent_id)}],['집중 측정',()=>{document.getElementById('localUploadDialog').close();focusAgent(d.agent_id)}]]){let x=document.createElement('button');x.textContent=label;x.onclick=fn;actions.append(x)}}await load()}catch(err){e.textContent=err.message}finally{b.disabled=false}}
 async function collectNow(){let e=document.getElementById('action');e.textContent='수집 시작 요청 중…';let r=await fetch('/api/collect',{method:'POST'}),d=await r.json();e.textContent=d.message||JSON.stringify(d);loadProgress()}
 async function toggleBattle(){let e=document.getElementById('action');e.textContent='대결 상태 변경 중…';let r=await fetch('/api/battle/toggle',{method:'POST'}),d=await r.json();e.textContent=d.message||JSON.stringify(d);loadProgress()}
 async function focusAgent(id){let e=document.getElementById('action'),games=Number(document.getElementById('focusGames').value)||500;e.textContent='집중 측정 상태 변경 중…';let r=await fetch('/api/focus',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({agent_id:id,games})}),d=await r.json();e.textContent=d.message||d.error||JSON.stringify(d);loadProgress()}
-async function showAgentMatches(id){let e=document.getElementById('action');e.textContent='전적 불러오는 중…';let r=await fetch(`/api/agent-matches?agent_id=${id}&limit=500`),d=await r.json();if(!r.ok){e.textContent=d.error||'전적 조회 실패';return}let a=d.agent,rate=a.games?((a.wins+.5*a.ties)/a.games*100).toFixed(1):'—';document.getElementById('agentmatchsummary').innerHTML=`<b>${esc(a.display_name)}</b> · BT ${Number(a.rating).toFixed(0)} · ${a.wins}-${a.losses}-${a.ties} (${rate}%) · 저장된 경기 ${d.total}개${d.total>d.matches.length?` · 최근 ${d.matches.length}개 표시`:''}`;document.getElementById('agentmatchrows').innerHTML=d.matches.map(x=>{let cash=x.own_reward==null?'—':`${Number(x.own_reward).toFixed(0)} / ${Number(x.opponent_reward).toFixed(0)}`;let margin=x.margin==null?'—':Number(x.margin).toFixed(0);return `<tr><td>${esc(fmtTime(x.completed_at||x.created_at))}</td><td>${esc(x.opponent_name)} <code>${esc(x.opponent_sha.slice(0,8))}</code></td><td>${x.seed} · ${x.seat}</td><td>${esc(x.result_label)}</td><td>${cash}</td><td>${margin}</td><td>${esc(x.status_label)}${x.error?` · ${esc(x.error)}`:''}</td></tr>`}).join('');tab('agentmatches',document.getElementById('agentMatchTab'));e.textContent=`${a.display_name} 전적을 불러왔습니다.`}
+async function showAgentMatches(id,opponentId,view){let e=document.getElementById('action');e.textContent='전적 불러오는 중…';try{let reqs=[fetch(`/api/agent-matches?agent_id=${id}&limit=500`+(opponentId?`&opponent_id=${opponentId}`:''))];if(id!==currentAgent||!opponentId)reqs.push(fetch(`/api/agent-opponents?agent_id=${id}`));let [r,o]=await Promise.all(reqs),d=await r.json();if(!r.ok)throw Error(d.error||'전적 조회 실패');if(o){let od=await o.json();if(!o.ok)throw Error(od.error||'상대별 전적 조회 실패');oppRows=od.opponents}currentAgent=id;let a=d.agent,rate=a.games?((a.wins+.5*a.ties)/a.games*100).toFixed(1):'—',opp=opponentId?oppRows.find(x=>x.opponent_id===opponentId):null;document.getElementById('agentmatchsummary').innerHTML=`<b>${esc(a.display_name)}</b> · BT ${Number(a.rating).toFixed(0)} · ${a.wins}-${a.losses}-${a.ties} (${rate}%) · 상대 ${oppRows.length}개 · ${opponentId?'이 상대와의':'저장된'} 경기 ${d.total}개${d.total>d.matches.length?` · 최근 ${d.matches.length}개 표시`:''} <button onclick="downloadAgent(${id})">코드 받기</button>`;renderOpp();document.getElementById('agentmatchrows').innerHTML=d.matches.map(x=>{let cash=x.own_reward==null?'—':`${Number(x.own_reward).toFixed(0)} / ${Number(x.opponent_reward).toFixed(0)}`;let margin=x.margin==null?'—':Number(x.margin).toFixed(0);return `<tr><td>${esc(fmtTime(x.completed_at||x.created_at))}</td><td>${esc(x.opponent_name)} <code>${esc(x.opponent_sha.slice(0,8))}</code></td><td>${x.seed} · ${x.seat}</td><td>${esc(x.result_label)}</td><td>${cash}</td><td>${margin}</td><td>${esc(x.status_label)}${x.error?` · ${esc(x.error)}`:''}</td></tr>`}).join('');document.getElementById('agentViewNote').innerHTML=opponentId?`${esc(opp?opp.name:'선택한 상대')} 상대 경기만 표시 <button onclick="showAgentMatches(${id},0,'list')">전체 경기</button>`:'';agentView(view||(opponentId?'list':'opp'));tab('agentmatches',document.getElementById('agentMatchTab'));e.textContent=`${a.display_name} 전적을 불러왔습니다.`}catch(err){e.textContent=err.message}}
+function renderOpp(){let k=oppSortKey,v=x=>k==='name'?String(x.name).toLowerCase():k==='rate'?x.score_rate:k==='margin'?(x.avg_margin??-1e12):k==='games'?x.games:k==='last'?String(x.last_played||''):(x.rating??-1e12),rows=[...oppRows].sort((a,b)=>{let p=v(a),q=v(b);return (p<q?-1:p>q?1:0)*oppSortDir});document.getElementById('agentopprows').innerHTML=rows.length?rows.map(x=>{let ci=x.score_low==null?'':` <span class=muted>(${(x.score_low*100).toFixed(0)}–${(x.score_high*100).toFixed(0)}%)</span>`,more=x.notebooks.length>1?`<details><summary class=muted>동일 artifact 노트북 ${x.notebooks.length}개</summary>${x.notebooks.map(n=>`<div><a target=_blank href="${esc(n.url)}">${esc(n.title)}</a> · ${esc(n.author)}</div>`).join('')}</details>`:'';return `<tr><td><a target=_blank href="${esc(x.url)}">${esc(x.name)}</a> <code>${esc(String(x.sha).slice(0,8))}</code>${more}</td><td>${esc(x.author)}</td><td>${x.rating==null?'—':Number(x.rating).toFixed(0)} <span class="${esc(x.status)}">${esc(x.status)}</span></td><td class=num>${x.games}</td><td>${x.wins}-${x.losses}-${x.ties}</td><td>${(x.score_rate*100).toFixed(1)}%${ci}</td><td class=num>${x.avg_margin==null?'—':Number(x.avg_margin).toFixed(0)}</td><td>${x.avg_own==null?'—':Number(x.avg_own).toFixed(0)} / ${x.avg_opponent==null?'—':Number(x.avg_opponent).toFixed(0)}</td><td>${esc(fmtTime(x.last_played))}</td><td><button onclick="showAgentMatches(${currentAgent},${x.opponent_id})">경기 보기</button></td></tr>`}).join(''):'<tr><td colspan=10 class=muted>유효 경기가 아직 없습니다.</td></tr>';document.querySelectorAll('#agentopptable th[data-sort]').forEach(th=>th.textContent=th.dataset.label+(th.dataset.sort===k?(oppSortDir<0?' ▼':' ▲'):''))}
+function sortOpp(k){if(oppSortKey===k)oppSortDir=-oppSortDir;else{oppSortKey=k;oppSortDir=k==='name'?1:-1}renderOpp()}
+function agentView(v){document.getElementById('agentopptable').style.display=v==='opp'?'':'none';document.getElementById('agentmatchtable').style.display=v==='list'?'':'none';document.getElementById('oppViewButton').classList.toggle('on',v==='opp');document.getElementById('listViewButton').classList.toggle('on',v==='list')}
+async function downloadAgent(id){let e=document.getElementById('action');e.textContent='코드 준비 중…';try{let r=await fetch(`/api/agent-download?agent_id=${id}`);if(!r.ok){let d=await r.json().catch(()=>({}));throw Error(d.error||'다운로드 실패')}let blob=await r.blob(),cd=r.headers.get('Content-Disposition')||'',m=/filename\*=UTF-8''([^;]+)/i.exec(cd)||/filename="([^"]+)"/i.exec(cd),name=m?decodeURIComponent(m[1]):`agent-${id}`,link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(link.href),10000);e.textContent=`${name} 다운로드`}catch(err){e.textContent=err.message}}
 async function searchNotebooks(){let q=document.getElementById('searchQuery').value.trim(),e=document.getElementById('searchResultText'),box=document.getElementById('searchResults');if(!q){e.textContent='검색어 또는 URL을 입력하세요.';return}e.textContent='검색 중…';let r=await fetch('/api/search?q='+encodeURIComponent(q)),d=await r.json();if(!r.ok){e.textContent=d.error||'검색 실패';return}box.style.display='block';box.innerHTML=d.results.length?d.results.map(x=>{let dup=x.duplicate_type?`<span class=muted>${esc(x.duplicate_type)} · ${esc(x.duplicate_detail||'')}</span>`:'<span class=muted>아직 수집되지 않음</span>';return `<div style=margin:8px 0><a target=_blank href="${esc(x.url)}"><b>${esc(x.title)}</b></a> · ${esc(x.author)} · ${dup} <button onclick="addNotebook('${esc(x.ref)}',false)">추가</button> <button onclick="addNotebook('${esc(x.ref)}',true)">추가+집중</button></div>`}).join(''):'검색 결과 없음';e.textContent=`검색 결과 ${d.results.length}개`}
 async function addNotebook(ref,focus){let e=document.getElementById('searchResultText'),games=Number(document.getElementById('focusGames').value)||500;e.textContent='노트북 내려받기·추출 중…';let r=await fetch('/api/add-notebook',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ref,focus,games})}),d=await r.json();e.textContent=r.ok?`${d.title}: ${d.duplicate_type} · ${d.duplicate_detail}`:(d.error||'추가 실패');if(r.ok){await load();if(d.agent_id)await showAgentMatches(d.agent_id)}}
-async function toggleAutoCollect(){let e=document.getElementById('settingsResult'),b=document.getElementById('autoCollectButton');e.textContent='자동 수집 상태 변경 중…';b.disabled=true;let r=await fetch('/api/auto-collect/toggle',{method:'POST'}),d=await r.json();e.textContent=r.ok?(d.settings.auto_collect_enabled?'자동 수집을 켰습니다.':'자동 수집을 껐습니다.'):(d.error||'상태 변경 실패');b.disabled=false;loadProgress()}
-load();setInterval(load,30000);setInterval(loadProgress,5000);
-async function saveSettings(){let e=document.getElementById('settingsResult');e.textContent='저장 중…';let body={interval_hours:Number(document.getElementById('intervalHours').value),workers:Number(document.getElementById('workers').value)};let r=await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});let d=await r.json();e.textContent=r.ok?`저장됨: ${d.settings.interval_hours}시간마다, 워커 ${d.settings.workers}`:(d.error||'저장 실패');if(r.ok)load()}
+async function toggleAutoCollect(){let e=document.getElementById('settingsResult'),b=document.getElementById('autoCollectButton');e.textContent='자동 수집 상태 변경 중…';b.disabled=true;let r=await fetch('/api/auto-collect/toggle',{method:'POST'}),d=await r.json();e.textContent=r.ok?(d.settings.auto_collect_enabled?'자동 수집을 켰습니다.':'자동 수집을 껐습니다.'):(d.error||'상태 변경 실패');b.disabled=adminOnly;loadProgress()}
+loadMe().finally(load);setInterval(load,30000);setInterval(loadProgress,5000);
+(()=>{let zone=document.getElementById('localDrop'),input=document.getElementById('localModelFile'),overlay=document.getElementById('dropOverlay'),dialog=document.getElementById('localUploadDialog'),depth=0;const files=e=>[...(e.dataTransfer?.types||[])].includes('Files');zone.addEventListener('click',()=>input.click());zone.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();input.click()}});input.addEventListener('change',()=>setUploadFile(input.files[0]));zone.addEventListener('dragover',e=>{if(files(e)){e.preventDefault();zone.classList.add('over')}});zone.addEventListener('dragleave',()=>zone.classList.remove('over'));addEventListener('dragenter',e=>{if(!files(e))return;e.preventDefault();depth++;if(!dialog.open)overlay.classList.add('on')});addEventListener('dragleave',e=>{if(!files(e))return;depth=Math.max(0,depth-1);if(!depth)overlay.classList.remove('on')});addEventListener('dragover',e=>{if(files(e))e.preventDefault()});addEventListener('drop',e=>{if(!files(e))return;e.preventDefault();depth=0;overlay.classList.remove('on');zone.classList.remove('over');let f=e.dataTransfer.files[0];if(f)openLocalUpload(f)})})();
+async function saveSettings(){let e=document.getElementById('settingsResult');e.textContent='저장 중…';let body={interval_hours:Number(document.getElementById('intervalHours').value),workers:Number(document.getElementById('workers').value),battle_public_only:document.getElementById('battlePublicOnly').checked,focus_public_only:document.getElementById('focusPublicOnly').checked};let r=await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});let d=await r.json();e.textContent=r.ok?`저장됨: ${d.settings.interval_hours}시간마다, 워커 ${d.settings.workers}`:(d.error||'저장 실패');if(r.ok){settingsDirty=false;load()}}
 </script></body></html>'''
 
 
@@ -2976,10 +3386,12 @@ def serve(state=DEFAULT_STATE, host="127.0.0.1", port=8791, exit_with_browser=Fa
     battle = BattleController(state)
 
     class Handler(BaseHTTPRequestHandler):
-        def send(self, code, data, content_type="application/json; charset=utf-8"):
+        def send(self, code, data, content_type="application/json; charset=utf-8", headers=None):
             body = data if isinstance(data, bytes) else data.encode("utf-8")
             self.send_response(code); self.send_header("Content-Type", content_type)
             self.send_header("Access-Control-Allow-Origin", "*")
+            for key, value in (headers or {}).items():
+                self.send_header(key, value)
             self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body)
 
         def do_GET(self):
@@ -2999,12 +3411,38 @@ def serve(state=DEFAULT_STATE, host="127.0.0.1", port=8791, exit_with_browser=Fa
                     agent_id = int(query.get("agent_id", [""])[0])
                     limit = int(query.get("limit", ["500"])[0])
                     offset = int(query.get("offset", ["0"])[0])
+                    opponent = query.get("opponent_id", [""])[0]
                     local = Store(state)
                     try:
-                        payload = agent_match_history(local, agent_id, limit, offset)
+                        payload = agent_match_history(local, agent_id, limit, offset,
+                                                      int(opponent) if opponent else None)
                     finally:
                         local.close()
                     self.send(200, json.dumps(payload, ensure_ascii=False))
+                except Exception as exc:
+                    self.send(400, json.dumps({"error": str(exc)}, ensure_ascii=False))
+            elif parsed.path == "/api/agent-opponents":
+                try:
+                    agent_id = int(urllib.parse.parse_qs(parsed.query).get("agent_id", [""])[0])
+                    local = Store(state)
+                    try:
+                        payload = agent_opponent_records(local, agent_id)
+                    finally:
+                        local.close()
+                    self.send(200, json.dumps(payload, ensure_ascii=False))
+                except Exception as exc:
+                    self.send(400, json.dumps({"error": str(exc)}, ensure_ascii=False))
+            elif parsed.path == "/api/agent-download":
+                try:
+                    agent_id = int(urllib.parse.parse_qs(parsed.query).get("agent_id", [""])[0])
+                    local = Store(state)
+                    try:
+                        filename, data, content_type = agent_download(local, agent_id)
+                    finally:
+                        local.close()
+                    fallback = re.sub(r"[^A-Za-z0-9._-]+", "-", filename).strip("-.") or "agent"
+                    self.send(200, data, content_type, {"Content-Disposition":
+                        f"attachment; filename=\"{fallback}\"; filename*=UTF-8''{urllib.parse.quote(filename)}"})
                 except Exception as exc:
                     self.send(400, json.dumps({"error": str(exc)}, ensure_ascii=False))
             elif parsed.path == "/api/search":
@@ -3027,11 +3465,37 @@ def serve(state=DEFAULT_STATE, host="127.0.0.1", port=8791, exit_with_browser=Fa
                     local.close()
                 payload["battle"] = battle.snapshot()
                 payload["collecting"] = collect_lock.locked()
+                payload["presence"] = sessions.presence()
                 self.send(200, json.dumps(payload, ensure_ascii=False))
             else:
                 self.send(404, json.dumps({"error": "not found"}))
 
         def do_POST(self):
+            if urllib.parse.urlparse(self.path).path == "/api/upload-agent":
+                # A custom header forces cross-origin preflight; this server
+                # does not allow it. Also explicitly validate browser Origin.
+                origin = self.headers.get("Origin")
+                if (self.headers.get("X-League-Upload") != "1"
+                        or (origin and origin != "http://" + self.headers.get("Host", ""))):
+                    return self.send(403, json.dumps({"error": "로컬 리그 화면에서 파일을 선택해 주세요."}, ensure_ascii=False))
+                try:
+                    length = int(self.headers.get("Content-Length", "0"))
+                    if not 0 < length <= PUBLIC_LEAGUE_MAX_DATASET_BYTES:
+                        return self.send(413, json.dumps({"error": "파일 크기는 1바이트~100 MiB입니다."}, ensure_ascii=False))
+                    query = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+                    payload = self.rfile.read(length)
+                    if len(payload) != length:
+                        raise ValueError("파일 업로드가 중단되었습니다.")
+                    local = Store(state)
+                    try:
+                        result = register_local_upload(local, query.get("filename", [""])[0], payload,
+                                                       query.get("title", [""])[0], query.get("url", [""])[0],
+                                                       uploader=league_user(self.headers))
+                    finally:
+                        local.close()
+                    return self.send(200, json.dumps(result, ensure_ascii=False))
+                except Exception as exc:
+                    return self.send(400, json.dumps({"error": str(exc)}, ensure_ascii=False))
             if self.path in ("/api/session", "/api/session/close"):
                 try:
                     length = int(self.headers.get("Content-Length", "0"))
@@ -3039,7 +3503,7 @@ def serve(state=DEFAULT_STATE, host="127.0.0.1", port=8791, exit_with_browser=Fa
                     if self.path.endswith("/close"):
                         sessions.close(payload.get("id", ""))
                     else:
-                        sessions.touch(payload.get("id", ""))
+                        sessions.touch(payload.get("id", ""), user=league_user(self.headers))
                     return self.send(204, b"")
                 except Exception as exc:
                     return self.send(400, json.dumps({"error": str(exc)}, ensure_ascii=False))
@@ -3049,14 +3513,15 @@ def serve(state=DEFAULT_STATE, host="127.0.0.1", port=8791, exit_with_browser=Fa
                     payload = json.loads(self.rfile.read(length) or b"{}")
                     local = Store(state)
                     try:
-                        settings = update_runtime_settings(local, payload.get("interval_hours"), payload.get("workers"))
+                        settings = update_runtime_settings(local, payload.get("interval_hours"), payload.get("workers"),
+                            payload.get("battle_public_only"), payload.get("focus_public_only"))
                     finally:
                         local.close()
                     return self.send(200, json.dumps({"settings": settings}, ensure_ascii=False))
                 except Exception as exc:
                     return self.send(400, json.dumps({"error": str(exc)}, ensure_ascii=False))
             if self.path == "/api/battle/toggle":
-                status = battle.toggle()
+                status = battle.toggle(actor=league_user(self.headers))
                 message = "연속 대결을 시작했습니다." if status["action"] == "started" else "대결 중지를 요청했습니다."
                 return self.send(202, json.dumps({"message": message, "battle": status}, ensure_ascii=False))
             if self.path == "/api/focus":
@@ -3071,9 +3536,9 @@ def serve(state=DEFAULT_STATE, host="127.0.0.1", port=8791, exit_with_browser=Fa
                             "SELECT id,sha256,qa_status,status FROM agents WHERE id=?", (agent_id,)).fetchone()
                     finally:
                         local.close()
-                    if not agent or agent["qa_status"] != "pass" or agent["status"] == "quarantine":
+                    if not agent or agent["qa_status"] != "pass" or agent["status"] in ("quarantine", "retired"):
                         raise ValueError("집중 측정할 수 있는 QA-pass agent가 아닙니다.")
-                    status = battle.focus(agent_id, focus_games)
+                    status = battle.focus(agent_id, focus_games, actor=league_user(self.headers))
                     if status["action"] == "started":
                         message = f"agent {agent_id} 집중 측정 {focus_games}경기를 시작했습니다."
                     else:
@@ -3093,7 +3558,8 @@ def serve(state=DEFAULT_STATE, host="127.0.0.1", port=8791, exit_with_browser=Fa
                     focus = bool(payload.get("focus"))
                     if focus and result.get("agent_id"):
                         focus_games = int(payload.get("games", 500))
-                        result["battle"] = battle.focus(result["agent_id"], focus_games)
+                        result["battle"] = battle.focus(result["agent_id"], focus_games,
+                                                        actor=league_user(self.headers))
                     return self.send(200, json.dumps(result, ensure_ascii=False))
                 except Exception as exc:
                     return self.send(400, json.dumps({"error": str(exc)}, ensure_ascii=False))
