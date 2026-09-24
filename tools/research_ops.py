@@ -47,7 +47,41 @@ def progress(campaign):
                 limits='Progress only; done is not a hash/health/performance verdict.')
 
 
+def excluding_parent_source(plan, parent, conditions):
+    """Exclude the frozen parent's source even when its opponent label differs."""
+    parent_sha = plan['models'][parent]['sha256']
+    excluded = sorted(name for name, ref in plan['opponents'].items()
+                      if ref['sha256'] == parent_sha)
+    other = [row for row in conditions if row['opponent'] not in excluded]
+    if not other:
+        return None
+    return dict(n=len(other), point_delta=statistics.mean(row['point_delta'] for row in other),
+                margin_delta=statistics.mean(row['margin_delta'] for row in other),
+                excluded_opponents=excluded, identity='frozen_source_sha256',
+                limits='Excludes this exact parent only; not a public-only or family-independent estimate.')
+
+
 def summarize(campaign):
+    """Read either frozen health contract without changing historical semantics."""
+    import validation_v2 as V
+    plan = read(campaign/'manifest.json').get('plan', {})
+    if plan.get('arena_meta', {}).get('validation_health_policy') != 'official_overage_v3':
+        return _summarize_checked(campaign)
+    import validation_v3 as V3
+    previous = (V.__file__, V.SUPPORT[:], V.L.health_failures)
+    try:
+        V3.install()
+        result = _summarize_checked(campaign)
+        result['health_policy'] = 'official_overage_v3'
+        manifest = V.check(campaign)
+        rows = V.load_rows(campaign, manifest)
+        result['timing_warning_games'] = sum(bool(r.get('timing_warnings')) for r in rows)
+        return result
+    finally:
+        V.__file__, V.SUPPORT, V.L.health_failures = previous
+
+
+def _summarize_checked(campaign):
     import validation_v2 as V
     m = V.check(campaign)
     rows = V.load_rows(campaign, m)
@@ -68,11 +102,9 @@ def summarize(campaign):
         comparisons[name]['by_opponent'] = {op:{k:d[k] for k in ('mean_point_delta','mean_margin_delta','win_to_loss','tie_to_loss')}
                                              for op,d in c['subgroups']['opponent'].items()}
         parent = next(x['parent'] for x in m['plan']['comparisons'] if x['candidate']+'_vs_'+x['parent']==name)
-        other = [d for d in c['conditions'] if d['opponent']!=parent]
-        if other:
-            comparisons[name]['excluding_named_parent_descriptive'] = dict(
-                n=len(other), point_delta=statistics.mean(d['point_delta'] for d in other),
-                margin_delta=statistics.mean(d['margin_delta'] for d in other))
+        other = excluding_parent_source(m['plan'], parent, c['conditions'])
+        if other is not None:
+            comparisons[name]['excluding_named_parent_descriptive'] = other
     counts = {name:{k:r[k] for k in ('games','wins','losses','ties','worst_margin','bottom_10pct_mean')}
               for name,r in fresh['by_candidate'].items()}
     return dict(campaign=str(campaign), stage=m['stage'], games=len(rows), hashes_pass=True,

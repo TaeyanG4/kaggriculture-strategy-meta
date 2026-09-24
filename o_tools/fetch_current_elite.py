@@ -11,6 +11,9 @@ REPLAY_URL = "https://www.kaggleusercontent.com/episodes/{id}.json"
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--subs', required=True); ap.add_argument('--max', type=int, default=60); ap.add_argument('--min-rating', type=float, default=0.0)
     ap.add_argument('--out', default='o_replays/elite_current')
+    ap.add_argument('--outcome', choices=('all', 'win', 'loss', 'tie'), default='all',
+                    help='Filter from the requested submission perspective before downloading')
+    ap.add_argument('--public-only', action='store_true', help='Exclude validation/self-play episode types')
     a = ap.parse_args()
     import requests
     s = requests.Session(); s.headers['User-Agent'] = 'kaggriculture-strategy-meta fetch_current_elite'
@@ -33,9 +36,15 @@ def main():
         have = {x['episode'] for x in idx}
         got = 0; ratings = []
         for e in eps:
+            if a.public_only and e.get('type') != 'EPISODE_TYPE_PUBLIC':
+                continue
             ag = e.get('agents', [])
             me = next((x for x in ag if x.get('submissionId') == sid), None); op = next((x for x in ag if x.get('submissionId') != sid), None)
             if not me or not op or me.get('reward') is None or op.get('reward') is None:
+                continue
+            margin = me['reward'] - op['reward']
+            outcome = 'win' if margin > 0 else 'loss' if margin < 0 else 'tie'
+            if a.outcome != 'all' and outcome != a.outcome:
                 continue
             opr = op.get('updatedScore') or 0
             if opr < a.min_rating:

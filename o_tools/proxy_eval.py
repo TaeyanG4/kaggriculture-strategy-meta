@@ -3,7 +3,9 @@ SEQUENCE PINNED per seed (the engine draws shops from an RNG shared with weed sp
 different worlds on the same seed; pinning makes A/B comparisons exact). Sequences are cached in
 o_results/proxy/shop_seq.json (recorded once from a c150-vs-c150 game per seed).
 Usage: python o_tools/proxy_eval.py --a agent/c150.py --b agent/opp_planner_proxy.py --seeds 7000-7007 [--flags nostock] [--workers 8]
-Prints B's cash mean/median/min/max, A's mean, B wins, and per-bucket means."""
+Prints B's cash mean/median/min/max, A's mean, B wins, and per-bucket means.
+Oracle diagnostics (o401): PROXY_ENGINE_CFG='{"farmHandCostMult": 0}' merges into the engine configuration; PROXY_ENGINE_PATCH=path applies
+that file's apply(engine) in every worker (both enter the cache key only when set)."""
 import argparse, json, os, sys, importlib.util, statistics, collections, hashlib
 from concurrent.futures import ProcessPoolExecutor
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,6 +37,9 @@ def game_key(a_path, b_path, seed, seat_b, shops, flags):
     import kaggle_environments.envs.kaggriculture.kaggriculture as eng_mod
     parts = [file_sha(os.path.abspath(a_path)), file_sha(os.path.abspath(b_path)), os.environ.get('PROXY_KNOBS', ''), flags or os.environ.get('PROXY_FLAGS', ''),
              file_sha(eng_mod.__file__), str(seed), str(seat_b), json.dumps(shops)]
+    for var in ('PROXY_ENGINE_CFG', 'PROXY_ENGINE_PATCH'):   # o401 oracles: extra engine configuration / engine patch file (key unchanged when unset)
+        if os.environ.get(var):
+            parts.append(var + '=' + (file_sha(os.environ[var]) if var == 'PROXY_ENGINE_PATCH' else os.environ[var]))
     return hashlib.sha256('|'.join(parts).encode()).hexdigest()
 
 
@@ -53,6 +58,13 @@ def run_game(args):
         except Exception:
             pass
     A = load_agent(a_path, 'agA'); B = load_agent(b_path, 'agB')
+    if os.environ.get('PROXY_ENGINE_PATCH'):   # o401: apply(engine) from the given file, e.g. state/o401/engine_patch.py (TELEPORT command)
+        spec = importlib.util.spec_from_file_location('proxy_engine_patch', os.path.abspath(os.environ['PROXY_ENGINE_PATCH'])); pm = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(pm)
+        try:
+            pm.apply(engine, seat_b=seat_b)   # patches that need to know B's seat (o401 perfect-sales oracle)
+        except TypeError:
+            pm.apply(engine)
     original = engine._end_of_day
     if shops:
         def pinned(state, env, day):
@@ -62,7 +74,10 @@ def run_game(args):
                 state[0].observation.town['unlocked_shops'][:] = want
         engine._end_of_day = pinned
     try:
-        env = make('kaggriculture', configuration={'seed': seed}, debug=False)
+        cfg = {'seed': seed}
+        if os.environ.get('PROXY_ENGINE_CFG'):   # o401: e.g. {"farmHandCostMult": 0} (free labour oracle)
+            cfg.update(json.loads(os.environ['PROXY_ENGINE_CFG']))
+        env = make('kaggriculture', configuration=cfg, debug=False)
         agents = [A, B] if seat_b == 1 else [B, A]
         if os.environ.get('PROXY_SLOW'):
             env.run(agents)
