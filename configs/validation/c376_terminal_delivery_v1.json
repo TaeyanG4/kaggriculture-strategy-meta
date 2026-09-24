@@ -1,0 +1,138 @@
+{
+  "schema": 1,
+  "workers": 6,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "o302": {
+      "path": "agent/o302_farmer_feed_topup.py",
+      "sha256": "2cdb9e5d14f72043631eb4b9c287fe2e5fb58a6375aeab90e3a8a36a7df87b34"
+    },
+    "c376": {
+      "path": "agent/c376_terminal_delivery_v2.py",
+      "sha256": "6ccc68cafda7842f7f456098510f0e32e96b4cdfbad51cfd420b75683a277d8c"
+    }
+  },
+  "opponents": {
+    "clone_horizon": {
+      "path": "state/public_league/sources/0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778.py",
+      "sha256": "0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778",
+      "family": "clone_horizon"
+    },
+    "pipe19": {
+      "path": "state/public_league/sources/111863bd708cc8134d0a7cc26ae9ac8b7cb5266e061cd71d8429caefb48b1c51.py",
+      "sha256": "111863bd708cc8134d0a7cc26ae9ac8b7cb5266e061cd71d8429caefb48b1c51",
+      "family": "pipe19"
+    },
+    "v56": {
+      "path": "state/public_league/sources/a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c.py",
+      "sha256": "a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c",
+      "family": "v56"
+    },
+    "frontier231": {
+      "path": "state/public_league/sources/565b416c4e437b7ff5c19a321752f9b0f566e7fb300b2538c97ae5f6bf4e2267.py",
+      "sha256": "565b416c4e437b7ff5c19a321752f9b0f566e7fb300b2538c97ae5f6bf4e2267",
+      "family": "frontier231"
+    },
+    "order_book": {
+      "path": "state/public_league/sources/a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab.py",
+      "sha256": "a16e0e9b40c489972630a0b9d04f30e9c1cab03159fa78676db74277d84d82ab",
+      "family": "order_book"
+    },
+    "idle_seller": {
+      "path": "state/public_league/sources/1cb133e934e3da46175be2662dec1d0980b1c13ba33b43a9ef035a0b3934e62f.py",
+      "sha256": "1cb133e934e3da46175be2662dec1d0980b1c13ba33b43a9ef035a0b3934e62f",
+      "family": "idle_seller"
+    },
+    "c373": {
+      "path": "state/public_league/sources/6731b608fa9a94e88f47211b3d3e2feb14681e45e6c918756e5a7e3205923297.py",
+      "sha256": "6731b608fa9a94e88f47211b3d3e2feb14681e45e6c918756e5a7e3205923297",
+      "family": "c373"
+    },
+    "c371": {
+      "path": "state/public_league/sources/e23cc84b4b801a40f92e209f43e5c9ad18e825e54dd6ed5527ea8f57b1cef12e.py",
+      "sha256": "e23cc84b4b801a40f92e209f43e5c9ad18e825e54dd6ed5527ea8f57b1cef12e",
+      "family": "c371"
+    },
+    "o302": {
+      "path": "state/public_league/sources/2cdb9e5d14f72043631eb4b9c287fe2e5fb58a6375aeab90e3a8a36a7df87b34.py",
+      "sha256": "2cdb9e5d14f72043631eb4b9c287fe2e5fb58a6375aeab90e3a8a36a7df87b34",
+      "family": "o302"
+    },
+    "yummers": {
+      "path": "state/public_league/sources/338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080.py",
+      "sha256": "338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080",
+      "family": "yummers"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c376",
+      "parent": "o302",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1471811871,
+        608402812,
+        1162455561,
+        157148085,
+        1926322541,
+        1096537261,
+        1383854022,
+        1878874663
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        2066239184,
+        243514635,
+        382935434,
+        1483559750,
+        313291908,
+        1157858562,
+        2143438417,
+        2061941230,
+        1314132551,
+        285348231,
+        92649945,
+        973320203,
+        552353288,
+        1027302297,
+        1651513529,
+        1089413315
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        1830649579,
+        967961089
+      ],
+      "alpha": 0.025
+    }
+  },
+  "arena_meta": {
+    "prior": "c375 disabled the whole clamp and lost margin in every development world. c376 v1 could not restore removed zero-quantity orders:24 native all identical. v2 repairs that implementation no-op by appending only an originally planned final-day SELL from newly delivered units, keeping all surviving market slots and early clamp.",
+    "design": "o302 parent; final-day physical delivery delta only, no wheat/fertilizer, no BUY orders, existing product request only, official10-order cap. v2 OFF8/8 native action and full state identical; ON4of8 differ, mean own+6.75 margin+12.5, no flips, all24valid. Exposed cases are development evidence only.",
+    "gate": "LOCAL candidate only: screen320 valid, source and contract hash PASS, no health failures, mean own>0 and mean margin>0, point delta>=0, each opponent point delta>=-0.125, no parent win-to-loss flip. If fails or no-op: hold with no confirm, no seed rescue. If passes: register local only; modest gain not a Kaggle submission. Confirm is schema provision only, not currently authorized by this design; no final.",
+    "execution": "6workers, League battles paused.8fresh worlds x10 equally weighted executing sources x2seats x2models. No performance readout before complete. Excludes all stored League and prior validation/RR seeds. Blind7240-7255 and32-world final unused.",
+    "limits": "Tiny development effect. Many sources share ancestry; ten source strata are not ten independent policy families. Screen may qualify an exploratory local candidate, not certify improvement or public dominance. Uncertainty reported by seed cluster."
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "schema": 1,
+  "workers": 4,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c379": {
+      "path": "agent/c379_terminal_schedule.py",
+      "sha256": "9cbc9171fc5650f59fcfc44c7453ce15bb64f27d7f2293294ab48317f59e3fce"
+    },
+    "c383": {
+      "path": "agent/c383_terminal_cargo.py",
+      "sha256": "7f798f0d1ac3e5224b023c17ccf7555373d2dc67bede7a545238d5c37f218f79"
+    },
+    "c384": {
+      "path": "agent/c384_predictive_tomato.py",
+      "sha256": "05b8d6eedb266fcc131ec74b8b87659e15ed077707d91489a423ad4d1a567144"
+    }
+  },
+  "opponents": {
+    "c379": {
+      "path": "agent/c379_terminal_schedule.py",
+      "sha256": "9cbc9171fc5650f59fcfc44c7453ce15bb64f27d7f2293294ab48317f59e3fce",
+      "family": "own_c379"
+    },
+    "c374": {
+      "path": "state/public_league/sources/8789bc82bf5b5b7b7ff3908a1f468e65a7be72d77089d5fec2a6aef6e869c912.py",
+      "sha256": "8789bc82bf5b5b7b7ff3908a1f468e65a7be72d77089d5fec2a6aef6e869c912",
+      "family": "c374"
+    },
+    "rescue254": {
+      "path": "state/public_league/artifacts/5351b5f421d8397f668f0a19a7ddf0354827785f690fca2e72a3bcee0017d4ff/main.py",
+      "sha256": "1cac27653a81208bddc652d7f8437a4eed4ff3bd261c32934a08983484edf214",
+      "family": "rescue254"
+    },
+    "moon251": {
+      "path": "state/public_league/sources/bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323.py",
+      "sha256": "bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323",
+      "family": "moon251"
+    },
+    "soil261": {
+      "path": "state/public_league/artifacts/d40b00a13000cdc62a3420b43ee38f4ffd3591447f666c30d4b59f92e82d7df3/main.py",
+      "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "family": "soil261"
+    },
+    "v57": {
+      "path": "state/public_league/sources/2ee689fdc58f38b7bf6b80b8d3f48129d19b47201dbee51fdcbd977498a5106f.py",
+      "sha256": "2ee689fdc58f38b7bf6b80b8d3f48129d19b47201dbee51fdcbd977498a5106f",
+      "family": "v57"
+    },
+    "wheat258": {
+      "path": "state/public_league/artifacts/97ad9f3bf0190a6368c764b1dc037c83bb1e495818c52566f761d26bde6e70b6/main.py",
+      "sha256": "83fb106f37fcc10f3c3d9db8a78ded1529da30e9e232976ec0cf46fd6662fed4",
+      "family": "wheat258"
+    },
+    "orderbook259": {
+      "path": "state/public_league/artifacts/8e82ba45517fb1704276ff3a98062a7e1c5d11aeb4db68c7d34d004be599297c/main.py",
+      "sha256": "8045c8872406044cb0b6bf9f80e440f07c250e325618894f4a91141af6d3b6ad",
+      "family": "orderbook259"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c383",
+      "parent": "c379",
+      "primary": true
+    },
+    {
+      "candidate": "c384",
+      "parent": "c379",
+      "primary": true
+    },
+    {
+      "candidate": "c384",
+      "parent": "c383",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1404771707,
+        267068012,
+        274711237,
+        247657180,
+        206248478,
+        1172570377,
+        737875568,
+        1245731310
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        2015860405,
+        1274192570,
+        1846133394,
+        1830247551,
+        712197926,
+        352938748,
+        465333444,
+        2061066911,
+        526758803,
+        428414154,
+        361086762,
+        970287357,
+        2076369941,
+        1507855362,
+        1625618338,
+        1590586130
+      ],
+      "alpha": 0.025
+    },
+    "final": {
+      "seeds": [
+        1248315094,
+        1140445908
+      ],
+      "alpha": 0.015
+    }
+  },
+  "arena_meta": {
+    "prior": "See state/c384/plan.json;48 development native games with OFF/prefix identity, no errors/mutation. Development and replay diagnostics are not independent evaluation.",
+    "sources": "Latest retrieval 2026-09-23:8 exact execution sources;252/260 same code omitted,254/255 same code only254. Shared lineage acknowledged. c379 self opponent included but excluded from primary superiority check.",
+    "screen_gate": "Proceed separately per candidate if384/384 health/hash pass; paired own>=0,margin>0,point>=0; each opponent point delta>=-0.125; no new material execution defects. Screen CI descriptive; no source/threshold tuning after result.",
+    "confirm_gate": "Independent16 worlds only for screen-qualified candidates. Paired margin>0 and97.5% world-bootstrap lower>0,point>=0.03 and97.5% world-bootstrap lower>0; each opponent point>=-0.125; excluding c379 must keep positive margin/point. Defect audit required. Candidate totals compare to frozen c379; c384-vs-c383 diagnoses contribution.",
+    "submission_gate": "Confirm gate plus >=5pp win-point improvement => live submission authorized; otherwise retain usable candidates locally. No32-world final, no blind, no pooling or reseeding. Bugfix with no statistically established broad gain remains local.",
+    "execution": "6 isolated workers due prior contention; restore8-worker League afterwards.",
+    "development": "Two exposed local loss worlds+two controls vsRescue/Moon; own+2036,margin+3298,48valid. Forecast approximates future shops/supply; natural shop divergence must be reported.",
+    "setup_correction": "v1 rejected at prepare before any games because total stage alpha .075 exceeds .05. v1b screen .01/confirm .025/unused final .015; same seeds/sources, runner unchanged.",
+    "runtime_retry": "First confirm stopped at first6jobs: opponent c379 max1.0975863s while c384 .7405984s,DONE/DONE719calls, no exceptions. Preserve c384_confirm, do not use partial performance. New isolated4worker contract reruns whole same768games, seeds/source/gates unchanged.4 workers is runtime contention control, not reseeding."
+  }
+}

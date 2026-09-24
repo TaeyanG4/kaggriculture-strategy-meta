@@ -1,0 +1,151 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c396": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c396_public_shadow.py",
+      "sha256": "a0b64d765c54ceeafc872ef2a249e3e8492eb5f2206800d035dbaaef31d5c480"
+    },
+    "c397": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c397_shadow_coverage.py",
+      "sha256": "28a520730a4f0037c0e9f433e28417db1ba0c95999a55b1751a396b28da08ad2"
+    }
+  },
+  "opponents": {
+    "c396": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\a0b64d765c54ceeafc872ef2a249e3e8492eb5f2206800d035dbaaef31d5c480.py",
+      "sha256": "a0b64d765c54ceeafc872ef2a249e3e8492eb5f2206800d035dbaaef31d5c480",
+      "family": "c396"
+    },
+    "c387": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\2574f60424e319f5cd1df0221c94eb1bf33da57fa32ef0a15a8a7e7f65a2eae7.py",
+      "sha256": "2574f60424e319f5cd1df0221c94eb1bf33da57fa32ef0a15a8a7e7f65a2eae7",
+      "family": "c387"
+    },
+    "v15": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\da083c4fa48672f9d77d1de2c77a4d2d40e0f53a4456d090489cb368f51836b0\\main.py",
+      "sha256": "d6565929be5283a5decf00c986359542ee1c106d7819815f8c69ccab35e363dd",
+      "family": "v15"
+    },
+    "herd255": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d22f94b90cb58f17637eed6062583533ea3f378a947b79d4fdc7059ce93c92b2\\main.py",
+      "sha256": "1cac27653a81208bddc652d7f8437a4eed4ff3bd261c32934a08983484edf214",
+      "family": "herd255"
+    },
+    "ca20": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\b70e22fa8105035a9744d13e1b46ee50a75e7f6c5a7b6196beb71c7f31802da7\\main.py",
+      "sha256": "29454a13477f827c34615300f90a7bdb074ea3c9bcb948f3372bf95fa1fb207d",
+      "family": "ca20"
+    },
+    "clone": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778.py",
+      "sha256": "0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778",
+      "family": "clone"
+    },
+    "wheat": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\97ad9f3bf0190a6368c764b1dc037c83bb1e495818c52566f761d26bde6e70b6\\main.py",
+      "sha256": "83fb106f37fcc10f3c3d9db8a78ded1529da30e9e232976ec0cf46fd6662fed4",
+      "family": "wheat"
+    },
+    "soil": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d40b00a13000cdc62a3420b43ee38f4ffd3591447f666c30d4b59f92e82d7df3\\main.py",
+      "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "family": "soil"
+    },
+    "order": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\8e82ba45517fb1704276ff3a98062a7e1c5d11aeb4db68c7d34d004be599297c\\main.py",
+      "sha256": "8045c8872406044cb0b6bf9f80e440f07c250e325618894f4a91141af6d3b6ad",
+      "family": "order"
+    },
+    "idle": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\1cb133e934e3da46175be2662dec1d0980b1c13ba33b43a9ef035a0b3934e62f.py",
+      "sha256": "1cb133e934e3da46175be2662dec1d0980b1c13ba33b43a9ef035a0b3934e62f",
+      "family": "idle"
+    },
+    "v43": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\3abe0ca715ba18647c138d0c28f59f34371e1ea28d4378e290ab33760d2c12dc.py",
+      "sha256": "3abe0ca715ba18647c138d0c28f59f34371e1ea28d4378e290ab33760d2c12dc",
+      "family": "v43"
+    },
+    "moon251": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323.py",
+      "sha256": "bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323",
+      "family": "moon251"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c397",
+      "parent": "c396",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1476085786,
+        36123679,
+        1690468503,
+        343042577,
+        1970704753,
+        1586102683,
+        1697935616,
+        2042922417
+      ],
+      "alpha": 0.005
+    },
+    "confirm": {
+      "seeds": [
+        227064571,
+        295460008,
+        1860782244,
+        1021486285,
+        2015760250,
+        403162607,
+        2087017386,
+        475606153,
+        1114023476,
+        1487042183,
+        80668115,
+        126605909,
+        424622426,
+        288095108,
+        935377032,
+        1806171425
+      ],
+      "alpha": 0.0025
+    },
+    "final": {
+      "seeds": [
+        509706848,
+        900315707
+      ],
+      "alpha": 0.001
+    }
+  },
+  "arena_meta": {
+    "validation_health_policy": "official_overage_v3",
+    "prior": "c385/c361/c394/c395 negatives preserved. c396/v15-herd-review: added three sources each719 action/private and718 public exact; identical seven-model set creates22 nonadverse single-turn proposals on three exposed paths. Whole-game benefit untested; same-turn sums not causal totals.",
+    "development_gate": "OFF full identity/prefix216 identity;actual native errors/mutations0;mean own>=0,margin>0,point>=0;positive margin>=2worlds;selected full accounting before admission.",
+    "confirm_gate": "8 fresh screen worlds/16 fresh confirm worlds; vs c396 margin>0,point>=0,each opponent point>=-.125;confirm99.75% world mean margin CI lower>0;full native health/hash pass;selected accounting no new unintended failures. Local admission only.",
+    "independence": "New24 worlds excluded from all stored configs and League matches; adjacent public variants are distinct sources, not independent architectural families. Confirm alpha.0025 for this source-set expansion; no threshold/seed tuning after results.",
+    "execution": "8 isolated workers based on measured12-worker contention. Pause League while native campaigns run;restore ordinary continuous battle/autocollection afterwards.",
+    "submission_gate": "Local registration only. No Kaggle submission requested. No32world final or blind7240-7255.",
+    "execution_fix": "v1 rejected at configuration validation before any job: canonical runner requires three stages. v1b adds two reserved final seeds for schema compatibility only; final is NOT to be run. Candidate/opponents/screen/confirm/gates unchanged. Original v1 preserved."
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "workers": 6,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c373": {
+      "path": "agent/c373_structure_retry.py",
+      "sha256": "6731b608fa9a94e88f47211b3d3e2feb14681e45e6c918756e5a7e3205923297"
+    },
+    "o301": {
+      "path": "agent/o301_hire_floor.py",
+      "sha256": "383d6fef780361b291f36428643e56739c5d5553c9d9364c9b27ac6e9e9db720"
+    }
+  },
+  "opponents": {
+    "clone_horizon": {
+      "path": "state/public_league/sources/0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778.py",
+      "sha256": "0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778",
+      "family": "clone_horizon"
+    },
+    "v56": {
+      "path": "state/public_league/sources/a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c.py",
+      "sha256": "a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c",
+      "family": "v56"
+    },
+    "yummers_new": {
+      "path": "state/public_league/sources/338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080.py",
+      "sha256": "338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080",
+      "family": "yummers_new"
+    },
+    "fieldcraft": {
+      "path": "state/c371/fieldcraft_bundle.py",
+      "sha256": "6191ee65e8b383bd4189a61318ee952f08ef455d36ffb82c3abdb30addc6c4d9",
+      "family": "fieldcraft"
+    },
+    "c369": {
+      "path": "state/public_league/sources/e3bc73c98b2ea83f7635653d43c8ed94a2aa118ce6be614a87dca5da841d2682.py",
+      "sha256": "e3bc73c98b2ea83f7635653d43c8ed94a2aa118ce6be614a87dca5da841d2682",
+      "family": "c369"
+    },
+    "frontier": {
+      "path": "state/public_league/sources/ecbc06f5cc704dd3f6526469a01937249c5ff739047b57890f9b670b5154cd98.py",
+      "sha256": "ecbc06f5cc704dd3f6526469a01937249c5ff739047b57890f9b670b5154cd98",
+      "family": "frontier"
+    },
+    "kaggriculture_new": {
+      "path": "state/public_league/sources/dac787a400d63f6d81ac76db3f3143acda62a3698898bc0ee1c8584b84f9cea5.py",
+      "sha256": "dac787a400d63f6d81ac76db3f3143acda62a3698898bc0ee1c8584b84f9cea5",
+      "family": "kaggriculture_new"
+    },
+    "c373": {
+      "path": "agent/c373_structure_retry.py",
+      "sha256": "6731b608fa9a94e88f47211b3d3e2feb14681e45e6c918756e5a7e3205923297",
+      "family": "c373"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "o301",
+      "parent": "c373",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1202748232,
+        1062039823,
+        979531129,
+        11397924,
+        666061489,
+        962620941,
+        2131706921,
+        1663698349
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1584687801,
+        1624938120,
+        1321533106,
+        1345963756,
+        1855433185,
+        1335406779,
+        2139046921,
+        1422476470,
+        2012727768,
+        375121231,
+        1232653420,
+        1963634336,
+        446460287,
+        343576396,
+        109571326,
+        1425253202
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        1233339155,
+        1576279401
+      ],
+      "alpha": 0.025
+    }
+  },
+  "arena_meta": {
+    "prior": "c373 local league 448W-40L-12T; live c358/c368 losses: three largest (-14.5k,-4.2k,-17.9k) all began with our d1h0 cash $1-3 (rival $33-112) so only 1-2 of 3 planned d1 hires were paid; live d1h0 cash mode $12, 9 games at exactly $4 (= the 3-hire cost). Public local rivals share our opening so local games never collapse; the trigger comes from private forks with different d0 wheat orders.",
+    "design": "o301 v2 = c373 + outermost hire cash floor for days 0-2 (replay the order list in engine order; if a HIRE cannot be paid, prepend SELL of shed fertilizer then wheat for the shortfall only) + same-day feed repair: a wheat sale can starve one morning FEED, so an actor idle for the rest of the day fetches one wheat once the plan has bought again and feeds that animal. v1 (bf40b6d7, floor only) left one cow starving in the collapse replay and was superseded before any campaign. OFF twin identical to c373; ON identical whenever the floor never fires.",
+    "gate": "Screen: no-op expected on this public panel (floor never fires); pass = zero health failures, candidate point delta >= 0 and mean paired margin >= 0 with all opponents >= -0.125. Confirm only if screen shows any trigger; otherwise local decision rests on frozen-rival replays of the three live collapse episodes and the League focus run.",
+    "execution": "6 workers, League battles paused; screen 256 games on 8 new worlds. Blind 7240-7255 protected.",
+    "limits": "Public panel cannot exercise the trigger; evidence of benefit is the three live replays (frozen rival) and non-regression here."
+  }
+}

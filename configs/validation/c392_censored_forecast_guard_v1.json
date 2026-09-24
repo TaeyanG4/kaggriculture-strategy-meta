@@ -1,0 +1,149 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c379": {
+      "path": "agent/c379_terminal_schedule.py",
+      "sha256": "9cbc9171fc5650f59fcfc44c7453ce15bb64f27d7f2293294ab48317f59e3fce"
+    },
+    "c384": {
+      "path": "agent/c384_predictive_tomato.py",
+      "sha256": "05b8d6eedb266fcc131ec74b8b87659e15ed077707d91489a423ad4d1a567144"
+    },
+    "c387": {
+      "path": "agent/c387_forecast_frontier.py",
+      "sha256": "2574f60424e319f5cd1df0221c94eb1bf33da57fa32ef0a15a8a7e7f65a2eae7"
+    },
+    "c392": {
+      "path": "agent/c392_censored_forecast_guard.py",
+      "sha256": "2d0a8d51d7cbf16a7819f8309fee7532bd547222592716a61e54abac1085fd7e"
+    }
+  },
+  "opponents": {
+    "c379": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\9cbc9171fc5650f59fcfc44c7453ce15bb64f27d7f2293294ab48317f59e3fce.py",
+      "sha256": "9cbc9171fc5650f59fcfc44c7453ce15bb64f27d7f2293294ab48317f59e3fce",
+      "family": "c379"
+    },
+    "c384": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\05b8d6eedb266fcc131ec74b8b87659e15ed077707d91489a423ad4d1a567144.py",
+      "sha256": "05b8d6eedb266fcc131ec74b8b87659e15ed077707d91489a423ad4d1a567144",
+      "family": "c384"
+    },
+    "wheat258": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\97ad9f3bf0190a6368c764b1dc037c83bb1e495818c52566f761d26bde6e70b6\\main.py",
+      "sha256": "83fb106f37fcc10f3c3d9db8a78ded1529da30e9e232976ec0cf46fd6662fed4",
+      "family": "wheat258"
+    },
+    "soil261": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d40b00a13000cdc62a3420b43ee38f4ffd3591447f666c30d4b59f92e82d7df3\\main.py",
+      "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "family": "soil261"
+    },
+    "v15": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\da083c4fa48672f9d77d1de2c77a4d2d40e0f53a4456d090489cb368f51836b0\\main.py",
+      "sha256": "d6565929be5283a5decf00c986359542ee1c106d7819815f8c69ccab35e363dd",
+      "family": "v15"
+    },
+    "order259": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\8e82ba45517fb1704276ff3a98062a7e1c5d11aeb4db68c7d34d004be599297c\\main.py",
+      "sha256": "8045c8872406044cb0b6bf9f80e440f07c250e325618894f4a91141af6d3b6ad",
+      "family": "order259"
+    },
+    "clone223": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778.py",
+      "sha256": "0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778",
+      "family": "clone223"
+    },
+    "idle233": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\1cb133e934e3da46175be2662dec1d0980b1c13ba33b43a9ef035a0b3934e62f.py",
+      "sha256": "1cb133e934e3da46175be2662dec1d0980b1c13ba33b43a9ef035a0b3934e62f",
+      "family": "idle233"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c392",
+      "parent": "c387",
+      "primary": true
+    },
+    {
+      "candidate": "c392",
+      "parent": "c384",
+      "primary": false
+    },
+    {
+      "candidate": "c392",
+      "parent": "c379",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1752791740,
+        355195918,
+        880085662,
+        70676376,
+        177248376,
+        1746419354,
+        1554931931,
+        477297612
+      ],
+      "alpha": 0.005
+    },
+    "confirm": {
+      "seeds": [
+        958172339,
+        1172684404,
+        2094349916,
+        1078356401,
+        1103658049,
+        80573856,
+        1442087850,
+        2046949966,
+        130260726,
+        1244508227,
+        2130134232,
+        1161387073,
+        1306653635,
+        1073008586,
+        697784175,
+        744140475
+      ],
+      "alpha": 0.0125
+    },
+    "final": {
+      "seeds": [
+        720155321,
+        267871542
+      ],
+      "alpha": 0.0075
+    }
+  },
+  "arena_meta": {
+    "validation_health_policy": "official_overage_v3",
+    "prior": "c391 item-fit gate repaired one loss but development own-2.44/margin-29, rejected. c327 floor censor modified global observer and race behavior (negative). Current exact shadow shows WOOL584 sells at floor: market cannot reveal all3 units, so last rival sale is absent from P observations. New scope only c387 extra paths for that censored interval; primary and observer unchanged. c326 blanket price gate not repeated.",
+    "development_gate": "All48valid;OFF16 full action/state identity;prefix15016identity;errors/mutation0;meanown>=0,margin>0,point>=0;positive margins in >=2 distinct worlds. Exposed development cases; stop on failure, no threshold sweep.",
+    "screen_gate": "512 complete hash/healthPASS;development and selected semanticsPASS;vs c387 margin>0,point>=0;every opponent point>=-.125. No tuning or reseeding.",
+    "confirm_gate": "Fresh16world1024. Local admission: vs c387 98.75percent world marginCI lower>0,point>=0,every opponent point>=-.125;vs c384/c379 overall margin>=0,points>=0;vs c387 after excluding our two opponent sources margin>0/points>=0. Selected exact execution/accounting PASS; own separately reported.",
+    "submission_gate": "No automatic Kaggle submission on a small local margin gain. This owner turn requests local registration and focus500 after established improvement.",
+    "independence": "c391 item-fit rejected before formal; retain half of standard alpha for this second forecast hypothesis. New8screen/16confirm;no32final or blind. Eight distinct exact sources share lineages; equal source weights do not mean independent families.",
+    "execution": "8 isolated workers under established contention;one campaign at a time;League stopped. Restore normal8worker auto3h after completion, or register+focus500 on confirmed local gain."
+  }
+}

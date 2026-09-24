@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c384": {
+      "path": "agent/c384_predictive_tomato.py",
+      "sha256": "05b8d6eedb266fcc131ec74b8b87659e15ed077707d91489a423ad4d1a567144"
+    },
+    "c389": {
+      "path": "agent/c389_sell_block_response.py",
+      "sha256": "0ce3802a8766828b1dde89fd19f18ce290226211a65db3b0b95179fdbb86fded"
+    }
+  },
+  "opponents": {
+    "c379": {
+      "path": "state/public_league/sources/9cbc9171fc5650f59fcfc44c7453ce15bb64f27d7f2293294ab48317f59e3fce.py",
+      "sha256": "9cbc9171fc5650f59fcfc44c7453ce15bb64f27d7f2293294ab48317f59e3fce",
+      "family": "c379"
+    },
+    "o301": {
+      "path": "state/public_league/sources/383d6fef780361b291f36428643e56739c5d5553c9d9364c9b27ac6e9e9db720.py",
+      "sha256": "383d6fef780361b291f36428643e56739c5d5553c9d9364c9b27ac6e9e9db720",
+      "family": "o301"
+    },
+    "ca20": {
+      "path": "state/public_league/artifacts/b70e22fa8105035a9744d13e1b46ee50a75e7f6c5a7b6196beb71c7f31802da7/main.py",
+      "sha256": "29454a13477f827c34615300f90a7bdb074ea3c9bcb948f3372bf95fa1fb207d",
+      "family": "ca20"
+    },
+    "moon251": {
+      "path": "state/public_league/sources/bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323.py",
+      "sha256": "bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323",
+      "family": "moon251"
+    },
+    "soil261": {
+      "path": "state/public_league/artifacts/d40b00a13000cdc62a3420b43ee38f4ffd3591447f666c30d4b59f92e82d7df3/main.py",
+      "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "family": "soil261"
+    },
+    "wheat258": {
+      "path": "state/public_league/artifacts/97ad9f3bf0190a6368c764b1dc037c83bb1e495818c52566f761d26bde6e70b6/main.py",
+      "sha256": "83fb106f37fcc10f3c3d9db8a78ded1529da30e9e232976ec0cf46fd6662fed4",
+      "family": "wheat258"
+    },
+    "v15": {
+      "path": "state/public_league/artifacts/da083c4fa48672f9d77d1de2c77a4d2d40e0f53a4456d090489cb368f51836b0/main.py",
+      "sha256": "d6565929be5283a5decf00c986359542ee1c106d7819815f8c69ccab35e363dd",
+      "family": "v15"
+    },
+    "order259": {
+      "path": "state/public_league/artifacts/8e82ba45517fb1704276ff3a98062a7e1c5d11aeb4db68c7d34d004be599297c/main.py",
+      "sha256": "8045c8872406044cb0b6bf9f80e440f07c250e325618894f4a91141af6d3b6ad",
+      "family": "order259"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c389",
+      "parent": "c384",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1184019260,
+        1636108365,
+        82109270,
+        1164806373,
+        997610146,
+        1659779385,
+        1934366383,
+        1474015576
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        942179558,
+        249445447,
+        1514579989,
+        2137734081,
+        2090414882,
+        1192872738,
+        1549970465,
+        299761678,
+        984318684,
+        10265378,
+        1079933750,
+        1313642573,
+        713863171,
+        1929659102,
+        366210102,
+        375089820
+      ],
+      "alpha": 0.025
+    },
+    "final": {
+      "seeds": [
+        182734082,
+        1383432853
+      ],
+      "alpha": 0.015
+    }
+  },
+  "arena_meta": {
+    "validation_health_policy": "official_overage_v3",
+    "prior": "c362 generic sell-impact heuristic lost margin/own; c364 fixed wheat/fertilizer order no-op; c381 native market preservation changed sale quantities/timing. This exact per-unit clone queue optimizer is a different objective and placement. Soil261 is byte-prefix Moon251 plus last reorder; same worlds1789075540/1404980631 change c384 wins into losses by margin474/353, production exactly unchanged. Native accounting4games valid. Exposed diagnosis only.",
+    "screen_gate": "256 complete hash/healthPASS;mean margin>0,point>=0;each opponent point>=-.125;developmentQA passed. No tuning/reseeding.",
+    "confirm_gate": "Fresh16worlds512. Local admission only: adjusted world marginCI lower>0,point>=0,each opponent point>=-.125;selected full native/accounting with no new unintended failures. Own separately reported. Eight exact sources, related lineages; no95percent claim.",
+    "submission_gate": "This contract is local admission only. No Kaggle submission from these results without a separately established submitted-champion comparison.",
+    "execution": "One campaign at a time,8isolated workers;32final/blind unused. Frozen development and fresh-screen sources/gates unchanged after results. Restore ordinaryLeague8/autocollect3h after completion."
+  }
+}

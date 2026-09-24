@@ -1,0 +1,142 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c373": {
+      "path": "agent/c373_structure_retry.py",
+      "sha256": "6731b608fa9a94e88f47211b3d3e2feb14681e45e6c918756e5a7e3205923297"
+    },
+    "o301": {
+      "path": "agent/o301_hire_floor.py",
+      "sha256": "383d6fef780361b291f36428643e56739c5d5553c9d9364c9b27ac6e9e9db720"
+    },
+    "o302": {
+      "path": "agent/o302_farmer_feed_topup.py",
+      "sha256": "2cdb9e5d14f72043631eb4b9c287fe2e5fb58a6375aeab90e3a8a36a7df87b34"
+    }
+  },
+  "opponents": {
+    "clone_horizon": {
+      "path": "state/public_league/sources/0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778.py",
+      "sha256": "0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778",
+      "family": "clone_horizon"
+    },
+    "v56": {
+      "path": "state/public_league/sources/a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c.py",
+      "sha256": "a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c",
+      "family": "v56"
+    },
+    "yummers_new": {
+      "path": "state/public_league/sources/338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080.py",
+      "sha256": "338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080",
+      "family": "yummers_new"
+    },
+    "fieldcraft": {
+      "path": "state/c371/fieldcraft_bundle.py",
+      "sha256": "6191ee65e8b383bd4189a61318ee952f08ef455d36ffb82c3abdb30addc6c4d9",
+      "family": "fieldcraft"
+    },
+    "c369": {
+      "path": "state/public_league/sources/e3bc73c98b2ea83f7635653d43c8ed94a2aa118ce6be614a87dca5da841d2682.py",
+      "sha256": "e3bc73c98b2ea83f7635653d43c8ed94a2aa118ce6be614a87dca5da841d2682",
+      "family": "c369"
+    },
+    "frontier": {
+      "path": "state/public_league/sources/ecbc06f5cc704dd3f6526469a01937249c5ff739047b57890f9b670b5154cd98.py",
+      "sha256": "ecbc06f5cc704dd3f6526469a01937249c5ff739047b57890f9b670b5154cd98",
+      "family": "frontier"
+    },
+    "kaggriculture_new": {
+      "path": "state/public_league/sources/dac787a400d63f6d81ac76db3f3143acda62a3698898bc0ee1c8584b84f9cea5.py",
+      "sha256": "dac787a400d63f6d81ac76db3f3143acda62a3698898bc0ee1c8584b84f9cea5",
+      "family": "kaggriculture_new"
+    },
+    "c373": {
+      "path": "agent/c373_structure_retry.py",
+      "sha256": "6731b608fa9a94e88f47211b3d3e2feb14681e45e6c918756e5a7e3205923297",
+      "family": "c373"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "o302",
+      "parent": "c373",
+      "primary": true
+    },
+    {
+      "candidate": "o302",
+      "parent": "o301",
+      "primary": false
+    },
+    {
+      "candidate": "o301",
+      "parent": "c373",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1911225563,
+        473876708,
+        1020209432,
+        368304839,
+        1352789032,
+        671390589,
+        1876891855,
+        1660838656
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1121722985,
+        540403030,
+        955068383,
+        649592245,
+        340245488,
+        1557339986,
+        890673290,
+        116678778,
+        569002812,
+        553369787,
+        539986213,
+        1986385892,
+        787589611,
+        776087359,
+        162611028,
+        1178110941
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        1758613129,
+        1451492474
+      ],
+      "alpha": 0.025
+    }
+  },
+  "arena_meta": {
+    "prior": "o301 (hire cash floor + same-day feed repair) cannot fire against the public panel. Separate live census: in 17/118 live games our farmer FEED at d26h17 fails for lack of wheat and a goose escapes (route-0 family tape: farmer picks 1 wheat at h1, feeds at h5 and h17); the public-lineage rival suffers the same defect. Locally reproduced on seed 2082846316 vs V56 (our herd drop at d27).",
+    "design": "o302 = o301 + farmer-only wheat pickup top-up: when the farmer PICKUP WHEAT carries fewer units than its remaining tape FEEDs that day, raise the pickup by the deficit, bounded by shed stock after all other pickups planned for the day. Hands untouched; unused units return to the shed at midnight. Tape scan shows the only farmer deficit is day 26 (2 feeds, 1 pickup) in 27 of 40 routes. OFF twin identical to o301.",
+    "gate": "Primary o302 vs c373: screen point delta >= 0, mean paired margin > 0, every opponent point delta >= -0.125, zero health failure. Confirm (16 new worlds) if screen passes: point delta >= 0, margin > 0, 98.5% world-bootstrap lower >= 0 on margin, every opponent >= -0.125. Secondary o302 vs o301 isolates the top-up; o301 vs c373 expected identical (no trigger).",
+    "execution": "8 workers (owner instruction 2026-09-22 15:30 after stopping League battles); same design, seeds, models, opponents and gates as v1. v1 run (o302_screen) is preserved: 338/384 valid with zero candidate invalids, then one parent c373 decision of 1.0097s (p99 0.0056s) in the c373 mirror game on seed 1876891855 tripped candidate_over_one_second while League battles ran with 4 workers; the runner cannot resume past an invalid cached row, so the identical contract is re-run here. Blind 7240-7255 protected.",
+    "limits": "Effect is a rare defect repair (about one goose in 15% of worlds); public panel shares the defect so paired margins measure the repair directly. No private-ladder claim."
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c365 preserved its c358 parent and improved rare CARROT2 feed-reserve worlds; prior final CI lower0. c361 V54 whole-body transplant failed fresh confirm. The recovered exact Moon147 and Wheat142 executable sources were absent from that evaluation; small and unequal Public League samples are exploratory only.",
+    "design": "c366 parent challenge: exact current recovered public agents 147 and142 versus submitted c365 on identical new seeds, both seats, eight fixed strong sources. All are self-contained Python policies; no local sidecar imports. No new public source code tuning from screen.",
+    "gate": "Screen advance only positive point delta and positive mean margin delta with no opponent point regression worse than -0.125. Confirm positive point and margin; independent final adjusted seed-bootstrap lower>0, point>=0.03, positive margin and no opponent delta below -0.125. Otherwise preserve locally without submission. Choose primary winner only after passing its own fixed tests; no pooled rescue of failed final. Runtime invalid aborts performance interpretation; fixed sources/seeds may retry with separately frozen lower-worker contract for CPU contention only.",
+    "worker_contract": "12-worker v1 aborted before performance interpretation: opponent over_one_second; same immutable policies and seeds in separate 8-worker v1b contract. Original failure preserved. No gate relaxation.",
+    "limits": "Public source panel, not private-top proof. Rank20 sensitivity is selection evidence only. Protected blind7240-7255 untouched."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c365": {
+      "path": "state/public_league/sources/d48e66c3c5aec21a55be8101d7544278d5303fc6a1b1a487d9a2df055c82e72f.py",
+      "sha256": "d48e66c3c5aec21a55be8101d7544278d5303fc6a1b1a487d9a2df055c82e72f"
+    },
+    "moon147": {
+      "path": "state/public_league/sources/5fbb75c9c40e6d9e26d95272ace47329b1ca319b3b2118232404de30806e7e9c.py",
+      "sha256": "5fbb75c9c40e6d9e26d95272ace47329b1ca319b3b2118232404de30806e7e9c"
+    },
+    "wheat142": {
+      "path": "state/public_league/sources/a5362d138ed3933a8204d467ffa0d2fd8fe121fc8eb42a8648c53ade91c1fbe3.py",
+      "sha256": "a5362d138ed3933a8204d467ffa0d2fd8fe121fc8eb42a8648c53ade91c1fbe3"
+    }
+  },
+  "opponents": {
+    "c358": {
+      "path": "state/public_league/sources/680a4f713d8d672dce3f13f5429df1f803626f408d76e1690eabe32152779196.py",
+      "sha256": "680a4f713d8d672dce3f13f5429df1f803626f408d76e1690eabe32152779196",
+      "family": "c358"
+    },
+    "one_more_wheat": {
+      "path": "state/public_league/sources/e8917154ee8573db867849bc235864cd1e73a2888958700e14cea2ffb50697b2.py",
+      "sha256": "e8917154ee8573db867849bc235864cd1e73a2888958700e14cea2ffb50697b2",
+      "family": "one_more_wheat"
+    },
+    "master_engine_v3": {
+      "path": "state/public_league/sources/9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9.py",
+      "sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "family": "master_engine_v3"
+    },
+    "localbest_update": {
+      "path": "state/public_league/sources/89a50e928ea14281220413f73cc9fa16b7ad47f2bf930ba7279a75d125a21859.py",
+      "sha256": "89a50e928ea14281220413f73cc9fa16b7ad47f2bf930ba7279a75d125a21859",
+      "family": "localbest_update"
+    },
+    "v54": {
+      "path": "state/public_league/sources/949e2eed410169f7a651e82bb37f6484a332a833d8c75937122701b90fc7658c.py",
+      "sha256": "949e2eed410169f7a651e82bb37f6484a332a833d8c75937122701b90fc7658c",
+      "family": "v54"
+    },
+    "pipe16": {
+      "path": "state/public_league/sources/827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181.py",
+      "sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "family": "pipe16"
+    },
+    "soil146": {
+      "path": "state/public_league/sources/37a7ad84fe8cc64af9c136188d547b937bf8d547e1a2e4aacf6e4d2fb64c970e.py",
+      "sha256": "37a7ad84fe8cc64af9c136188d547b937bf8d547e1a2e4aacf6e4d2fb64c970e",
+      "family": "soil146"
+    },
+    "yummers164": {
+      "path": "state/public_league/artifacts/34306cfb1da0e1790272104e50cea017917b68cf8a3a89ce9f319274d586044e/main.py",
+      "sha256": "1eb55f83a2f376de7a4951fcfb0f16eba3b98384a9b1f99065404b01e5b63bc1",
+      "family": "yummers164"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "moon147",
+      "parent": "c365",
+      "primary": true
+    },
+    {
+      "candidate": "wheat142",
+      "parent": "c365",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        563782662,
+        2028712147,
+        1826498484,
+        797088380,
+        373156433,
+        1438036279,
+        898305886,
+        963250569
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1491081259,
+        727578247,
+        1278582625,
+        149539906,
+        535017242,
+        1667596111,
+        509239928,
+        1463720219,
+        1577942410,
+        1636140622,
+        616645525,
+        2123159091,
+        586631950,
+        528190391,
+        50933604,
+        429618459
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        152816275,
+        1989078681,
+        1811849578,
+        1397298619,
+        1725614626,
+        563254084,
+        331280234,
+        579879585,
+        1617298798,
+        1272025130,
+        1506648963,
+        1118433449,
+        1158442269,
+        2009866753,
+        84890237,
+        52069482,
+        2137230398,
+        307255171,
+        834360812,
+        2069673783,
+        1218225347,
+        100226251,
+        302128952,
+        254753139,
+        1092460844,
+        1515238170,
+        1369082316,
+        1262929632,
+        1450714640,
+        1725875354,
+        470082936,
+        214721158
+      ],
+      "alpha": 0.025
+    }
+  }
+}

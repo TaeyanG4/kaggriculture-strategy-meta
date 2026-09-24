@@ -1,0 +1,130 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "parent": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c402_current_public_shadow.py",
+      "sha256": "dbc25e1a4464ad3c8e04a3ce6907cba1897efd0d87818563ba6e2a796c363797"
+    },
+    "c404": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c404_reserved_wheat_settlement.py",
+      "sha256": "64b7fce17239d5829e904e46bf5ac8d5478f7e8d5abb799bb76c7ff6fc3005e5"
+    }
+  },
+  "opponents": {
+    "c402": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\dbc25e1a4464ad3c8e04a3ce6907cba1897efd0d87818563ba6e2a796c363797.py",
+      "sha256": "dbc25e1a4464ad3c8e04a3ce6907cba1897efd0d87818563ba6e2a796c363797",
+      "family": "c402"
+    },
+    "c398": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\12e98b68bf6d59b6a010328d06fa81f21c44ed0d0b706d1e32394f408370988b.py",
+      "sha256": "12e98b68bf6d59b6a010328d06fa81f21c44ed0d0b706d1e32394f408370988b",
+      "family": "c398"
+    },
+    "c397": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\28a520730a4f0037c0e9f433e28417db1ba0c95999a55b1751a396b28da08ad2.py",
+      "sha256": "28a520730a4f0037c0e9f433e28417db1ba0c95999a55b1751a396b28da08ad2",
+      "family": "c397"
+    },
+    "herd281": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d2089c2592061ac57d70ee758dceb07c15f65125cb02cb6a402357b552ebaab8\\main.py",
+      "sha256": "d9f59320dace8a8108d89bc879a123315bb14f6444ef6b0f58702dfbadc4d383",
+      "family": "herd281"
+    },
+    "moon": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d40b00a13000cdc62a3420b43ee38f4ffd3591447f666c30d4b59f92e82d7df3\\main.py",
+      "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "family": "moon"
+    },
+    "ca25": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\2f93786f2f5d6c4429c4a7e77485dcb67232e58970f9d362ba2e0614b924b8c3\\main.py",
+      "sha256": "48c6c8a4525450e108d1007fca11a9cb2388b961ab1fa65ca0b140d891cba378",
+      "family": "ca25"
+    },
+    "demand": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\2e66a232e3f03c2a9ab567f10d89320d73903bc639fa0aeb6b36a2a01e8a90a1.py",
+      "sha256": "2e66a232e3f03c2a9ab567f10d89320d73903bc639fa0aeb6b36a2a01e8a90a1",
+      "family": "demand"
+    },
+    "autonomous": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\dcc71f74caf3f2b99825d0e364df966d907c7da63dbaa1425ab312188ee532e2.py",
+      "sha256": "dcc71f74caf3f2b99825d0e364df966d907c7da63dbaa1425ab312188ee532e2",
+      "family": "autonomous"
+    },
+    "hybu": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\f6175fd1bc3850f74185e7a813bb5a87d54e7e15212c874133dafc6e1ce91d34.py",
+      "sha256": "f6175fd1bc3850f74185e7a813bb5a87d54e7e15212c874133dafc6e1ce91d34",
+      "family": "hybu"
+    },
+    "shepherd": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\5f2b51a2beaf5e08cb73e82f0e03e02e56de601563b28344e49b7058e371b247.py",
+      "sha256": "5f2b51a2beaf5e08cb73e82f0e03e02e56de601563b28344e49b7058e371b247",
+      "family": "shepherd"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c404",
+      "parent": "parent",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1489338108,
+        1465721234,
+        1835308233,
+        547203659,
+        639211346,
+        491360400,
+        1238081040,
+        256765279,
+        1972509178,
+        1659565627,
+        1182344114,
+        1883389778,
+        41339967,
+        647856519,
+        16129955,
+        1733060317
+      ],
+      "alpha": 0.0025
+    },
+    "confirm": {
+      "seeds": [
+        1785442922
+      ],
+      "alpha": 0.0025
+    },
+    "final": {
+      "seeds": [
+        1291594189
+      ],
+      "alpha": 0.001
+    }
+  },
+  "arena_meta": {
+    "validation_health_policy": "official_overage_v3",
+    "prior": "c398 adjacent equal-lot settlement: confirm CI lower0, held. c403 fresh native loss vs c398 -6531 with identical production, net wheat cash -6250. c404 changes execution contract: partial buy/sell lots; preserve all inherited absolute market indices; later empty slot or append only; future residual sale rather than all-or-nothing. Same conservative funds/capacity/pickup guards. c402 parent contains expanded public hypotheses, NOT c398. c399-401 crop failures remain separate.",
+    "gate": "Only screen is authorized for this 32-games-per-opponent comparison: 16 new worlds x 2 seats. Development and ledger QA required first. Practical advantage: own and margin mean positive versus c402, aggregate paired point nonnegative, direct vs c402 W>L and vs c398 W>=L, every public opponent W>L. World paired CI and each head-to-head uncertainty reported separately: practical advantage is not a statistical superiority claim. Registration needs measured improvement and defect audit; no automatic Kaggle submission from a small comparison. If no practical advantage continue a materially different candidate, no same-source seed extension.",
+    "independence": "Fresh seeds excluded from League and frozen configs. Confirm/final placeholders never run. Both seats share one world; related public sources not independent architectures.",
+    "execution": "8 workers, League paused; restore on finish."
+  }
+}

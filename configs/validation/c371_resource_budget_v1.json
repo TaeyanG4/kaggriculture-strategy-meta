@@ -1,0 +1,137 @@
+{
+  "schema": 1,
+  "workers": 6,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c369 screen was no-op, not economic negative. Owner later submitted and registered it; current BT second, but live opponent distributions disjoint from c368. c370 isolated tomato maintenance OFF identity6/6 and tomato harvest80 preserved, hire saving521, no fresh test. Historical base15 calendar-based fertilizer omission and c334 added-hire negative do not test this observable crop/harvest-conditioned omission.",
+    "design": "One fixed c371 composition: c369 plus original V54 V219SKIP and V56 EXP410, no donor threshold tuning. Exact dependency functions match parent AST. Native OFF6/6, three exposed development worlds: tomato harvest preserved, wheat unchanged or+12, strawberries+2..4; margin+22/+535..539/+228, own+12/+569..571/-64. Not independent performance evidence.",
+    "gate": "Primary c371 vs c369. Screen: point delta>0, mean own>0, mean margin>0, every opponent point delta>=-0.125. Confirm: point delta>=0.03, own>0, margin>0, 98.5% world-bootstrap lower>0, every opponent point delta>=-0.125. Also require aggregate point/own/margin nonnegative vs c368 in both stages. Both stages and zero health failure required for submission. Otherwise local hold; no pooling rescue or seed fishing.",
+    "execution": "6 workers after observed8-worker timing contention; no overlapping League battles. Screen8 fresh worlds/384games; confirm16/768 only if screen passes. Owner32-world final skipped: final2 placeholder seeds never prepared or executed. All old frozen configs preserved.",
+    "limits": "Eight executing sources equally weighted, family labels are source strata not independent lineages. V56/clone_horizon differ mainly race horizon and share lineage with others. World bootstrap handles paired seats, not private ladder representativeness. New clone_horizon had no League games at freeze and is included as a published challenger, not a proven champion. Blind7240-7255 untouched."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c368": {
+      "path": "agent/c368_terminal_seed_budget.py",
+      "sha256": "fed4a96fafe96a80a37ec480fcf12de8ded716517fd4226d2b0ed4bcaeeab1b0"
+    },
+    "c369": {
+      "path": "agent/c369_shop_herd.py",
+      "sha256": "e3bc73c98b2ea83f7635653d43c8ed94a2aa118ce6be614a87dca5da841d2682"
+    },
+    "c371": {
+      "path": "agent/c371_resource_budget.py",
+      "sha256": "e23cc84b4b801a40f92e209f43e5c9ad18e825e54dd6ed5527ea8f57b1cef12e"
+    }
+  },
+  "opponents": {
+    "v56": {
+      "path": "state/public_league/sources/a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c.py",
+      "sha256": "a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c",
+      "family": "v56"
+    },
+    "clone_horizon": {
+      "path": "state/public_league/sources/0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778.py",
+      "sha256": "0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778",
+      "family": "clone_horizon"
+    },
+    "seed_leak": {
+      "path": "state/public_league/artifacts/dac30be141e5459d13de4de97fae6b32902300b56668d638e096b5314365a1dd/main.py",
+      "sha256": "562f34ad0ba7824b35a4ca12d63c4f869add4dd7f71dc30869fd77c431aee16d",
+      "family": "seed_leak"
+    },
+    "yummers_new": {
+      "path": "state/public_league/sources/338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080.py",
+      "sha256": "338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080",
+      "family": "yummers_new"
+    },
+    "fieldcraft": {
+      "path": "state/public_league/artifacts/fba097121118ed17b6b8b268343d26f2f66fa7470a2ff05903d3381ca956fcfd/main.py",
+      "sha256": "7fab02c889fde933e642ee9ceb35dd56ae9a0a073fffc0f6d7a689128367651d",
+      "family": "fieldcraft"
+    },
+    "v54": {
+      "path": "state/public_league/sources/5fbb75c9c40e6d9e26d95272ace47329b1ca319b3b2118232404de30806e7e9c.py",
+      "sha256": "5fbb75c9c40e6d9e26d95272ace47329b1ca319b3b2118232404de30806e7e9c",
+      "family": "v54"
+    },
+    "c368": {
+      "path": "state/public_league/sources/fed4a96fafe96a80a37ec480fcf12de8ded716517fd4226d2b0ed4bcaeeab1b0.py",
+      "sha256": "fed4a96fafe96a80a37ec480fcf12de8ded716517fd4226d2b0ed4bcaeeab1b0",
+      "family": "c368"
+    },
+    "c369": {
+      "path": "state/public_league/sources/e3bc73c98b2ea83f7635653d43c8ed94a2aa118ce6be614a87dca5da841d2682.py",
+      "sha256": "e3bc73c98b2ea83f7635653d43c8ed94a2aa118ce6be614a87dca5da841d2682",
+      "family": "c369"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c371",
+      "parent": "c369",
+      "primary": true
+    },
+    {
+      "candidate": "c371",
+      "parent": "c368",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        509348296,
+        204484944,
+        1635154283,
+        1694047648,
+        547197095,
+        992843350,
+        1972622764,
+        595280210
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        812258402,
+        1831862109,
+        1987436936,
+        525565022,
+        505587380,
+        195600191,
+        512349708,
+        1665852758,
+        2067892051,
+        1071338299,
+        1397014723,
+        1842638383,
+        855061939,
+        2029818123,
+        854794991,
+        267881374
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        33194485,
+        1946502806
+      ],
+      "alpha": 0.025
+    }
+  }
+}

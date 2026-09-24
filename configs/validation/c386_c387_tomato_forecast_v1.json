@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c379": {
+      "path": "agent/c379_terminal_schedule.py",
+      "sha256": "9cbc9171fc5650f59fcfc44c7453ce15bb64f27d7f2293294ab48317f59e3fce"
+    },
+    "c384": {
+      "path": "agent/c384_predictive_tomato.py",
+      "sha256": "05b8d6eedb266fcc131ec74b8b87659e15ed077707d91489a423ad4d1a567144"
+    },
+    "c386": {
+      "path": "agent/c386_tomato_opportunity_union.py",
+      "sha256": "4322b098ed0c1478135f34de3492c16b4c186d570156f2596cdc7fb1854e57c9"
+    },
+    "c387": {
+      "path": "agent/c387_forecast_frontier.py",
+      "sha256": "2574f60424e319f5cd1df0221c94eb1bf33da57fa32ef0a15a8a7e7f65a2eae7"
+    }
+  },
+  "opponents": {
+    "c379": {
+      "path": "state/public_league/sources/9cbc9171fc5650f59fcfc44c7453ce15bb64f27d7f2293294ab48317f59e3fce.py",
+      "sha256": "9cbc9171fc5650f59fcfc44c7453ce15bb64f27d7f2293294ab48317f59e3fce",
+      "family": "c379"
+    },
+    "o301": {
+      "path": "state/public_league/sources/383d6fef780361b291f36428643e56739c5d5553c9d9364c9b27ac6e9e9db720.py",
+      "sha256": "383d6fef780361b291f36428643e56739c5d5553c9d9364c9b27ac6e9e9db720",
+      "family": "o301"
+    },
+    "ca20": {
+      "path": "state/public_league/artifacts/b70e22fa8105035a9744d13e1b46ee50a75e7f6c5a7b6196beb71c7f31802da7/main.py",
+      "sha256": "29454a13477f827c34615300f90a7bdb074ea3c9bcb948f3372bf95fa1fb207d",
+      "family": "ca20"
+    },
+    "moon251": {
+      "path": "state/public_league/sources/bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323.py",
+      "sha256": "bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323",
+      "family": "moon251"
+    },
+    "soil261": {
+      "path": "state/public_league/artifacts/d40b00a13000cdc62a3420b43ee38f4ffd3591447f666c30d4b59f92e82d7df3/main.py",
+      "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "family": "soil261"
+    },
+    "wheat258": {
+      "path": "state/public_league/artifacts/97ad9f3bf0190a6368c764b1dc037c83bb1e495818c52566f761d26bde6e70b6/main.py",
+      "sha256": "83fb106f37fcc10f3c3d9db8a78ded1529da30e9e232976ec0cf46fd6662fed4",
+      "family": "wheat258"
+    },
+    "v15": {
+      "path": "state/public_league/artifacts/da083c4fa48672f9d77d1de2c77a4d2d40e0f53a4456d090489cb368f51836b0/main.py",
+      "sha256": "d6565929be5283a5decf00c986359542ee1c106d7819815f8c69ccab35e363dd",
+      "family": "v15"
+    },
+    "order259": {
+      "path": "state/public_league/artifacts/8e82ba45517fb1704276ff3a98062a7e1c5d11aeb4db68c7d34d004be599297c/main.py",
+      "sha256": "8045c8872406044cb0b6bf9f80e440f07c250e325618894f4a91141af6d3b6ad",
+      "family": "order259"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c386",
+      "parent": "c384",
+      "primary": true
+    },
+    {
+      "candidate": "c387",
+      "parent": "c384",
+      "primary": true
+    },
+    {
+      "candidate": "c386",
+      "parent": "c379",
+      "primary": false
+    },
+    {
+      "candidate": "c387",
+      "parent": "c379",
+      "primary": false
+    },
+    {
+      "candidate": "c387",
+      "parent": "c386",
+      "primary": false
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        449316174,
+        1100898950,
+        111857040,
+        1456687742,
+        915463960,
+        112573684,
+        1217367363,
+        2073823578
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1371153008,
+        565572349,
+        2095378834,
+        1191124329,
+        1503002146,
+        1978690829,
+        859319626,
+        1789075540,
+        1404980631,
+        21056558,
+        444635435,
+        807901911,
+        1851098319,
+        697801153,
+        1198556522,
+        1283668865
+      ],
+      "alpha": 0.025
+    },
+    "final": {
+      "seeds": [
+        1080397277,
+        1223455224
+      ],
+      "alpha": 0.015
+    }
+  },
+  "arena_meta": {
+    "recorded": "2026-09-23T10:27:41.473469",
+    "validation_health_policy": "official_overage_v3",
+    "prior": "c385 review; c386 loss audit and c387 donor transfer. Development exposed; OFF build setup error aborted/preserved; corrected OFF AST/hash checks before jobs.",
+    "screen_gate": "512 complete hash/healthPASS and semanticPASS. Candidate vs c384: margin>0,point>=0;each opponent point>=-.125. No parameter tuning. CI descriptive. Only qualifying candidates proceed; controls may remain for separation.",
+    "confirm_gate": "Fresh16 worlds. Qualified candidate vs c384: adjusted world marginCI lower>0,point>=0,each opponent point>=-.125. Against submitted c379 point>=0 and margin>0,also excluding c379 opponent. Local admission requires semanticPASS and measured improvement. Own separately reported.",
+    "submission_gate": "Additional >=5pp point vs c384 and c379 with both adjusted world pointCI lower>0. Otherwise local only. No32-worldfinal/blind.",
+    "independence": "Fresh8screen/16confirm, excluded all available config/League/development seeds.2primary hypotheses; no stage pooling/reseeding.8exact sources not8independentlineages.",
+    "execution": "8isolatedworkers due prior measured contention; League stopped. Auto collectionON; restoreordinary8workers after completion.",
+    "coverage": "Both seats;OFF/prefix identity; source/error/mutation/health; selected exact native+accounting for changed/control cases across distinct reacting sources. Frozen contracts unchanged."
+  }
+}

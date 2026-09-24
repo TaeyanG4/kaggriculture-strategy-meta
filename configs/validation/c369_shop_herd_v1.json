@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "arena_meta": {
+    "prior": "c302 older V48 cow/goose bundle failed own cash; c361 V54 chassis plus whole LocalBest market stack failed independent confirmation. Neither isolates current public Y purchase/placement layer on c368. No claim that these valid negatives were code failures.",
+    "design": "Pinned V54 5fbb75c9 Y controller only, identical settings (yarnsheep/yarngeese, d8-11, cash reserve100); c368 operating and market stack retained. Current parent lacks this layer. Development tail1873348647: V54 three confirmed sheep replacements, +63 wool harvest vs parent, no crop difference, -7634 margin. Native isolated integration recovers to+242/+269, off6/6 full identity, two no-swap development worlds exact same rewards. These exposed worlds excluded from fresh tests.",
+    "gate": "Screen: positive point delta, own and margin delta; no opponent point regression worse than -0.125. Confirm: positive 98.5% seed-cluster bootstrap lower bound, point delta>=0.03, own and margin positive, no opponent point regression below -0.125. Both must pass for submission; otherwise local only. No rescue by pooling or by selecting a different variant on failed results. Public top-source panel has lineage overlap and is not proof against private leaders.",
+    "execution": "8 workers, no overlapping League battles. Screen8 fresh worlds then confirm16 only if screen passes. Owner skipped32-world final: no32-world campaign is run; final two seeds exist only for runner schema and are never prepared/executed, no final-PASS claim. This is a new two-stage protocol, not altered old c368 gates.",
+    "limits": "Only runtime main.py used for these already QA-passed single-policy files; accompanying LICENSE/NOTICE do not change execution. Identity pinned independently. Protected blind7240-7255 untouched."
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c368": {
+      "path": "agent/c368_terminal_seed_budget.py",
+      "sha256": "fed4a96fafe96a80a37ec480fcf12de8ded716517fd4226d2b0ed4bcaeeab1b0"
+    },
+    "c369": {
+      "path": "agent/c369_shop_herd.py",
+      "sha256": "e3bc73c98b2ea83f7635653d43c8ed94a2aa118ce6be614a87dca5da841d2682"
+    }
+  },
+  "opponents": {
+    "master_engine_v3": {
+      "path": "state/public_league/sources/9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9.py",
+      "sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "family": "master_engine_v3"
+    },
+    "localbest_update": {
+      "path": "state/public_league/sources/89a50e928ea14281220413f73cc9fa16b7ad47f2bf930ba7279a75d125a21859.py",
+      "sha256": "89a50e928ea14281220413f73cc9fa16b7ad47f2bf930ba7279a75d125a21859",
+      "family": "localbest_update"
+    },
+    "yummers164": {
+      "path": "state/public_league/artifacts/34306cfb1da0e1790272104e50cea017917b68cf8a3a89ce9f319274d586044e/main.py",
+      "sha256": "1eb55f83a2f376de7a4951fcfb0f16eba3b98384a9b1f99065404b01e5b63bc1",
+      "family": "yummers164"
+    },
+    "moon147": {
+      "path": "state/public_league/sources/5fbb75c9c40e6d9e26d95272ace47329b1ca319b3b2118232404de30806e7e9c.py",
+      "sha256": "5fbb75c9c40e6d9e26d95272ace47329b1ca319b3b2118232404de30806e7e9c",
+      "family": "moon147"
+    },
+    "c368": {
+      "path": "agent/c368_terminal_seed_budget.py",
+      "sha256": "fed4a96fafe96a80a37ec480fcf12de8ded716517fd4226d2b0ed4bcaeeab1b0",
+      "family": "c368"
+    },
+    "more_wheat142": {
+      "path": "state/public_league/sources/a5362d138ed3933a8204d467ffa0d2fd8fe121fc8eb42a8648c53ade91c1fbe3.py",
+      "sha256": "a5362d138ed3933a8204d467ffa0d2fd8fe121fc8eb42a8648c53ade91c1fbe3",
+      "family": "more_wheat142"
+    },
+    "wheat_seller203": {
+      "path": "state/public_league/artifacts/37073eced296e50f9a35468ade807097e35c6315bfc08b929cbd73f49159a0a7/main.py",
+      "sha256": "ba8f82ed007594d9ecd8aea1a8816c01c4cc8291629437215e121cf58ffd4176",
+      "family": "wheat_seller203"
+    },
+    "multi_route208": {
+      "path": "state/public_league/artifacts/f9ac8779806d8401306f0be6a4dd7a3b299170d906c3c12044dfb1a118f5eec2/main.py",
+      "sha256": "e8917154ee8573db867849bc235864cd1e73a2888958700e14cea2ffb50697b2",
+      "family": "multi_route208"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c369",
+      "parent": "c368",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        981500349,
+        563520312,
+        2002302735,
+        1444113532,
+        381931812,
+        1433401069,
+        906897260,
+        1296836323
+      ],
+      "alpha": 0.01
+    },
+    "confirm": {
+      "seeds": [
+        1945933764,
+        2000386918,
+        1004042748,
+        116432231,
+        648977842,
+        770935965,
+        1302935102,
+        1266932173,
+        336707175,
+        1703570455,
+        369547297,
+        167303678,
+        1407923085,
+        1546758446,
+        167072497,
+        534190852
+      ],
+      "alpha": 0.015
+    },
+    "final": {
+      "seeds": [
+        1996996510,
+        79050994
+      ],
+      "alpha": 0.025
+    }
+  }
+}

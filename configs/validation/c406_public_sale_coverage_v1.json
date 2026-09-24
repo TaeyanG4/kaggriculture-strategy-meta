@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "parent": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c405_funded_settlement_slots.py",
+      "sha256": "5e2db7c0c28ac9f6e50ae315480beb367d0708a0e89ced5ca2f3aaf02201ceb7"
+    },
+    "c406": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c406_public_sale_coverage.py",
+      "sha256": "cbbce2d21b687da9db86400199be674c32400b91c920f9ed52c1b58ae95230ee"
+    }
+  },
+  "opponents": {
+    "moon222": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\ecbc06f5cc704dd3f6526469a01937249c5ff739047b57890f9b670b5154cd98.py",
+      "sha256": "ecbc06f5cc704dd3f6526469a01937249c5ff739047b57890f9b670b5154cd98",
+      "family": "moon"
+    },
+    "master276": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\a58ee3a1e78dbbd0e5a27a37eb7d3ae16cc3064f5101d7b955608f23719e9dba.py",
+      "sha256": "a58ee3a1e78dbbd0e5a27a37eb7d3ae16cc3064f5101d7b955608f23719e9dba",
+      "family": "harvest"
+    },
+    "harvest279": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d3a95637410fd8b1643ddd1a7729c6d80ea2f3cdb1a45ea1306d235971cf2563\\main.py",
+      "sha256": "1f8c3116cb2fd401a1827caa0848290e6d7cb7f9f3e3860a355b0f4f2952504b",
+      "family": "harvest"
+    },
+    "moon261": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d40b00a13000cdc62a3420b43ee38f4ffd3591447f666c30d4b59f92e82d7df3\\main.py",
+      "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "family": "moon"
+    },
+    "harvest286": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\b04f5c3553cbd0eb51276f3b4a9c1c2965867c15d73181938359a2604e49f451\\main.py",
+      "sha256": "9a67fcbea45766205b4962a82bbd7a1e22b719997e882fde9dd7d274e5836fb0",
+      "family": "harvest"
+    },
+    "herd281": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d2089c2592061ac57d70ee758dceb07c15f65125cb02cb6a402357b552ebaab8\\main.py",
+      "sha256": "d9f59320dace8a8108d89bc879a123315bb14f6444ef6b0f58702dfbadc4d383",
+      "family": "herd281"
+    },
+    "wheat258": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\97ad9f3bf0190a6368c764b1dc037c83bb1e495818c52566f761d26bde6e70b6\\main.py",
+      "sha256": "83fb106f37fcc10f3c3d9db8a78ded1529da30e9e232976ec0cf46fd6662fed4",
+      "family": "wheat258"
+    },
+    "c405": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\5e2db7c0c28ac9f6e50ae315480beb367d0708a0e89ced5ca2f3aaf02201ceb7.py",
+      "sha256": "5e2db7c0c28ac9f6e50ae315480beb367d0708a0e89ced5ca2f3aaf02201ceb7",
+      "family": "c405"
+    },
+    "c398": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\12e98b68bf6d59b6a010328d06fa81f21c44ed0d0b706d1e32394f408370988b.py",
+      "sha256": "12e98b68bf6d59b6a010328d06fa81f21c44ed0d0b706d1e32394f408370988b",
+      "family": "c398"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c406",
+      "parent": "parent",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1039604721,
+        295239684,
+        1233273412,
+        1774210476,
+        119784493,
+        1408116290,
+        636626699,
+        835275824
+      ],
+      "alpha": 0.005
+    },
+    "confirm": {
+      "seeds": [
+        1898973078,
+        1088378448,
+        1457653828,
+        947443417,
+        378497686,
+        1391537402,
+        1698113911,
+        329891147,
+        77023647,
+        390720792,
+        415162777,
+        902828050,
+        272993149,
+        1979065123,
+        2073320111,
+        723927248
+      ],
+      "alpha": 0.0025
+    },
+    "final": {
+      "seeds": [
+        632027187,
+        1780402473
+      ],
+      "alpha": 0.001
+    }
+  },
+  "arena_meta": {
+    "validation_health_policy": "official_overage_v3",
+    "prior": "c397/c402 verified public source tracking improved order response but did not cover Moon222, Master276 or Harvest279. New existing League losses reproduced; all three public policies give exact719 action/private and718 public projections from observable data. Fourteen-source unchanged-path diagnostic finds26 nonadverse sale proposals. Keep production, settlement, evaluator,216-step activation and64 search budget unchanged. Unlike failed crop changes c399-401 no field/resource plan changes. Current Moon261 already covered; Harvest286 idle feeding reviewed but not adopted without a demonstrated missed-feed opportunity. Historical sources are distinct policies, not new notebook families.",
+    "gate": "Reuse c388 gate: development own>=0,margin>0,point>=0,positive>=2worlds and full identity/health; screen own>=0,margin>0,point>=0,per-opponent point delta>=-.125; confirm same plus99.75%world margin CI lower>0. Defect audit before admission. Local-only if passed; no automatic Kaggle submission for a small coverage update. Final placeholder never run. No retry with more seeds or relaxed thresholds.",
+    "execution": "8 workers; League paused; reuse runners/readouts. Candidate/source set frozen before development, no tuning based on independent outcomes."
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "note": "Direct current-artifact H2H requested by owner. c368 versus dashboard V54 artifact 5fbb75c9, 16 fresh worlds, both seats. Existing 3-world league H2H is reported separately. This is not the skipped c368 32-world final and does not use blind 7240-7255.",
+  "splits": {
+    "train": [
+      677954598,
+      1006187134,
+      447161253,
+      1532797369,
+      527401137,
+      1579215803,
+      1883545412,
+      1873348647,
+      750256614,
+      219254894,
+      817797530,
+      520830988,
+      1017362523,
+      910552379,
+      1758227879,
+      616078972
+    ],
+    "selection": [1410993584, 34448119],
+    "holdout": [1665734437, 1669852849]
+  },
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "opponents": [
+    {
+      "name": "current_v54_5fbb75c9",
+      "path": "state/public_league/sources/5fbb75c9c40e6d9e26d95272ace47329b1ca319b3b2118232404de30806e7e9c.py",
+      "family": "current_v54"
+    }
+  ]
+}
