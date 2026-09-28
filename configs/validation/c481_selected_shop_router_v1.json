@@ -1,0 +1,107 @@
+{
+ "schema": 1,
+ "workers": 12,
+ "timeout_seconds": 240,
+ "configuration": {
+  "episodeSteps": 720
+ },
+ "engine": {
+  "version": "1.32.7",
+  "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+  "files": {
+   "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+   "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+   "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+   "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+   "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+  }
+ },
+ "models": {
+  "parent": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c479_confident_four_turn_forecast.py",
+   "sha256": "202288cbdb565d81b192b182e23906bcd3404ad467e0d09635f1222bb34dad7d"
+  },
+  "c481": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c481_selected_shop_router.py",
+   "sha256": "9fc68b8700f96d683ce1ae66a5628627ccb3c67c4fa545dd654118e5489ae706"
+  }
+ },
+ "opponents": {
+  "demand340": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\bfe696c4caee29b3132b0b1ec4bcfc0aaa825357074ba1358390e138a8924b39\\main.py",
+   "sha256": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8",
+   "family": "demand_turn_timing"
+  },
+  "herd267": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\f96e7f9e64301347b55e9e884b32a6ee076b2cb8ad2d5add731250cabd44c4f1\\main.py",
+   "sha256": "a3323c6587b095622ac9d43a4f13c64fc44c9a2ac24562097e591821e5e88068",
+   "family": "herd"
+  },
+  "harvest326": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\5b5a63b523f0f69d271736927a828657ae82c56d676ca4976a8762a07a16cbff\\main.py",
+   "sha256": "3e6953b40e2facbad5dacd5af86f9d788007d753786ca658b6a9df268ce06025",
+   "family": "harvest"
+  },
+  "master322": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d.py",
+   "sha256": "cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d",
+   "family": "master"
+  },
+  "kitex78": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\b792548d14a7b7ab518e6134d20bfb1d5c6cf3b1275e8a37370166b246653cf0.py",
+   "sha256": "b792548d14a7b7ab518e6134d20bfb1d5c6cf3b1275e8a37370166b246653cf0",
+   "family": "kitex"
+  },
+  "harvest312": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d9e9c85dc5c68a8e47d249c4a07904e729b0f48ceab285681e031beba8746d5a\\main.py",
+   "sha256": "c893e10212de48af36fd8a9975bf808f8336929e3402ed57f59f726f1c6df4bc",
+   "family": "harvest"
+  },
+  "forecast478": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\c478\\forecast-notebook-final.py",
+   "sha256": "b137c80db04a45028cccd95ee963581dc1406807bce5e31ab8a03aed2bbe4d05",
+   "family": "herd_forecast_router"
+  },
+  "lucas344": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd.py",
+   "sha256": "3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd",
+   "family": "parent"
+  }
+ },
+ "comparisons": [
+  {
+   "candidate": "c481",
+   "parent": "parent",
+   "primary": true
+  }
+ ],
+ "stages": {
+  "screen": {
+   "seeds": [
+    1041188421,
+    863551107
+   ],
+   "alpha": 0.02
+  },
+  "confirm": {
+   "seeds": [
+    976303610,
+    1373467942
+   ],
+   "alpha": 0.02
+  },
+  "final": {
+   "seeds": [
+    1336972572,
+    915254985
+   ],
+   "alpha": 0.009
+  }
+ },
+ "arena_meta": {
+  "validation_health_policy": "official_overage_v3",
+  "prior": "c480 full ten-pair map failed. Select exactly two pairs with positive own/margin and nonnegative points in every exposed development condition. No new full development games; no unseen final outcomes read for selection.",
+  "gate": "Own>=0/margin>0/points>=0/public opponent point guards and at least2positive world means. Require selected accounting and manual non-feed resource review. No admission or import without owner permission.",
+  "execution": "Four unused-outcome worlds, two per selected pair, preselected only by parent first144turn observations.128 native games/7public+colleague344 and six paired audits. Conditional confirmation, not population win rate. Freeze final config before any game."
+ }
+}

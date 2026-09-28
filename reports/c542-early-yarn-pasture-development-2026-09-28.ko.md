@@ -1,0 +1,18 @@
+# c542 초기 양목장 관측 조건 검증
+
+- **[2026-09-28T04:04:09.322168+00:00 Codex / c541採택local359·24全편입 → c542 큰패배축종24검증]** c541복구완료03:50:21·**24(新20+4cache)/12쌍 own+253.333·margin+192.667/9W3L同**,8발동2세계각own362..421·마진210..421/4同/개별음수0. OFF1438prefix627/8628singlepass exact·전체24DONEhealth0·全12raw 급식생산폐기/무효자금탈출종료PASS,80토마토생산판매同/646실12PLACE·남은8자정無추가폐기. 고용377절감에토마토판매−15/−8/+44·2조건비료net6/상대가격이득포함. 좁은3노출세계개발/일반승률보장0·Harvest602−9708/Lucas−159등미해결. 원c540FAIL/c541사전빈주문오류native0不변。
+  **c541 source135e7e444857ecb8a74570367cb803eae4f911782c585fe6f621e16453240ae3/local359 QA·단일tar/CRLFonlycompiledreadback PASS·共通seal/apply/verify全24(20new4reuse)완료**. c541-recovery임시삭제/03:50팝업shown재사용. 최신基359;**중복유사c539358가역은퇴**,全204265이전match/source/QA/전적保留/팀공개영향0;343anchor/355제출/356소유자수동제출reference유지。Kaggle대신제출0。
+  **c542 source61ca1c68475cb3b8fe74e791a477a68103adb98014433db66f8027d7a1d3e9a4**=c541위**day7+관측정확YARN/YARN에만**기존_y_controller window확장·1COW→1SHEEP×2(173/178),원cash100/physicalcredit/PICKUP/PLACE·서비스경로시장유지·다른상점/날/GOOSE변경0. 完c541602부모/후보도원49양털/40우유기전同·옛광범위c429/c431 negative保留. `herd-calendar-analysis`에서추가밀13관측비용/상품입고일정·우리기존우유/양털매출가격피드백별도검토. **602085461s0+809215919s1+1314653922s0 × Master350/TTV1/Lucas344/Harvest326 × 부모c541후보=24(8exact부모cache+16新)**,미러0;809는선언과거c462confirm메타사전순첫다른doubleYARN,성과미선택·131비발동토마토대조. 소스/계약새동결·OFF1438/activeprefix173/非활성719/단일tar→최초replay·全8628응답privateimmutable/회계·실2양배치/급식수확배송달력·자금/밤폐기/종료. raw급식/생산FAIL은전환경제분류,새무효급식탈출등은무시금지. 노출조건개발/자동128등록없음·유망적격후local全유효편입허용。
+  **c542 actualPID37932/launcher54744·04:00:43UTC/8CPU·하위0·단일lease**,Windows44800actualPID隠STA·**c542 ACTIVE 첫04:07UTC/13:07KST→10분**appreadback. 완료입구c542 completion/error/process/review. 대기중완료자료독립분석/중간성적금지·한FAIL기전포기금지. 次c481/c487조건수리/c498全경제·큰개선근거우선. League대결만중지·수집최신유지/마감2026-09-30 23:59UTC。
+
+
+실제 효과는 전체 실행과 후처리 완료 뒤 리뷰한다. 현재 후보 성능 주장은 없다.
+
+
+## 완료 결과와 실행 수리
+
+- **[2026-09-28T04:14:50.004737+00:00 Codex / c542 큰이득確認·원gate保留 → c543 빈서비스수리/실지원24]** 소유자완료통보로04:05:15完成確認·**c54224(新16+8cache)/12쌍own+3720.583·margin+3751/9W3L→11W1L(+16.67pp),기존승손실/개별음수0**. 6024조건만발동 **own11103..11216·마진11112..11326**,Harvest−9708→**1404**,Lucas−159→**11167**·나머지8同. **8628응답private/관측불변exact/24DONEhealth0**·2양구매배치PASS/자금급식탈출종료추가결함0. WOOL+49/MILK−40/다른생산同·추가밀급식13/동물200비용·전체시장매출가격/구매변화포함,단독양털매출을순이익아님. 밤575FERT1추가/671WHEAT2감소実비용保留。
+  **원execution/twoactiveworld gate FAIL·c542未採択/未登録**,3빈HARVEST510/518/653과655emptyMILK PLACE가원소작업잔재,생산수량삭제가아님. 二번째809는旧c462첫상점YY였으나**현c541 BRUNCH/YARN**으로정책미발동·성능약함아닌관측지원선정한계. 原source/계약/판정全保留·큰기전포기0. `c542/review-decision/economic-review`완료·c542임시삭제/04:05popupshown재사용·재경기0。
+  **c543 source914f0674dd48b5c05bd99a94d062b5dfc289990c9b6481a44fedd4acee2da0f8**=c542변환규칙불변+`_y_controller`뒤 **실전환day7SHEEP·관측yield0 HARVEST / 창고emptyMILK PLACE만PASS**·원market예측전단/관측불변/미래상대입력0. 추가자원생산판매/넓은축종선택변경0. 全4完c542경로719정책출력시장同/정확4명령차이만officialunit farm/private동일검사·c541 OFF1438/非활성719/prefix173,**currentc541 vs c523549prefix174exact+실YARN/YARNcow→sheep지원** 확인을사전필수로고정. 原c542실행검사완화없음/체인중간튜닝0。
+  **602085461s0/549449905s1/1314653922s0×Master350/TTV1/Lucas344/Harvest326×부모c541후보=24**,8정확부모cache+16新/미러0/8CPU·하위0·단일lease. 549는원currentlinec523실YY/소173178관측근거,과거seed라벨만으로추정금지. 원캡처replay→全12쌍8628singlepassresponse/private/immutable/회계·2양배치급식수확배송/무효/밤폐기/자금탈출종료검사. 의도한우유감소·급식차이는rawFAIL보존후경제분류. 개발표본/일반승률보장0·자동128없음。
+  **actualPID26336/launcher48260·04:12:17UTC**,Windowsnotifier53600actualPID隠STA·**c543 ACTIVE 첫04:19UTC/13:19KST→10분**appreadback. c543completion/error/process/review입구。現採택c541359/全24편입완료·c539358가역은퇴/c526356owneruploadreference/c522355제출reference保留·Kaggle소유자전용。큰기전수리후공개/현손실·c481/c487조건/c498전체경제지속/League대결만중지·수집최신유지·2026-09-30 23:59UTC마감。

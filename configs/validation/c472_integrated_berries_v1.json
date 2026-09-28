@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "parent": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c470_demand_public_coverage.py",
+      "sha256": "c36d7d611207dd6ea189f77a9ff92f87fa6b905c1443ba830308ec4a8e026c0d"
+    },
+    "c472": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c472_integrated_berry_service.py",
+      "sha256": "c252ec6f5e4fe423fef64e023180b2b8a7294ad9cb6ce6043f55228d7d131c7f"
+    }
+  },
+  "opponents": {
+    "demand340": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\bfe696c4caee29b3132b0b1ec4bcfc0aaa825357074ba1358390e138a8924b39\\main.py",
+      "sha256": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8",
+      "family": "demand_turn_timing"
+    },
+    "harvest326": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\5b5a63b523f0f69d271736927a828657ae82c56d676ca4976a8762a07a16cbff\\main.py",
+      "sha256": "3e6953b40e2facbad5dacd5af86f9d788007d753786ca658b6a9df268ce06025",
+      "family": "harvest"
+    },
+    "herd267": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\f96e7f9e64301347b55e9e884b32a6ee076b2cb8ad2d5add731250cabd44c4f1\\main.py",
+      "sha256": "a3323c6587b095622ac9d43a4f13c64fc44c9a2ac24562097e591821e5e88068",
+      "family": "herd"
+    },
+    "master322": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d.py",
+      "sha256": "cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d",
+      "family": "master"
+    },
+    "kitex78": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\b792548d14a7b7ab518e6134d20bfb1d5c6cf3b1275e8a37370166b246653cf0.py",
+      "sha256": "b792548d14a7b7ab518e6134d20bfb1d5c6cf3b1275e8a37370166b246653cf0",
+      "family": "kitex"
+    },
+    "moon261": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d40b00a13000cdc62a3420b43ee38f4ffd3591447f666c30d4b59f92e82d7df3\\main.py",
+      "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "family": "moon"
+    },
+    "xox333": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\72861c6e02a6dbfd193edb2cebe12563c5f1b41c1f210de6bfb34105d72929ff\\main.py",
+      "sha256": "c4423a8b8262cc755c72e0e9661d08ede20a7c734faaee32a4d1307edcd30a79",
+      "family": "parent"
+    },
+    "lucas327": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\561eb9ffa90cd8c026ea75dfc79ae28bd1be72ddc565a204fc6194b9c62757b1.py",
+      "sha256": "561eb9ffa90cd8c026ea75dfc79ae28bd1be72ddc565a204fc6194b9c62757b1",
+      "family": "parent"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c472",
+      "parent": "parent",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1005962435,
+        669353716,
+        1820275371,
+        909644668
+      ],
+      "alpha": 0.02
+    },
+    "confirm": {
+      "seeds": [
+        2022170912,
+        1364221803,
+        400755742,
+        898236368
+      ],
+      "alpha": 0.02
+    },
+    "final": {
+      "seeds": [
+        1230537701,
+        905177625
+      ],
+      "alpha": 0.009
+    }
+  },
+  "arena_meta": {
+    "validation_health_policy": "official_overage_v3",
+    "prior": "c471 repaired service:32 exposed conditions+25pp,all120berries. c470 public340 increment submitted. c472 puts exact service before C396 response/projection so new actions cannot invalidate its own forecasts.",
+    "gate": "Integration: exact actions/accounting,berry calendar,no parent nonPASS overrides,actual market safeguards,known rival private projection; mean own/margin>=0 against c471 and positive margin against c470,points>=0. Formal: healthy complete,meanown>=0/margin>0/points>=0,positive2worlds,per-opponent point>=-0.125; active service telemetry delivered120/conflicts0; selected full execution/accounting. World95%CI reported, direct review required; no automatic adoption.",
+    "execution": "Integration8conditions:8c471cached+8parent+8candidate; if fixed integration gates pass, fresh8worlds x8opponents x2seats x2models=256, both128 stages unless health failure. Selected6paired semantic audits. New12-worker contract; no parallel unrelated CPU."
+  }
+}

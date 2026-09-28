@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 240,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "parent": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c465_residual_queue_closure.py",
+      "sha256": "0f13a22d870b8fcd56a7cddfc1f1ad4226a1121c122e9d76dd8dce5f229d6115"
+    },
+    "c469": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c469_sparse_fertilized_berries.py",
+      "sha256": "34171ea92a07b3eee7213b8560bf7f3ab5983a071824ab9480ba838686381acb"
+    }
+  },
+  "opponents": {
+    "herd267": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\f96e7f9e64301347b55e9e884b32a6ee076b2cb8ad2d5add731250cabd44c4f1\\main.py",
+      "sha256": "a3323c6587b095622ac9d43a4f13c64fc44c9a2ac24562097e591821e5e88068",
+      "family": "herd"
+    },
+    "harvest326": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\5b5a63b523f0f69d271736927a828657ae82c56d676ca4976a8762a07a16cbff\\main.py",
+      "sha256": "3e6953b40e2facbad5dacd5af86f9d788007d753786ca658b6a9df268ce06025",
+      "family": "harvest"
+    },
+    "demand340": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\bfe696c4caee29b3132b0b1ec4bcfc0aaa825357074ba1358390e138a8924b39\\main.py",
+      "sha256": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8",
+      "family": "demand_turn_timing"
+    },
+    "master322": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d.py",
+      "sha256": "cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d",
+      "family": "master"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c469",
+      "parent": "parent",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        622163681,
+        706171713,
+        10714277,
+        480053807
+      ],
+      "alpha": 0.02
+    },
+    "confirm": {
+      "seeds": [
+        2040241970,
+        643489794,
+        566500121,
+        139005547,
+        1356176847,
+        103612290,
+        1320630226,
+        1824124400
+      ],
+      "alpha": 0.02
+    },
+    "final": {
+      "seeds": [
+        1348200214,
+        1687822805
+      ],
+      "alpha": 0.009
+    }
+  },
+  "arena_meta": {
+    "validation_health_policy": "official_overage_v3",
+    "prior": "c468 same controller:120extra berries in4diagnostic worlds; average own+6053.25/margin+9254.5, one serious regression and shop-path changes. Exposed private recordings diagnose only.",
+    "execution": "Reacting public4 x exposed worlds4 x2seats x2models=64 development. If fixed gate passes, fresh8world128 confirm. Eight validation workers plus separately owned c466 sequential diagnostic; total<=12. No mid-stage tuning.",
+    "gate": "All completed hashes/official health pass; mean own>=0, margin>0, family point delta>=0; opponent mean point delta>=-0.125; positive margin in>=2worlds. Confirm same gates plus selected exact accounting. World CI reported without broad win-rate claim; final adoption remains direct review."
+  }
+}
