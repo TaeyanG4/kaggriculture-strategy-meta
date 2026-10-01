@@ -18,32 +18,32 @@
   },
   "models": {
     "parent": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c506_public351_shadow.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c506_public351_shadow.py",
       "sha256": "65a293217c77193b6587774a17dda41282888e38d2fa319d2eab9aa65dc7abd8"
     },
     "c516": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c516_wool_fertilizer_calendar.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c516_wool_fertilizer_calendar.py",
       "sha256": "6c260fea9afeb806a92d24861417e1df3a72c4d4487886bdb54cee3aec983780"
     }
   },
   "opponents": {
     "demand340": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\bfe696c4caee29b3132b0b1ec4bcfc0aaa825357074ba1358390e138a8924b39\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\bfe696c4caee29b3132b0b1ec4bcfc0aaa825357074ba1358390e138a8924b39\\main.py",
       "sha256": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8",
       "family": "demand_turn_timing"
     },
     "public351": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\1eb0938d1a032e6189f5c08963cb2114ce71166942dd97727cccd405a002d2ee.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\sources\\1eb0938d1a032e6189f5c08963cb2114ce71166942dd97727cccd405a002d2ee.py",
       "sha256": "1eb0938d1a032e6189f5c08963cb2114ce71166942dd97727cccd405a002d2ee",
       "family": "herd"
     },
     "harvest326": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\5b5a63b523f0f69d271736927a828657ae82c56d676ca4976a8762a07a16cbff\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\5b5a63b523f0f69d271736927a828657ae82c56d676ca4976a8762a07a16cbff\\main.py",
       "sha256": "3e6953b40e2facbad5dacd5af86f9d788007d753786ca658b6a9df268ce06025",
       "family": "harvest"
     },
     "lucas344": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\sources\\3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd.py",
       "sha256": "3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd",
       "family": "parent"
     }

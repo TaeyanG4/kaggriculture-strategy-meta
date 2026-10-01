@@ -18,32 +18,32 @@
   },
   "models": {
     "parent": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c465_residual_queue_closure.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c465_residual_queue_closure.py",
       "sha256": "0f13a22d870b8fcd56a7cddfc1f1ad4226a1121c122e9d76dd8dce5f229d6115"
     },
     "c469": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c469_sparse_fertilized_berries.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c469_sparse_fertilized_berries.py",
       "sha256": "34171ea92a07b3eee7213b8560bf7f3ab5983a071824ab9480ba838686381acb"
     }
   },
   "opponents": {
     "herd267": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\f96e7f9e64301347b55e9e884b32a6ee076b2cb8ad2d5add731250cabd44c4f1\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\f96e7f9e64301347b55e9e884b32a6ee076b2cb8ad2d5add731250cabd44c4f1\\main.py",
       "sha256": "a3323c6587b095622ac9d43a4f13c64fc44c9a2ac24562097e591821e5e88068",
       "family": "herd"
     },
     "harvest326": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\5b5a63b523f0f69d271736927a828657ae82c56d676ca4976a8762a07a16cbff\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\5b5a63b523f0f69d271736927a828657ae82c56d676ca4976a8762a07a16cbff\\main.py",
       "sha256": "3e6953b40e2facbad5dacd5af86f9d788007d753786ca658b6a9df268ce06025",
       "family": "harvest"
     },
     "demand340": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\bfe696c4caee29b3132b0b1ec4bcfc0aaa825357074ba1358390e138a8924b39\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\bfe696c4caee29b3132b0b1ec4bcfc0aaa825357074ba1358390e138a8924b39\\main.py",
       "sha256": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8",
       "family": "demand_turn_timing"
     },
     "master322": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\sources\\cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d.py",
       "sha256": "cda529cb6b359fc4a9ab124d4d7950d5912bd5de846dcec4be70ca83b7150b2d",
       "family": "master"
     }

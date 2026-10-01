@@ -1,5 +1,5 @@
 param([string]$Candidate, [string]$Tag)
-$root = "H:\dev\kaggle-data\kaggriculture-strategy-meta"
+$root = "H:\kaggle\competitions\kaggriculture-strategy-meta"
 New-Item -ItemType Directory -Force "$root\o_results\elite_suite" | Out-Null
 $chunks = Get-ChildItem "$root\o_replays\elite_chunks" -Directory
 $total = ($chunks | ForEach-Object { (Get-ChildItem $_.FullName -Filter '*-replay.json').Count } | Measure-Object -Sum).Sum

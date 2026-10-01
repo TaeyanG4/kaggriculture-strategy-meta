@@ -3,7 +3,7 @@ Deterministic re-execution of the two p002 smoke games (same seed / seat / pinne
 parent, with engine hooks: per-day herd, cash, feed stock, purchases by hour, per-tile animal events (place / first feed / first harvest), milk
 sales and the full cash ledger. Not a new evaluation: reproduces the exact smoke games (finals must equal the smoke printout)."""
 import os, sys, json, collections, io, contextlib
-ROOT = 'H:/dev/kaggle-data/kaggriculture-strategy-meta'; os.chdir(ROOT); sys.path.insert(0, 'o_tools'); os.environ['MPLBACKEND'] = 'Agg'
+ROOT = 'H:/kaggle/competitions/kaggriculture-strategy-meta'; os.chdir(ROOT); sys.path.insert(0, 'o_tools'); os.environ['MPLBACKEND'] = 'Agg'
 os.environ.pop('PROXY_KNOBS', None)
 from proxy_eval import load_agent
 import fastgame

@@ -18,52 +18,52 @@
  },
  "models": {
   "c1200": {
-   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1200_final.py",
+   "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c1200_final.py",
    "sha256": "1e2bbdadd062fdb7d8e68261c20019493993fc98b1aa9b66db01e605ec5ca6a8"
   },
   "c947": {
-   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c947_joint_cargo_delivery.py",
+   "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c947_joint_cargo_delivery.py",
    "sha256": "0e09479554a9c3843de013cedf39ba9c08902826842a064f7240a447b13ab0de"
   }
  },
  "opponents": {
   "c947o": {
-   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c947_joint_cargo_delivery.py",
+   "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c947_joint_cargo_delivery.py",
    "sha256": "0e09479554a9c3843de013cedf39ba9c08902826842a064f7240a447b13ab0de",
    "family": "localbest_chain"
   },
   "c974": {
-   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c974_native_place_advance.py",
+   "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c974_native_place_advance.py",
    "sha256": "7b9567fc9b33e5e40fb6c2faadd3dc25b63c789c0bc3141133234ae92768e862",
    "family": "localbest_chain"
   },
   "c995": {
-   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c995_integrated_perennial_fertilizer.py",
+   "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c995_integrated_perennial_fertilizer.py",
    "sha256": "ff3e76a9c80c95e952e85a3222497b9c2068467a3643ff60ae97ee4184a95fc4",
    "family": "localbest_chain"
   },
   "c1001": {
-   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1001_hanaro_public_shadow.py",
+   "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c1001_hanaro_public_shadow.py",
    "sha256": "31bc5a6608078941cc09a1f5d84d5212616eba7fdb442ca539eee82daf2231f7",
    "family": "localbest_chain"
   },
   "c1017": {
-   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1017_native_crop_survival_water.py",
+   "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c1017_native_crop_survival_water.py",
    "sha256": "2ce2133ed4dcf7f8f6a01c88f84d09b7251c78d9b8221b1036718ac8bbaecb46",
    "family": "localbest_chain"
   },
   "c1041": {
-   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1041_native_manure_collection.py",
+   "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c1041_native_manure_collection.py",
    "sha256": "51c0098dce8ddd5b8efe1c0b935e7b4e3a82b21f39c59acb5da1b6b87696afb8",
    "family": "localbest_chain"
   },
   "c1047": {
-   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1047_terminal_seed_stock_bound.py",
+   "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c1047_terminal_seed_stock_bound.py",
    "sha256": "aa89c1e23f501124e5c2295bebdf0909ecc25596ddb6d050f630e439fb754826",
    "family": "localbest_chain"
   },
   "c1054": {
-   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1054_actual_cargo_depot_delivery.py",
+   "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c1054_actual_cargo_depot_delivery.py",
    "sha256": "8dbc15c9014f7e2458fbfc958c98f9541280e88db14296e23b93882dd16c2cee",
    "family": "localbest_chain"
   }

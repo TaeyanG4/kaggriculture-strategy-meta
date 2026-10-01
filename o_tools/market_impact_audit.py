@@ -18,7 +18,7 @@ import argparse, collections, copy, glob, json, os, sys, time, statistics
 from concurrent.futures import ProcessPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MAIN_ROOT = r'H:\dev\kaggle-data\kaggriculture-strategy-meta'
+MAIN_ROOT = r'H:\kaggle\competitions\kaggriculture-strategy-meta'
 os.environ['MPLBACKEND'] = 'Agg'
 for p in [os.path.join(ROOT, 'o_tools'), os.path.join(MAIN_ROOT, 'o_tools'), ROOT, MAIN_ROOT]:
     if os.path.isdir(p) and p not in sys.path:

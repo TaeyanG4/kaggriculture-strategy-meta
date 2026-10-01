@@ -18,72 +18,72 @@
   },
   "models": {
     "c396": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c396_public_shadow.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c396_public_shadow.py",
       "sha256": "a0b64d765c54ceeafc872ef2a249e3e8492eb5f2206800d035dbaaef31d5c480"
     },
     "c397": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c397_shadow_coverage.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\agent\\c397_shadow_coverage.py",
       "sha256": "28a520730a4f0037c0e9f433e28417db1ba0c95999a55b1751a396b28da08ad2"
     }
   },
   "opponents": {
     "c396": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\a0b64d765c54ceeafc872ef2a249e3e8492eb5f2206800d035dbaaef31d5c480.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\sources\\a0b64d765c54ceeafc872ef2a249e3e8492eb5f2206800d035dbaaef31d5c480.py",
       "sha256": "a0b64d765c54ceeafc872ef2a249e3e8492eb5f2206800d035dbaaef31d5c480",
       "family": "c396"
     },
     "c387": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\2574f60424e319f5cd1df0221c94eb1bf33da57fa32ef0a15a8a7e7f65a2eae7.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\sources\\2574f60424e319f5cd1df0221c94eb1bf33da57fa32ef0a15a8a7e7f65a2eae7.py",
       "sha256": "2574f60424e319f5cd1df0221c94eb1bf33da57fa32ef0a15a8a7e7f65a2eae7",
       "family": "c387"
     },
     "v15": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\da083c4fa48672f9d77d1de2c77a4d2d40e0f53a4456d090489cb368f51836b0\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\da083c4fa48672f9d77d1de2c77a4d2d40e0f53a4456d090489cb368f51836b0\\main.py",
       "sha256": "d6565929be5283a5decf00c986359542ee1c106d7819815f8c69ccab35e363dd",
       "family": "v15"
     },
     "herd255": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d22f94b90cb58f17637eed6062583533ea3f378a947b79d4fdc7059ce93c92b2\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d22f94b90cb58f17637eed6062583533ea3f378a947b79d4fdc7059ce93c92b2\\main.py",
       "sha256": "1cac27653a81208bddc652d7f8437a4eed4ff3bd261c32934a08983484edf214",
       "family": "herd255"
     },
     "ca20": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\b70e22fa8105035a9744d13e1b46ee50a75e7f6c5a7b6196beb71c7f31802da7\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\b70e22fa8105035a9744d13e1b46ee50a75e7f6c5a7b6196beb71c7f31802da7\\main.py",
       "sha256": "29454a13477f827c34615300f90a7bdb074ea3c9bcb948f3372bf95fa1fb207d",
       "family": "ca20"
     },
     "clone": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\sources\\0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778.py",
       "sha256": "0070f9e125902d690995acbbb0df1e3f46185a560771c0843d074f315345c778",
       "family": "clone"
     },
     "wheat": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\97ad9f3bf0190a6368c764b1dc037c83bb1e495818c52566f761d26bde6e70b6\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\97ad9f3bf0190a6368c764b1dc037c83bb1e495818c52566f761d26bde6e70b6\\main.py",
       "sha256": "83fb106f37fcc10f3c3d9db8a78ded1529da30e9e232976ec0cf46fd6662fed4",
       "family": "wheat"
     },
     "soil": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d40b00a13000cdc62a3420b43ee38f4ffd3591447f666c30d4b59f92e82d7df3\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\d40b00a13000cdc62a3420b43ee38f4ffd3591447f666c30d4b59f92e82d7df3\\main.py",
       "sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
       "family": "soil"
     },
     "order": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\8e82ba45517fb1704276ff3a98062a7e1c5d11aeb4db68c7d34d004be599297c\\main.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\8e82ba45517fb1704276ff3a98062a7e1c5d11aeb4db68c7d34d004be599297c\\main.py",
       "sha256": "8045c8872406044cb0b6bf9f80e440f07c250e325618894f4a91141af6d3b6ad",
       "family": "order"
     },
     "idle": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\1cb133e934e3da46175be2662dec1d0980b1c13ba33b43a9ef035a0b3934e62f.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\sources\\1cb133e934e3da46175be2662dec1d0980b1c13ba33b43a9ef035a0b3934e62f.py",
       "sha256": "1cb133e934e3da46175be2662dec1d0980b1c13ba33b43a9ef035a0b3934e62f",
       "family": "idle"
     },
     "v43": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\3abe0ca715ba18647c138d0c28f59f34371e1ea28d4378e290ab33760d2c12dc.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\sources\\3abe0ca715ba18647c138d0c28f59f34371e1ea28d4378e290ab33760d2c12dc.py",
       "sha256": "3abe0ca715ba18647c138d0c28f59f34371e1ea28d4378e290ab33760d2c12dc",
       "family": "v43"
     },
     "moon251": {
-      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323.py",
+      "path": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\state\\public_league\\sources\\bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323.py",
       "sha256": "bc80b476d9f3a714c8a357f57de8ca57012f6bd96cb2e204cab2a29a311b2323",
       "family": "moon251"
     }

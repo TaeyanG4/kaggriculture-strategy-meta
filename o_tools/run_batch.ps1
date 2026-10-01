@@ -16,7 +16,7 @@ param(
 )
 # Runs suite (6 chunk processes) + pool (1 process) per candidate in the background and polls result
 # files, so one status line shows the current step AND the whole batch (elapsed / ETA) in real time.
-$root = "H:\dev\kaggle-data\kaggriculture-strategy-meta"
+$root = "H:\kaggle\competitions\kaggriculture-strategy-meta"
 $py = "$root\.venv\Scripts\python.exe"
 $poolTag = [IO.Path]::GetFileNameWithoutExtension($Pool)
 $poolN = @((Get-Content "$root\$Pool" -Raw -Encoding UTF8 | ConvertFrom-Json).PSObject.Properties).Count

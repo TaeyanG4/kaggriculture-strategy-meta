@@ -6,7 +6,7 @@ param(
 )
 # Lean validation: suite (88) -> gate -> fast pool (10 opps x 8 seeds x 2 seats) -> holdout (40).
 # ~5 min per candidate instead of ~12. Bank / 32-seed pool stay manual (finalists only).
-$root = "H:\dev\kaggle-data\kaggriculture-strategy-meta"; $py = "$root\.venv\Scripts\python.exe"; $env:MPLBACKEND = "Agg"
+$root = "H:\kaggle\competitions\kaggriculture-strategy-meta"; $py = "$root\.venv\Scripts\python.exe"; $env:MPLBACKEND = "Agg"
 $sw = [System.Diagnostics.Stopwatch]::StartNew()
 & "$root\o_tools\run_batch.ps1" -SkipPool -Candidates @("$Tag=$File") | Out-Null
 $s = & $py "$root\o_tools\suite_summary.py" $Tag $Base | Select-Object -Index 2,3

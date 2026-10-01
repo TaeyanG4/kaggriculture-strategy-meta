@@ -138,7 +138,7 @@
     "execution": "8isolatedworkers due prior measured contention; League stopped. Auto collectionON; restoreordinary8workers after completion.",
     "coverage": "Both seats;OFF/prefix identity; source/error/mutation/health; selected exact native+accounting for changed/control cases across distinct reacting sources. Frozen contracts unchanged.",
     "execution_subset": {
-      "source": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\configs\\validation\\c386_c387_tomato_forecast_v1.json",
+      "source": "H:\\kaggle\\competitions\\kaggriculture-strategy-meta\\configs\\validation\\c386_c387_tomato_forecast_v1.json",
       "source_sha256": "8dac8c0e9956e12b82293067dfda0176433abe375b4023b6471d7e95c8e9b84b",
       "retained_models": [
         "c379",
