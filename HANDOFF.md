@@ -14,4 +14,6 @@ PUBLIC RELEASE 2026-10-01 10:05 KST (Claude, owner request): repo TaeyanG4/kaggr
 
 VISIBILITY 2026-10-01 10:40 KST (Claude, owner request): repo set back to PRIVATE while the leaderboard runs. Owner release rule (Kaggle 6.b): public = GitHub public + Kaggle Discussion post with repo link and method summary; no competition data in repo; credential/license check first. README: timeline table -> list (mobile readability), local league section + UI screenshot + top-25 rating chart added (server started briefly for the screenshot, then stopped). Checklist docs/release-checklist.md.
 
+VISIBILITY 2026-10-01 11:00 KST (Claude, owner request "다시 public으로"): repo PUBLIC again. Kaggle Discussion post per rule 6.b (draft docs/release-checklist.md §5) remains for the owner. Gateway 8792 + Cloudflare tunnel stopped 10:55; no league listeners; scheduled task "Kaggriculture Public League Collect" still Ready.
+
 NEXT: read-only status of 56722176 only when owner asks; no further uploads without a new explicit owner instruction.
