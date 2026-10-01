@@ -16,6 +16,7 @@ Start with the top-level [README](../README.md) ([한국어](../README.ko.md)), 
 | [reusable-validation.ko.md](reusable-validation.ko.md) | How to write a validation config and run the shared runner; stages, seeds, health rules, statistics | current (v1 contract; v3/v4 notes in research-tools) |
 | [research-tools.ko.md](research-tools.ko.md) | Tool catalogue: runners v2/v3, overage timing contract, replay/identity audits, builders | current |
 | [research-guardrails.md](research-guardrails.md) | Owner rules accumulated during the c300–c1000 research cycles (small-improvement policy, download exceptions, retry rules) | current |
+| [release-checklist.md](release-checklist.md) | Steps before opening the repository: no competition data, no credentials, licenses, Kaggle rule 6.b Discussion post (draft included) | current |
 | [completion-driven-research.ko.md](completion-driven-research.ko.md) | Completion-notification driven research loop used in the late cycles | current |
 | [c300-research.ko.md](c300-research.ko.md) | c300-series research framing (live-loss decomposition, opening mirror) | reference |
 | [o-validation-process.ko.md](o-validation-process.ko.md) | o-series validation process (planner candidates) | reference |

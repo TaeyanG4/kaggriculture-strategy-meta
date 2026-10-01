@@ -85,17 +85,51 @@ flowchart LR
     H --> I[c1200 final<br/>10-01]
 ```
 
-| Period | Phase | What happened | Where to read |
-|---|---|---|---|
-| 09-11 | Dataset pilot | Bounded current-meta V1 (168 CC0 episodes, 336 seats), schema and gate; first benchmark harness and rights-clear baselines | `docs/gate-2026-09-11.md`, `docs/v1-schema.md` |
-| 09-12 → 09-13 | Public baselines | Adopted v27 then V37 as exact champions; rebuilt the simulation league with official loader, fingerprints and separate seed stages; `c110`/`c111` first live submissions (c111 2350.6 after 56 games) | `docs/public-v37-adoption.md`, `docs/simulation-league.md` |
-| 09-14 → 09-19 | Planner (o-series) | Built a planner (`base19`) and compared it with public V46/V47/V48 and our own tapes on a 12-opponent panel and head-to-head; learned the local panel saturates above the live top, that live strength came from tape routers, and that the gap to the top was herd scale, not labour | `reports/o-index-2026-09-19.ko.md`, `reports/o-policy-compare-results-2026-09-19.ko.md` |
-| 09-21 | Public notebook league | Service that collects every public Kaggriculture notebook, extracts runnable agents and plays native reacting matches locally (614 notebooks screened by 09-25) | `docs/public-league.ko.md` |
-| 09-21 → 09-24 | New lineage | `c358` composed the Local Best market stack with V54's opening; `c396` added public-policy state tracking with same-turn funded market response; `c414` targeted-opponent acceptance; validation v3 adopted the official overage timing contract | `reports/c358-localbest-hybrid-2026-09-21.ko.md`, `reports/c414-targeted-opponents-2026-09-24.ko.md` |
-| 09-25 → 09-28 | Market and recovery layers | Exact queue search (`c461`), terminal recovery (`c447`), wool/fertilizer calendars (`c516`–`c544`); c544 reached 2411 live. Route swaps, sale windows and extra tomato rows (`c588`–`c596`) all failed adoption | `docs/experiment-history-and-lessons.ko.md` |
-| 09-28 → 09-29 | Service layers | Observation-based cleanup and completion services (`c580`, `c612`, `c671`, `c763`, `c776`, `c785`, `c833`) | candidate reports in `reports/` |
-| 09-30 | c900 series | Nine small, gated adoptions `c947` → `c1064`, each verified by exact own-field transition checks; owner policy now admitted qualified small improvements without a win flip | `state/`-free summaries in `HANDOFF.md`; chart below |
-| 10-01 | Final | `c1200` = `c1064` packaged and submitted; direct ladder of every c900-series version on fresh seeds (256 games) | `configs/validation/c1200_chain_ladder_v4.json` |
+**Sep 11 · Dataset pilot.** Bounded current-meta V1 (168 CC0 episodes, 336
+seats) with schema and quality gate; first benchmark harness and rights-clear
+baselines. Read `docs/gate-2026-09-11.md`, `docs/v1-schema.md`.
+
+**Sep 12–13 · Public baselines.** Adopted v27, then V37, as exact champions.
+Rebuilt the simulation league with Kaggle's official loader, source and engine
+fingerprints and separate seed stages. `c110`/`c111` were the first live
+submissions (c111 reached 2350.6 after 56 games). Read
+`docs/public-v37-adoption.md`, `docs/simulation-league.md`.
+
+**Sep 14–19 · Planner (o-series).** Built a planner (`base19`) and compared it
+with public V46/V47/V48 and our own tapes on a 12-opponent panel and head-to-head.
+Learned that the local panel saturates above the live top, that live strength came
+from tape routers, and that the gap to the top was herd scale, not labour. Read
+`reports/o-index-2026-09-19.ko.md`, `reports/o-policy-compare-results-2026-09-19.ko.md`.
+
+**Sep 21 · Local public-notebook league.** Built a service that collects every
+public Kaggriculture notebook, extracts runnable agents and plays native reacting
+matches locally, with a web UI, ratings and a team gateway. Details and
+screenshots in [section 5](#local-public-notebook-league). Read
+`docs/public-league.ko.md`.
+
+**Sep 21–24 · New lineage.** `c358` composed the Local Best market stack with
+V54's opening; `c396` added public-policy state tracking with a same-turn funded
+market response; `c414` added targeted-opponent acceptance; validation v3 adopted
+the official overage timing contract. Read
+`reports/c358-localbest-hybrid-2026-09-21.ko.md`, `reports/c414-targeted-opponents-2026-09-24.ko.md`.
+
+**Sep 25–28 · Market and recovery layers.** Exact queue search (`c461`), terminal
+recovery (`c447`), wool and fertilizer calendars (`c516`–`c544`); c544 reached
+2411 live. Route swaps, sale windows and extra tomato rows (`c588`–`c596`) all
+failed adoption. Read `docs/experiment-history-and-lessons.ko.md`.
+
+**Sep 28–29 · Service layers.** Observation-based cleanup and completion services
+(`c580`, `c612`, `c671`, `c763`, `c776`, `c785`, `c833`). Read the candidate
+reports in `reports/`.
+
+**Sep 30 · c900 series.** Nine small, gated adoptions `c947` → `c1064`, each
+verified by exact own-field transition checks; the owner policy now admitted
+qualified small improvements without a win flip. Read `HANDOFF.md` and the
+charts below.
+
+**Oct 1 · Final.** `c1200` = `c1064` packaged and submitted; direct ladder of
+every c900-series version on fresh seeds (256 games). Read
+`configs/validation/c1200_chain_ladder_v4.json`.
 
 ### c900-series progress
 
@@ -190,8 +224,41 @@ flowchart LR
   `docs/reusable-validation.ko.md`.
 - **Opponent pools.** Fixed historical baselines, diverse strong public policies,
   hypothesis-specific weakness attackers and legitimately obtained top-ranked
-  code or replays (`docs/agent-validation-protocol.ko.md`); the public notebook
-  league supplied and rated the public pool.
+  code or replays (`docs/agent-validation-protocol.ko.md`); the local league
+  below supplied and rated the public pool.
+
+### Local public-notebook league
+
+To know how a candidate fares against the actual live population, not just a
+hand-picked panel, we built a local league around the public notebooks
+(`tools/public_league.py`, `src/kaggriculture_meta/public_league.py`,
+`configs/public_league_v2.json`).
+
+- **Collection.** Every public Kaggriculture notebook is listed through the Kaggle
+  API (score and recency orderings plus search), new versions are pulled, and
+  runnable agents are extracted from `main.py`, tar members, `%%writefile` cells,
+  direct agent cells and packed file maps. Multi-file artifacts are hashed over
+  their sorted member paths and bytes.
+- **Admission QA.** An agent enters only if it compiles, loads through Kaggle's
+  last-callable loader and returns a real first action under the official
+  observation; failures are quarantined with their error, never deleted.
+- **Matches.** Native reacting games on the pinned engine, both seats, eight
+  workers, SQLite-cached by engine, rules, runner, artifacts, seed and seat.
+  New agents get catch-up matchmaking; the top 120–150 stay `active`, the rest
+  are `archived` with full history.
+- **Rating.** Regularized Bradley–Terry displayed on a 1500 + 400/ln10 scale with
+  Wilson 95% intervals. Our own candidates are registered alongside the public
+  pool, so a "focus measurement" of 500 games against the live population takes
+  about an hour.
+- **Operation.** A local web UI (port 8791) with manual and scheduled collection,
+  continuous battles, per-agent histories and source views; a login gateway plus a
+  Cloudflare quick tunnel gave teammates read access. Snapshot on 2026-10-01: 407
+  notebooks, 739 versions, 380 runnable agents, 150 active, 206,593 completed
+  matches.
+
+![Local league web UI](docs/images/public_league_ui_2026-10-01.png)
+
+![Local league top 25 ratings](docs/images/public_league_ratings_2026-10-01.png)
 
 ## 6. Results
 

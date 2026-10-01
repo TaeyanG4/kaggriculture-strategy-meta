@@ -12,4 +12,6 @@ LADDER 2026-10-01 09:29 KST (Claude, owner request "c947부터 c1200까지 비�
 
 PUBLIC RELEASE 2026-10-01 10:05 KST (Claude, owner request): repo TaeyanG4/kaggriculture-strategy-meta switched PRIVATE->PUBLIC after secrets scan (tracked HEAD, history filenames, staged files: clean). Commit 4a76ea7: README.md (en) + README.ko.md, docs/INDEX.md, LICENSE Apache-2.0, NOTICE, docs/images/*.png, lineage c947..c1064 + c1200_final.py tracked byte-exact (.gitattributes -text), c546..c1200 configs/reports/tools/tests. README sections 6 Results and 7 Review intentionally blank (owner adds later). 76 failed-candidate agent files and RESUME.md left untracked by owner choice.
 
+VISIBILITY 2026-10-01 10:40 KST (Claude, owner request): repo set back to PRIVATE while the leaderboard runs. Owner release rule (Kaggle 6.b): public = GitHub public + Kaggle Discussion post with repo link and method summary; no competition data in repo; credential/license check first. README: timeline table -> list (mobile readability), local league section + UI screenshot + top-25 rating chart added (server started briefly for the screenshot, then stopped). Checklist docs/release-checklist.md.
+
 NEXT: read-only status of 56722176 only when owner asks; no further uploads without a new explicit owner instruction.
