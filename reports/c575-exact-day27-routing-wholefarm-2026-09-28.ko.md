@@ -1,0 +1,19 @@
+# c575 같은 인원·시비의 27일 토마토 경로 전체농장 진단
+
+## 실행오류 직접리뷰
+
+**c575는14:16:35UTC 오류종료했으며 정상4경기 완료가 아니다.** 원12pool 실행에서 새27일계산이1.24..1.55초 걸려 strictnewrouter fullcall<1초 wrapper검사가AssertionError를냈다. engine이이를652ERROR로흡수하고나머지행동을PASS로진행한뒤 마지막719만DONE으로덮었다. callback_count651/필요719, 전4replay652..718ERROR이고response검사가651actionNone불일치를잡았다. 따라서720/DONE와공식원장cash0만으로정상정책결과를인정할수없다. 전4경기의수익·생산수치를성과로사용하거나정상완료cache로재사용하지않는다. **원source/plan/identity/error/replay/ledger를보존**, execution-error-review/review-decision완료·임시c575삭제/14:16shown소리재사용. 정책의행동비결정성이입증된것은아니다. 단독source약0.41초와차이가있으나일반12worker성능원인을확정하지않는다.
+
+c576은 **동일정확정책·동일새계산1초gate**를유지하며 실행과검사만복구한다. 원20same-source prefix와16비발동case 36건을SHA로재사용하고 부모c557 exact720native4와c572비교cache도보존한다. 유효완료경기를재실행하지않는다. 오류c575native4는정상cache로쓸수없으므로최대4새candidate진단만실행한다. 모든접두완료barrier뒤4독립native만4pool에넣어다른prefix작업과겹치지않는다. timingobserver는위반을기록하면서원행동을반환하고후속gate에서거절한다; engine내인위예외로게임을바꾸지않는다. **모든720관측의모든seatERROR/INVALID/TIMEOUT0·실source719calls·최종DONE·공식누적actTimeout+remainingOverageTime·새경로전체call<1초**를전부검사하고통과한경우만최초공식원장과719response감사를진행한다. 실패시replay+health+모든call시간/위반을저장한뒤중단한다. 과거4invalid캡처를새health가거절하는회귀PASS/검사완화0.
+
+c573은 **13:59:04UTC 완료**,4노출세계의12현재상황/4고유기하를 검증했다. 새policycalls/native/후보0. 같은인원·원시비·물주기와 수확30을 모두 유지하면 day26 조기20/밤10, day27 **조기14→22/밤16→8**, day28 조기30/밤0이다. 전12공식unit검사PASS/원소스불변. 한타일전체서비스를한worker가한블록으로방문하는 범위의 경로최적이며 전역전략/최소인원증명이 아니다. 독립창고100/조건FERT라 실제밤폐기·순익 개선확정0. 원c572 day27 폐기2/6/11/9, 114611904 day26추가2는 후속전체농장검사의 대상이다. `economic-review/review-decision`완료·**임시c573삭제/13:59shown소리재사용**.
+
+c574에서같은목적함수의계산을 sparsefeasiblepath+두worker분할frontier/중복pair재사용으로 줄였다. 원1차구현1.31초는 보존했고 최종단독0.315초, 소스helper12최대0.370초, 독립작은문제 전수검사48개PASS다. 단, 사전검사가 모든call에1초를강제하여 repairOFF step0의기존초기화4.591초에서FAIL/native0였다. **공식규칙은 actTimeout1+remainingOverageTime(초기60)**이고 max(0,elapsed−1)을 누적차감한다. 기존c572OFF도4.585초다. c574원source/plan/identity/error/판정은 그대로보존하고 `timing-contract-error-review`에공식agent.py/core.py증거를고정했다. c575는 **동일정확정책**의별도계약으로모든call공식누적시간규칙과새경로전체call<1초를동시에검사한다. 원엄격1초계약의FAIL을PASS로덮지않았다. c573보고의1초는기본예산이지전체허용시간이라는단정이아님을이곳에서정정한다.
+
+c575는c572 원투자문턱/추가SErow7의5TOMATO·한worker/원80+추가40/시비·다른농사·시장선택을유지한다. day27현재15칸모두WATER,FERT,HARVEST필요·양수yield/원source-owned4worker/남은callback<=21이라는실행지원범위에서만 전체subset 최단경로와worker분할을사용한다. 그외현재조건·26/28일은원c572계획을유지한다. 조기입고최대→최소peak→그peak내총시간최소/개별귀환선택이다. 가격·seed·상대private·결과lookup0/실제관측만. 명령위치guard/실FERT·cargo검사/실TOMATOprojectedstock 매도정합은원그대로다. 내부_C574 식별자는유지한동일소스이며c575명칭이별도정책을뜻하지않는다.
+
+소스 **13f17f50a4ee8a874bdd94e4befe232090e3e02c3d9ce6a8dda4e4db3fa5ae79**, 단일tar **153ce4d5eb893baee738a6e83d2ef3049983213280dc3a8f71386dc38b63c0d2**. 사전 **96.40초PASS**: 완료48전수/12공식물리helper재사용, repairOFF719 exactc572+allOFF1438 exactc557/관측불변. 4개c572접두는27일이전행동을모두유지하고처음변경[651, 651, 651, 651]에서발생했다. 새계획전체call최대0.407초/공식누적예산PASS. 원c557대4발동접두+비발동승대조719=5결과재사용/나머지15확인. 모든사전통과뒤만 coordinator시작.
+
+**2026-09-28T14:15:42.489654+00:00 actual33240/launcher47688/notifier45420·12CPU/모델하위0/globallease**. 실행전16.0logicalCPU/load14.0%/free56.3GiB·가속실측주장0. **첫2026-09-28T14:18:00Z→5분**앱readback. Windows숨김STA실PID완료·오류소리1회/receipt중복0. 정상진행즉시DONT_NOTIFY·모델wait중간성적금지. 원20선정경로/원4eligible, 최대4새candidate녹음상대native; 부모c557 exact720native4와c572비교캐시재사용, 비발동16재대결0. 원반응강도검증이아니며720DONE→최초공식원장cash잔차0→719응답불변검사다. 실제전체농장밤폐기/원80+extra40/시비급식/무효·fallback·자금/탈출종료·양측모든생산매입매출/샵RNG·rawFAIL·시간예산을직접리뷰한다. effect는c557대, versus_c572는실패c572대다.
+
+채택**c557/local364803a6237/tar4286c003**유지·c55724+c55836양단계PASS/52unique38new14reuse편입완·재등록편입0. c558검증명,c544362/owner56631964보존/Kaggle소유자전용. 새source는1차24~36→같은exactsource의최신실강자종류확대별도2차24~36둘다PASS→직접경제실행/source/tar/QA/readback중복확인→local→양단계全유효공통편입verify. 2차전실최종cell/version/hash/alias/공개경쟁근거조회;미검증ratingtitle최근성은강도증명아님. 8현재+33old패pending·소진0/c567c571c572배송FAIL·한own음수/c561c564c313317320c536c552F11FAIL보존. 큰효과지원근거우선/한FAIL기전포기0. 여유12부족8이하/하위0/총最大128미러0/**c545504절대재개금지**. League대결만중지·서버수집최신보존/2026-09-30 23:59UTC마감.

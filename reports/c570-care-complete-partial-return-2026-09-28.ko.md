@@ -1,0 +1,14 @@
+# c570 모든 작업을 유지하는 부분 조기입고 진단
+
+- **[2026-09-28T13:12:17.126647+00:00 Codex / c569 공동배치 리뷰 완료 → c570 작업완료·부분 조기입고 진단]** c569 **12:57:35UTC 완료**,4source-role719capture=2876exact/불변·12현재관측4세계72scenario(24alias)/32fullreturn가능. 全4기하同:day26 pool4/5/6duration23/21/20 vs20,day27원FERT pool5/6/7=26/24/22 vs21(전불가)·extraFERT유예23/21/20,day28pool4/5/6=23/21/19 vs21. 원baseFERT保留·추가인원1/2고용+987/+2584. **이고정전량귀환catalog에서고용절감근거0**,전역최소인원/기전포기아님. 원c567FAIL보존·`economic-review/review-decision`완/임시c569삭제/12:57:35shown소리재사용. 전량PLACE/cargo0요건은게임필수보다강함:기존c541는원12조기입고+8밤입고활용. 경제/밤폐기gate를완화하지않고부분귀환기전을별도검토한다.
+  **c570은새policycalls/native/원engine원장감사/후보0**,c569완료12currentcontext(4c567경로×26/27/28일)그대로/원2876capture재사용. 현재c5675cd2e34f/c557803a6237불변. 원source-owned토마토staff와extra2/3/4·원baseFERT保留/extraFERT오늘유예2모드=72보고(무시비24alias포함). 한타일전체서비스한worker/고정8row/columnsnake연속분할정역방향·원actor배정은동일. **모든20현재WATER·요청FERT·현재yield HARVEST를밤전완료한다는제약아래조기입고량最大→마지막완료시간最小→고정peak총시간最小**,worker별귀환선택. catalog불가전역불가주장0/시드가격상대futureprivate입력0.
+  선택명령officialunit검사·전20care/수확/요청시비완료와harvest=earlydeposit+nightcargo exact·원c569가능32allreturn은전량입고회귀필수. **밤cargo를안전하다고가정하지않음**:공동창고·다른농장cargo/매도·자금/가격RNG실검사미완·원밤FAIL保留. isolatedpool창고100/조건FERT·현allorders+3000reserve+FibonacciextraHIRE/10order별도,solvency아님. 원count2poolnextpos라벨exact/현재obsaction불변. observable先保存후원DROP시각stock/cargo/orders·원poolPLACE/밤폐기사후labels만. 27extraFERT유예로다음날yield바뀌므로독립날수확합산0.
+  **사전SH114648869day26 6mode1.562초PASS**:extra2+원2(total4)19callbacks/40全수확/조기18·밤22/추가hire0,extra3(total5)19callbacks/조기32·밤8/+987,extra4(total6)20callbacks/全40입고/+2584. 原FERT없는날두모드同. 원SHc567원12조기+extra0보다사전입고여지6이있지만실공동창고폐기/순익개선확정0. **사전1재사용/남은11본체인**. 충분한지원이면다음은別관측routing/dispatchsource·전체농장진단으로연결,고정값문턱fit/isolated진단끝없는반복0.
+  **2026-09-28T13:09:34.836821+00:00 actual38188/launcher51312/notifier39444·12CPU하위0/globallease**,16logicalCPU/load22%/free53.5GiB스냅샷·가속실측주장0. **첫13:12UTC→5분**앱readback·사전1.562초+남은11병렬import병합1분여유추정/보장0. Windows숨김STA실PID완료오류소리1회receipt중복0/正常즉시DONT_NOTIFY·모델wait중간성적금지.
+  原c5674extra78+원80보존나TOMATO밤폐기增39/36/48/37/own+18258/-437/-3104/-89/margin+1433/-1738/-4326/-3800/全town504혼합HOLD保留·반응강도0. 現採択**c557/local364 exact803a6237/tar4286c003**,兩단계c55724/c55836/52unique38new14reuse全편입完·재등록편입0. c558검증명/c544362 owner56631964/Kaggle소유자전용. 新source兩단계同exact24~36·2차최신實강자종류확대/실cellhashversionalias공개경쟁근거·직접경제실행QA/source/tar/readback중복後local共通전체유효편입. local미검증ratingtitle최근성만강도확정0. 大효과지원가능성우선·8현재+33oldpending/c561/c564/c313317320/c536/c552/F11FAIL保留/한FAIL기전포기0. 여유12부족8이하/하위0/通常24~36총最大128미러0/**c545504절대재개금지**. League대결만중지서버수집最新보존/09-30 23:59UTC마감. [c570 보고서](reports/c570-care-complete-partial-return-2026-09-28.ko.md).
+
+
+
+## 완료 검토
+
+13:09:39UTC 완료. 72조건 물리검사와 기존32전량귀환 회귀 통과. 같은 extra2명·원시비에서 day26/27/28 조기입고18/14/30, 밤cargo22/26/13. day27은 원20보다 조기입고가 적다. 전체농장 실행·수익은 미확정이며 새대결은0. 경제/판정 리뷰 완료, c570 임시확인 삭제·기존소리영수증 재사용. 별도c571 관측소스 전체농장진단을 시작했다.

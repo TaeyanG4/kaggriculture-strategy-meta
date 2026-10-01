@@ -1,0 +1,112 @@
+{
+ "schema": 1,
+ "workers": 8,
+ "timeout_seconds": 600,
+ "configuration": {
+  "episodeSteps": 720
+ },
+ "engine": {
+  "version": "1.32.7",
+  "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+  "files": {
+   "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+   "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+   "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+   "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+   "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+  }
+ },
+ "models": {
+  "c1200": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1200_final.py",
+   "sha256": "1e2bbdadd062fdb7d8e68261c20019493993fc98b1aa9b66db01e605ec5ca6a8"
+  },
+  "c947": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c947_joint_cargo_delivery.py",
+   "sha256": "0e09479554a9c3843de013cedf39ba9c08902826842a064f7240a447b13ab0de"
+  }
+ },
+ "opponents": {
+  "c947o": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c947_joint_cargo_delivery.py",
+   "sha256": "0e09479554a9c3843de013cedf39ba9c08902826842a064f7240a447b13ab0de",
+   "family": "localbest_chain"
+  },
+  "c974": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c974_native_place_advance.py",
+   "sha256": "7b9567fc9b33e5e40fb6c2faadd3dc25b63c789c0bc3141133234ae92768e862",
+   "family": "localbest_chain"
+  },
+  "c995": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c995_integrated_perennial_fertilizer.py",
+   "sha256": "ff3e76a9c80c95e952e85a3222497b9c2068467a3643ff60ae97ee4184a95fc4",
+   "family": "localbest_chain"
+  },
+  "c1001": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1001_hanaro_public_shadow.py",
+   "sha256": "31bc5a6608078941cc09a1f5d84d5212616eba7fdb442ca539eee82daf2231f7",
+   "family": "localbest_chain"
+  },
+  "c1017": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1017_native_crop_survival_water.py",
+   "sha256": "2ce2133ed4dcf7f8f6a01c88f84d09b7251c78d9b8221b1036718ac8bbaecb46",
+   "family": "localbest_chain"
+  },
+  "c1041": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1041_native_manure_collection.py",
+   "sha256": "51c0098dce8ddd5b8efe1c0b935e7b4e3a82b21f39c59acb5da1b6b87696afb8",
+   "family": "localbest_chain"
+  },
+  "c1047": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1047_terminal_seed_stock_bound.py",
+   "sha256": "aa89c1e23f501124e5c2295bebdf0909ecc25596ddb6d050f630e439fb754826",
+   "family": "localbest_chain"
+  },
+  "c1054": {
+   "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c1054_actual_cargo_depot_delivery.py",
+   "sha256": "8dbc15c9014f7e2458fbfc958c98f9541280e88db14296e23b93882dd16c2cee",
+   "family": "localbest_chain"
+  }
+ },
+ "comparisons": [
+  {
+   "candidate": "c1200",
+   "parent": "c947",
+   "primary": true
+  }
+ ],
+ "stages": {
+  "screen": {
+   "seeds": [
+    510008412,
+    688500313,
+    772789584,
+    1806629880,
+    1136162908,
+    1242268655,
+    1535284019,
+    1357265103
+   ],
+   "alpha": 0.03
+  },
+  "confirm": {
+   "seeds": [
+    841650160,
+    1912879414
+   ],
+   "alpha": 0.01
+  },
+  "final": {
+   "seeds": [
+    1711065752,
+    1769400333
+   ],
+   "alpha": 0.01
+  }
+ },
+ "arena_meta": {
+  "validation_health_policy": "official_overage_v3",
+  "purpose": "Owner-requested informational ladder 2026-10-01: c1200(=c1064) and c947 anchors vs every adopted c900-series version on 8 never-used seeds, both seats. Not a promotion gate.",
+  "owner_request": "c947 부터 c1200 까지 비교 한번 해보자"
+ }
+}

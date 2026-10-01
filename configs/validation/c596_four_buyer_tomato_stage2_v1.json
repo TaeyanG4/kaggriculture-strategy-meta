@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 600,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c580": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c580_bakery_egg_calendar_service_cleanup.py",
+      "sha256": "822aabf69f19ff4597c72e80a665d915b4d3b7eb7740a1fc52c0a20e0551ba13"
+    },
+    "c596": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c596_four_buyer_tomato_row.py",
+      "sha256": "e2863e0f47010d339cbda6da75664226fff7a52bcb6a4d89ed041fcba5953b9b"
+    }
+  },
+  "opponents": {
+    "public350": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\836cbfb633583890728cfd3a67e22a53bee95616edb6363798e0d28c774dc527.py",
+      "sha256": "836cbfb633583890728cfd3a67e22a53bee95616edb6363798e0d28c774dc527",
+      "family": "master_engine"
+    },
+    "Lucas344": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd.py",
+      "sha256": "3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd",
+      "family": "team_adaptive_liquidation"
+    },
+    "TTV1": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\8b66603aaec8d31838d659ad303b377a82ab51ace7e332c302844c06f5822178\\main.py",
+      "sha256": "63dde9e4f73eb6c4c60cd453d085c17f4fec7110a6d52a2946b20e7ddb9f32bc",
+      "family": "demand_turn_timing"
+    },
+    "HarvestLatest": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\c581\\latest\\harvest\\static-readback\\main.py",
+      "sha256": "8cffc452c3023082f261d66ec068d8a285a3febea5d4d56de2b13792e2086d5e",
+      "family": "master_latest_revealed_carrot_failclosed"
+    },
+    "Demand340": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\bfe696c4caee29b3132b0b1ec4bcfc0aaa825357074ba1358390e138a8924b39\\main.py",
+      "sha256": "55be5d5f124c8daaaa63c1a29ba4aab096004909666f04748007603c67b7d2a8",
+      "family": "demand_turn_timing"
+    },
+    "Forecast353": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\190d311a8483a78a996751b9d475290c810f4e1e9784c9516859e4452f98eb29\\main.py",
+      "sha256": "a1f063a9c6cbf9e46402e7fbfd2956fb21bd4e10539f92f72f256e8b5e352bcb",
+      "family": "herd_forecast_router"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c596",
+      "parent": "c580",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        1765400949,
+        1352831483,
+        672352264
+      ],
+      "alpha": 0.02
+    },
+    "confirm": {
+      "seeds": [
+        1443940218,
+        764115564,
+        1934035542
+      ],
+      "alpha": 0.02
+    },
+    "final": {
+      "seeds": [
+        2126763092,
+        114934510
+      ],
+      "alpha": 0.009
+    }
+  },
+  "arena_meta": {
+    "validation_health_policy": "official_overage_v3",
+    "purpose": "c596 lead test: c580 + c572 tomato layers gated on >=4 tomato-buying shops at the day-18 commit.",
+    "seed_selection": "LEAD TEST: >=4 gate formed after 14 observed worlds (all 7 four-plus-buyer worlds margin-positive, 5/7 own-positive); validated only on unseen worlds from state/c588/probe_tomato_price.json (commit + >=4 buyers); adoption/registration is the owner's decision, not Claude's."
+  }
+}

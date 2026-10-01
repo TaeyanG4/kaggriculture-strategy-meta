@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "workers": 8,
+  "timeout_seconds": 600,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c544": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c544_farmers_pair_calendar.py",
+      "sha256": "ae29108b761960c4874c6ff41202a202f4ec9a018e5e8fe8ae95954d2cb480a1"
+    },
+    "c580": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c580_bakery_egg_calendar_service_cleanup.py",
+      "sha256": "822aabf69f19ff4597c72e80a665d915b4d3b7eb7740a1fc52c0a20e0551ba13"
+    }
+  },
+  "opponents": {
+    "public350": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\836cbfb633583890728cfd3a67e22a53bee95616edb6363798e0d28c774dc527.py",
+      "sha256": "836cbfb633583890728cfd3a67e22a53bee95616edb6363798e0d28c774dc527",
+      "family": "master_engine"
+    },
+    "TTV1": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\artifacts\\8b66603aaec8d31838d659ad303b377a82ab51ace7e332c302844c06f5822178\\main.py",
+      "sha256": "63dde9e4f73eb6c4c60cd453d085c17f4fec7110a6d52a2946b20e7ddb9f32bc",
+      "family": "demand_turn_timing"
+    },
+    "Lucas344": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd.py",
+      "sha256": "3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd",
+      "family": "team_adaptive_liquidation"
+    },
+    "HarvestLatest": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\c581\\latest\\harvest\\static-readback\\main.py",
+      "sha256": "8cffc452c3023082f261d66ec068d8a285a3febea5d4d56de2b13792e2086d5e",
+      "family": "master_latest_revealed_carrot_failclosed"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c580",
+      "parent": "c544",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        88450194,
+        1731048129
+      ],
+      "alpha": 0.02
+    },
+    "confirm": {
+      "seeds": [
+        1321729799,
+        640235345
+      ],
+      "alpha": 0.02
+    },
+    "final": {
+      "seeds": [
+        557588396,
+        1069564835
+      ],
+      "alpha": 0.009
+    }
+  },
+  "arena_meta": {
+    "purpose": "o403: direct paired check c544(local362)->c580(local368) on fresh unselected seeds; c580 was only ever validated against c557, never against c544 directly.",
+    "opponents": "c581 stage-2 live-verified opponents, one per family; Demand340/Forecast353 omitted to keep screen at 32 games.",
+    "seeds": "fresh secrets.randbelow draws, absent from all configs/validation and state/*/plan.json (5263 ids scanned 2026-09-28T17:06Z).",
+    "validation_health_policy": "official_overage_v3",
+    "v1b": "v1 run was invalid: strict 1s-per-call default applied because validation_health_policy was omitted; v1b adds official_overage_v3 (same as every config since c384). Seeds/models/opponents unchanged."
+  }
+}

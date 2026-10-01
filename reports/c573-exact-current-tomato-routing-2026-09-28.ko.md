@@ -1,0 +1,17 @@
+# c573 현재15토마토 같은 인원 경로확대 진단
+
+## 完了レビュー
+
+c573은 **13:59:04UTC 완료**,4노출세계의12현재상황/4고유기하를 검증했다. 새policycalls/native/후보0. 같은인원·원시비·물주기와 수확30을 모두 유지하면 day26 조기20/밤10, day27 **조기14→22/밤16→8**, day28 조기30/밤0이다. 전12공식unit검사PASS/원소스불변. 한타일전체서비스를한worker가한블록으로방문하는 범위의 경로최적이며 전역전략/최소인원증명이 아니다. 독립창고100/조건FERT라 실제밤폐기·순익 개선확정0. 원c572 day27 폐기2/6/11/9, 114611904 day26추가2는 후속전체농장검사의 대상이다. `economic-review/review-decision`완료·**임시c573삭제/13:59shown소리재사용**.
+
+c574에서같은목적함수의계산을 sparsefeasiblepath+두worker분할frontier/중복pair재사용으로 줄였다. 원1차구현1.31초는 보존했고 최종단독0.315초, 소스helper12최대0.370초, 독립작은문제 전수검사48개PASS다. 단, 사전검사가 모든call에1초를강제하여 repairOFF step0의기존초기화4.591초에서FAIL/native0였다. **공식규칙은 actTimeout1+remainingOverageTime(초기60)**이고 max(0,elapsed−1)을 누적차감한다. 기존c572OFF도4.585초다. c574원source/plan/identity/error/판정은 그대로보존하고 `timing-contract-error-review`에공식agent.py/core.py증거를고정했다. c575는 **동일정확정책**의별도계약으로모든call공식누적시간규칙과새경로전체call<1초를동시에검사한다. 원엄격1초계약의FAIL을PASS로덮지않았다. c573보고의1초는기본예산이지전체허용시간이라는단정이아님을이곳에서정정한다.
+
+c572는 13:46:21UTC 완료했다. 원20경로 중4변경/16동일, 새 녹음상대 native4와 재사용 부모4, 2876응답exact·관측불변이다. 원토마토80과 추가5칸40수확을 모두 유지했고 추가고용비2872/씨앗250, 상품매입160..202였다. SH114648869/114644493/Shawn114624225/114611904 순서로 c557대 own +23174/+8003/+10905/−5183, margin +9387/+2882/+2696/−2263, 평균own9224.75/margin3175.5다. 그러나 밤토마토폐기2/6/11/11(SH원1)이 남고 한 경로의 현금이 감소하여 **배송·경제HOLD/미등록**이다. SH에는 WHEAT1@551/STRAWBERRY1@599 추가폐기도 있다. 실제12계획 모두 현재15칸 물·수확30/시비0,15,0을 완료했고 fallback/shortfall/추가무효·실급식실패·자금·탈출·종료0/cash잔차0다. raw feed/production/discard FAIL은 보존한다. 샵변화504(114644493는576)와 SH MILK매출+4150/Shawn MILK+10119/114644493 WOOL+7393 등 다른 생산·가격이 섞였으므로 40토마토만의 이익이나 반응강도로 해석하지 않는다. economic-review/review-decision 완료, **임시c572삭제/13:46shown 소리재사용**.
+
+c573는 이4경로의 day26/27/28 현재계획시작 12관측을 재사용한다. 새policycalls/native/원engine원장감사/후보0, c572e3b77638와 채택c557803a6237 소스불변. 현재15TOMATO/원source-owned3,4,3명/물·수확·요청FERT를 유지하고 고정8snake 제한만 전체subset 최단경로+전체worker분할로 확장한다. 조기입고최대→마지막완료시간최소→그peak내총시간최소다. 한타일 전체서비스를 한worker가 한블록으로 방문하는 범위의 정확계획이며 전역전략최적/최소인원증명은 아니다. 작업종류분리/courier/중간복귀/앞당긴고용은 미검토다. 현재입력기하로 결과 전에 묶은4그룹을 각각 계산하고 실제12관측의 actor를 공식unit으로 검증한다. isolated창고100/필요FERT공급 조건이며 공동창고·매도·가격RNG·현금·잔여밤cargo 안전은 미확정이다. observable저장 뒤에만 원c572미래원장labels를 열고 미래라벨은 계획선택에 쓰지 않는다.
+
+사전5.76초PASS: n4/5×FERT여부×8/12/16callbacks 총12개 독립전수경로·worker배정 검증, off-shedspawn과 전체목적함수/입력불변 포함. 실제day27 동일기하1회5.08초 계산으로 4경로 전부 같은4worker/수확30/FERT15/21callbacks에서 조기14→22, 밤16→8을 공식unit으로 확인했다. 이는 실폐기감소나 순익이 아니다. 사전1그룹재사용+남은3그룹 실행. solver5초는 agent실callback시간검증이 아니므로 후속소스 구현 전에 시간·메모리 제약을 확인해야 한다.
+
+**13:58:56UTC actual5688/launcher9164/notifier36464·4CPU/모델하위0/globallease**. 실행전16logicalCPU/load11%/free56.3GiB. 최대12허용이지만 고유기하4개뿐이므로4worker이며 가속실측주장은 없다. **첫14:01UTC→5분** 앱readback 완료. 사전5.08초와 나머지3계획/공식검증/로딩병합에 약2분 여유를 둔 ETA이며 보장은 아니다. Windows숨김STA 실제PID 완료·오류소리1회, 정상진행DONT_NOTIFY/모델wait·중간성적금지. 완료후 plan/identity/preflight/small-exhaustive/diagnostic-summary/cases를 직접 검토하고, 지원되면 별도관측routing 소스와 전체농장실증으로 연결한다. 고용/FERT/투자문턱·행수 성과맞춤과 같은조건 진단반복은 하지 않는다.
+
+**채택c557/local364 유지**, exact803a6237/tar4286c003/QAreadback/c55724+c55836 두단계PASS/52unique38new14reuse 편입완·재등록편입0. c558검증명,c544362/owner56631964보존/Kaggle소유자전용. 새소스는1차24~36PASS→동일exactsource+최신실강자종류확대 별도2차24~36PASS→직접경제실행/source/tar/QA/readback중복확인/local등록→양단계 전유효공통sessionimportverify. 2차전 최신실cell/version/hash/alias/공개경쟁근거갱신; title/미검증rating/최근성은 강도증명이 아니다. 8현재+33old패pending/소진0. c567/c571/c572배송FAIL, c561/c564/c313317320/c536/c552/F11 음수보존·큰효과와지원근거우선. 여유12CPU/부족8이하/모델하위0/총最大128미러0/**c545504절대재개금지**. League대결만중지·수집서버최신보존/2026-09-30 23:59UTC마감.

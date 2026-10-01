@@ -1,0 +1,25 @@
+Kaggriculture Strategy Meta
+Copyright 2026 Taeyang (TaeyanG4)
+
+This repository is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It builds on publicly shared Kaggle notebooks for the Kaggriculture competition,
+all of which were published under the Apache License 2.0. Their complete license
+texts and attribution notices are retained verbatim inside the agent sources that
+embed them (for example agent/c1200_final.py and the agent/public_*.py files).
+Upstream works include, among others:
+
+- Kaito Fukami, "25/27 Strict-Future | v27 Midgame Meta Reset" (route backbone credited to Ezzzzzekki)
+- Ahmed Berat Ozer, "More Yield, Smarter Labor" (V37) and "Kaggriculture V54 Productive Wheat and Patient"
+- Guru Prasaath S, "Kaggriculture Master Engine V2"
+- Seyit Kaan Gunes, "Kaggriculture 2820 score" (shop-aware herd substitution layer)
+- Dmitrii Gluzdov, "More Wheat, Smarter Sales" and "Herd-Safe Sale Window"
+- Harvey Zhang, "V15 Market Stack"
+- xox787, "Terminal Recovery v4"
+- Thomas Tschinkel, router v5 (used as a reference opponent)
+- Further public notebooks embedded only as opponent-policy hypotheses for state tracking;
+  each is attributed inside the embedding source.
+
+Kaggle competition data were used only under the competition rules. Raw episode
+replays, competition payloads and local league databases are not part of this
+repository.

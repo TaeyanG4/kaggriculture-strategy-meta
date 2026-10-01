@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "workers": 12,
+  "timeout_seconds": 600,
+  "configuration": {
+    "episodeSteps": 720
+  },
+  "engine": {
+    "version": "1.32.7",
+    "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+    "files": {
+      "core.py": "0922c4599a1b6e0d8c3dadf06ae5297f98138d859d686f00daee6f36e6d45d0e",
+      "agent.py": "9b7682ce9921c8f34080a8be0f7b41598cc12ac7eb14d24e4b707883f25213b6",
+      "utils.py": "537b627b11784d424147ef57ebb0369b039bf83c9f891e81f10486b1f552334b",
+      "envs/kaggriculture/kaggriculture.py": "bc8a54879ef02c7ea64b8b333d6a976f0ea65c4949149d01f463f23bccee653e",
+      "envs/kaggriculture/kaggriculture.json": "a82c89c1a2315b93f39775d8e025471a01b738647c9772658368ee6b1b6f4867"
+    }
+  },
+  "models": {
+    "c580": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c580_bakery_egg_calendar_service_cleanup.py",
+      "sha256": "822aabf69f19ff4597c72e80a665d915b4d3b7eb7740a1fc52c0a20e0551ba13"
+    },
+    "c602": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\agent\\c602_observed_carrot_seed_supply.py",
+      "sha256": "f14305a1f18b4cad9c0fc1e98032f86dc8ff5edd2edeb8a9908224b34bdfabed"
+    }
+  },
+  "opponents": {
+    "public350": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\836cbfb633583890728cfd3a67e22a53bee95616edb6363798e0d28c774dc527.py",
+      "sha256": "836cbfb633583890728cfd3a67e22a53bee95616edb6363798e0d28c774dc527",
+      "family": "master_engine"
+    },
+    "Lucas344": {
+      "path": "H:\\dev\\kaggle-data\\kaggriculture-strategy-meta\\state\\public_league\\sources\\3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd.py",
+      "sha256": "3c135a28a1fdec4cb9aa24a3660ea74bf2377667a8edb67431f6447e191d2cbd",
+      "family": "team_adaptive_liquidation"
+    }
+  },
+  "comparisons": [
+    {
+      "candidate": "c602",
+      "parent": "c580",
+      "primary": true
+    }
+  ],
+  "stages": {
+    "screen": {
+      "seeds": [
+        72564861,
+        639445707,
+        1169301624
+      ],
+      "alpha": 0.02
+    },
+    "confirm": {
+      "seeds": [
+        2026721201,
+        2026721202
+      ],
+      "alpha": 0.02
+    },
+    "final": {
+      "seeds": [
+        2026721203,
+        2026721204
+      ],
+      "alpha": 0.009
+    }
+  },
+  "arena_meta": {
+    "validation_health_policy": "official_overage_v3",
+    "purpose": "Current direct-harvest opportunity seed replenishment; 24total/12pairs, two largest supported quote-gap loss worlds plus existing minimum win control. Exposed development; live seed does not fix later shops.",
+    "gate": "Frozen own>=0,margin>0,points>=0,no lost wins,each opponent points>=0,two own+margin positive worlds,all active own>=0,official719 timing/health,exact response and fullfarm execution. No extra ineffective/feed/escape/capital/terminal failures. Preserve raw production/discard differences. Later same-source expanded latest24..36 stage2 mandatory.",
+    "selection": {
+      "episodes": [
+        114835070,
+        114829010,
+        114837889
+      ],
+      "seeds": [
+        72564861,
+        639445707,
+        1169301624
+      ]
+    },
+    "not_allowed": "No seed/outcome/opponent/future selection inside policy. c578 failure preserved. Replenishment is shared stock; no false named-seed allocation claim."
+  }
+}

@@ -89,6 +89,58 @@ class BoundedImportTests(unittest.TestCase):
             _, again = bulk.prepare(self.store.db, [self.campaign])
             self.assertEqual((again['already_present'], again['new_games']), (2, 0))
 
+    def make_formal_capture(self):
+        from validation_v2 import make_jobs
+        manifest = dict(stage='screen', engine=self.engine,
+            models={'c':dict(self.ref(0))}, opponents={'o':dict(self.ref(1), family='fixture')},
+            plan=dict(configuration=league.ENGINE_CONFIG, stages=dict(screen=dict(seeds=[99]))))
+        manifest['contract_sha256'] = native.digest(manifest)
+        manifest['jobs'] = make_jobs(manifest)
+        manifest['expected_jobs'] = len(manifest['jobs'])
+        path = self.root/'prepared-formal'/'manifest.json'
+        self.write(path, manifest)
+        self.write(self.campaign/'import-formal-provenance.json',
+                   dict(manifest=str(path), sha256=bulk.digest(path)))
+        for index, job in enumerate(manifest['jobs']):
+            row = dict(self.rows[index], match_id=job['match_id'], stage='screen', model='c',
+                       opponent_name='o', opponent_family='fixture', job_sha256=native.digest(job))
+            audit = dict(valid=True, rewards=row['rewards'], job=dict(seed=99, seat=index,
+                hashes=[self.ref(index)['sha256'], self.ref(1-index)['sha256']]))
+            self.write(self.campaign/'official'/(job['match_id']+'.json'), row)
+            self.write(self.campaign/'games'/(job['match_id']+'.json'), dict(job=job, official=row, row=audit))
+        self.plan = dict(workers=8, contract_sha256=manifest['contract_sha256'],
+                         jobs=manifest['jobs'], cached={})
+        self.freeze_plan()
+        return path
+
+    def test_captured_formal_schedule_imports_without_rewriting_plan(self):
+        self.make_formal_capture()
+        plan_bytes = (self.campaign/'plan.json').read_bytes()
+        bounded.seal_bounded(self.campaign)
+        self.assertEqual((self.campaign/'plan.json').read_bytes(), plan_bytes)
+        with patch.object(league, 'engine_sha', return_value='e'*64):
+            planned, summary = bulk.prepare(self.store.db, [self.campaign])
+            self.assertEqual(summary['new_games'], 2)
+            bulk.apply_batch(self.store, planned, summary, self.receipt)
+            _, again = bulk.prepare(self.store.db, [self.campaign])
+            self.assertEqual((again['already_present'], again['new_games']), (2, 0))
+
+    def test_captured_formal_schedule_cannot_filter_a_loss(self):
+        self.make_formal_capture()
+        self.plan['jobs'] = self.plan['jobs'][:1]
+        self.freeze_plan()
+        self.write(self.campaign/'completion-ready.json', dict(games=1, cached=0, new_games=1))
+        with self.assertRaisesRegex(bulk.ImportRejected, 'Captured formal schedule drift'):
+            bounded.seal_bounded(self.campaign)
+
+    def test_captured_formal_manifest_drift_rejected(self):
+        path = self.make_formal_capture()
+        manifest = bulk.read(path)
+        manifest['plan']['stages']['screen']['seeds'] = [100]
+        self.write(path, manifest)
+        with self.assertRaisesRegex(bulk.ImportRejected, 'Frozen file drift'):
+            bounded.seal_bounded(self.campaign)
+
     def test_cached_original_identity_and_import_ref_preserved(self):
         result_path, job = self.make_cache()
         bounded.seal_bounded(self.campaign)

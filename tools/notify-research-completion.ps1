@@ -7,6 +7,22 @@
 )
 $ErrorActionPreference='Stop'
 $noticeDir=(Resolve-Path -LiteralPath $StateDir).Path
+# The latest explicit owner preference supersedes the preserved older receipt.
+function Test-NoticeEnabled {
+    $noticeRoot=Split-Path -Parent $PSScriptRoot
+    $currentPolicy=Join-Path $noticeRoot 'state/continuation-20260929/owner-request.json'
+    if(Test-Path -LiteralPath $currentPolicy){
+        $currentPreference=Get-Content -LiteralPath $currentPolicy -Raw -Encoding UTF8 | ConvertFrom-Json
+        if($null -ne $currentPreference.windows_completion_notification){return [bool]$currentPreference.windows_completion_notification}
+    }
+    $oldPolicy=Join-Path $noticeRoot 'state/continuation-20260929/execution-mode-owner-update.json'
+    if(Test-Path -LiteralPath $oldPolicy){
+        $oldPreference=Get-Content -LiteralPath $oldPolicy -Raw -Encoding UTF8 | ConvertFrom-Json
+        if($oldPreference.notification_mode -eq 'silent'){return $false}
+    }
+    return $true
+}
+if(-not (Test-NoticeEnabled)){return}
 $noticeReceipt=Join-Path $noticeDir 'windows-notification.json'
 $noticeProcessFile=Join-Path $noticeDir 'windows-notifier-process.json'
 $noticeLock=$null
@@ -29,14 +45,14 @@ try {
     if (-not (Test-Path -LiteralPath $noticeDone) -and -not (Test-Path -LiteralPath $noticeError) -and $OwnerPid -gt 0) {
         $noticeOwner=Get-Process -Id $OwnerPid -ErrorAction SilentlyContinue
         if ($null -ne $noticeOwner) {
-            $noticeLimit=[DateTime]::Parse('2026-09-30T23:59:00Z').ToUniversalTime()
-            $noticeRemaining=[Math]::Max(0,[Math]::Min([int]::MaxValue,($noticeLimit-[DateTime]::UtcNow).TotalMilliseconds))
-            if (-not $noticeOwner.WaitForExit([int]$noticeRemaining)) { return }
+            $noticeOwner.WaitForExit()
         }
     }
+    if(-not (Test-NoticeEnabled)){return}
     $noticeCompleted=Test-Path -LiteralPath $noticeDone
+    if (-not $noticeCompleted -and -not (Test-Path -LiteralPath $noticeError) -and $OwnerPid -le 0) { return }
     $noticeTitle=if ($noticeCompleted) {"$Label 검증 완료"} else {"$Label 검증 확인 필요"}
-    $noticeBody=if ($noticeCompleted) {'검증 실행과 후처리가 끝났습니다. Codex에 끝났다고 알려주시면 결과 검토를 이어갑니다.'} else {'검증이 오류 또는 중단으로 끝났습니다. 저장 결과를 보존했습니다. Codex에 알려주세요.'}
+    $noticeBody=if ($noticeCompleted) {'검수 실행과 후처리가 끝났습니다. Codex가 다음 10분 자동 확인에서 결과를 검토하고 작업을 이어갑니다.'} else {'검수가 오류 또는 중단으로 끝났습니다. 저장 결과를 보존했습니다. Codex가 다음 자동 확인에서 원인을 검토합니다.'}
     # Reuse the native NotifyIcon mechanism used by run-validation-v1/v2/v3.
     Add-Type -AssemblyName System.Windows.Forms
     Add-Type -AssemblyName System.Drawing
@@ -49,7 +65,7 @@ try {
     $script:noticeShown=$false
     $noticeIcon.add_BalloonTipShown({$script:noticeShown=$true})
     $noticeIcon.Visible=$true
-    $noticeRecord=@{at=[DateTime]::UtcNow.ToString('o');status='requested';label=$Label;completed=$noticeCompleted;title=$noticeTitle;body=$noticeBody;pid=$PID;mechanism='Windows Forms NotifyIcon';source=$noticeDone;model_calls=0}
+    $noticeRecord=@{at=[DateTime]::UtcNow.ToString('o');status='requested';label=$Label;completed=$noticeCompleted;title=$noticeTitle;body=$noticeBody;pid=$PID;mechanism='Windows Forms NotifyIcon';source=$(if($noticeCompleted){$noticeDone}else{$noticeError});model_calls=0}
     $noticeIcon.ShowBalloonTip(15000)
     Save-Notice $noticeReceipt $noticeRecord
     if ($noticeCompleted) {[Media.SystemSounds]::Asterisk.Play()} else {[Media.SystemSounds]::Exclamation.Play()}

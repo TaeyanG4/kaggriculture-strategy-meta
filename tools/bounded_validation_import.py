@@ -39,7 +39,25 @@ def collect(path, ancestors=()):
     require(len({j['match_id'] for j in jobs}) == len(jobs), 'Duplicate scheduled job')
     # Explicit-job plans use sorted JSON with its default whitespace. Native
     # job hashes separately use championship_league.digest's compact encoding.
-    contract = hashlib.sha256(json.dumps(plan['contract'], sort_keys=True).encode()).hexdigest()
+    formal_schedule = 'contract' not in plan
+    if formal_schedule:
+        # Some first-run captures retain the exact schedule from a prepared
+        # v2/v3 manifest instead of creating a second explicit-job contract.
+        # Verify that original manifest and every job; never synthesize a
+        # replacement contract or edit the frozen capture plan.
+        provenance = read(pin(path/'import-formal-provenance.json'))
+        formal = read(pin(ROOT/provenance['manifest'], provenance['sha256']))
+        core = {k:v for k,v in formal.items()
+                if k not in ('contract_sha256', 'jobs', 'expected_jobs')}
+        contract = native.digest(core)
+        require(contract == formal['contract_sha256'] == plan['contract_sha256'],
+                'Captured formal contract drift')
+        from validation_v2 import make_jobs
+        require(formal['jobs'] == make_jobs(formal) == jobs,
+                'Captured formal schedule drift')
+        require(formal['expected_jobs'] == len(jobs), 'Incomplete formal schedule')
+    else:
+        contract = hashlib.sha256(json.dumps(plan['contract'], sort_keys=True).encode()).hexdigest()
     require(all(j['contract_sha256'] == contract for j in jobs), 'Bounded contract drift')
     require(1 <= plan['workers'] <= 12, 'Invalid worker count')
     cached = plan.get('cached', {})
@@ -73,7 +91,7 @@ def collect(path, ancestors=()):
             require(row.get(k) == v, 'Original result identity differs: '+k)
 
     for scheduled in jobs:
-        check_job(scheduled)
+        check_job(scheduled, formal=formal_schedule)
         mid = scheduled['match_id']
         wrapper = read(pin(path/'games'/(mid+'.json')))
         require(wrapper['job'] == scheduled, 'Wrapper schedule drift')
