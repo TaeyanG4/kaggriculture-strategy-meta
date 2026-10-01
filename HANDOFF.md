@@ -16,4 +16,6 @@ VISIBILITY 2026-10-01 10:40 KST (Claude, owner request): repo set back to PRIVAT
 
 VISIBILITY 2026-10-01 11:00 KST (Claude, owner request "다시 public으로"): repo PUBLIC again. Kaggle Discussion post per rule 6.b (draft docs/release-checklist.md §5) remains for the owner. Gateway 8792 + Cloudflare tunnel stopped 10:55; no league listeners; scheduled task "Kaggriculture Public League Collect" still Ready.
 
+LOCAL CLEANUP 2026-10-01 10:56 KST (Claude, owner-confirmed options): freed 449.0 GB (drive free 895.6 GB). Deleted: state/* except keep set, o_replays (124.5 GB), o_results, 76 untracked failed-candidate agents, .venv, caches/tmp; league scheduled task + startup entry + URL protocol removed; league server/gateway/tunnel stopped. KEPT locally: git tree + .git (packed 467 MB), state/c1200 (final tar.gz, submit receipts, cleanup log/script), state/c1067, state/c1058, state/continuation-20260929, state/o_dev policy .py files, state/public_league/league.sqlite3 (checkpointed, 1.3 GB). Final package also on GitHub Release v1.0-c1200. To run tools again: recreate .venv per README §9.
+
 NEXT: read-only status of 56722176 only when owner asks; no further uploads without a new explicit owner instruction.
