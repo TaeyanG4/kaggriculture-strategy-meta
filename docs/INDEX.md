@@ -8,6 +8,19 @@ later evidence.
 Start with the top-level [README](../README.md) ([한국어](../README.ko.md)), then
 `HANDOFF.md` (START HERE block = current state and pending owner decisions).
 
+## Final results and retrospective
+
+| Document | What it covers | Status |
+|---|---|---|
+| [Final results and retrospective · 2026-10-18 (한국어)](../reports/final-results-and-retrospective-2026-10-18.ko.md) | Official 557th-place result, top-solution taxonomy, dated decisions and corrections, learning/evaluation lessons, evidence limits | current |
+| [Final result snapshot](../reports/final-results-2026-10-18.json) | Selected official final rows, c1200 submission-ID match, verification status and read-only retrieval provenance | current |
+| [September 19 architecture audit](../reports/c308-majkel-architecture-evidence-2026-09-19.ko.md) | Withdraws the inference that replay branching proves a private planner architecture | historical correction |
+| [September 19 learning audit](../reports/c308-learning-pipeline-audit-2026-09-19.ko.md) | Actual learning attempts, old-data issues, repaired alignment and limits of the experiment | historical evidence |
+
+Use the final retrospective for the current assessment. Earlier reports preserve
+what was known or hypothesised at their dates; strong architectural claims in
+them should be read alongside subsequent corrections. Research remains complete.
+
 ## Operating rules and process
 
 | Document | What it covers | Status |

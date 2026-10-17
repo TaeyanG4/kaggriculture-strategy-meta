@@ -1,5 +1,15 @@
 # HANDOFF — FINAL c1200
 
+FINAL RESULTS / RETROSPECTIVE 2026-10-18 KST (owner request to update GitHub):
+Kaggle's verified final team leaderboard, checked 2026-10-17 15:55 UTC, matches
+submission 56722176 to Taeyang, rank557, score4498.3. Summary and query provenance:
+reports/final-results-2026-10-18.json. Detailed sourced review:
+reports/final-results-and-retrospective-2026-10-18.ko.md. README en/ko sections6–7
+and docs/INDEX now link the results, top-solution types and dated corrections.
+This is documentation of the completed competition; no agent logic, campaign,
+service or submission was changed. Historical qualification numbers below were
+not rerun. Earlier records remain dated evidence, including the October1 cleanup.
+
 OWNER SCOPE COMPLETE. User ended broad improvement research and requested final versionc1200, only brief serious-bug/error/simple-fix inspection. Authoritystate/c1200/owner-finalization-authority.json. Current decisionstate/c1200/final-ready.json; canonicalstate/continuation-20260929/owner-request.json. Do not resume research automatically. No modelagents. Heartbeatkaggriculture-5 PAUSED.
 
 FINAL c1200 agent/c1200_final.py andstate/c1200/c1200_final.tar.gz. Byte-identical validatedc1064 source/archive; hashes/license/provenance in state/c1200/manifest.json.108valid/38826exact,OFF719,standaloneQA passed and reused. Source logic unchanged, no serious runtime error identified in existing qualification and final targeted inspection. c1067adoption/economicreview preserved. Meanown+67.666667/margin+71.666667 versusc1054,50winsunchanged,51positive/3negativecashpairs,worstown-289/margin-429. Reviewed economictradeoffs; notpopulationwin-rate proof.
@@ -20,4 +30,6 @@ LOCAL CLEANUP 2026-10-01 10:56 KST (Claude, owner-confirmed options): freed 449.
 
 LOCAL TRIM 2026-10-01 11:15 KST (Claude, owner request "agent/ state/ 주력·발전 계보만"): working copy is now a git SPARSE CHECKOUT (non-cone): agent/ holds only c1200_final.py, lineage c947..c1064, public_v27/v37/master_engine bases, requirements.txt, overlays/ (159 files, 207 MB); all other 490 tracked agent sources stay in the repository and on GitHub, just not on disk. Restore everything with `git sparse-checkout disable`. state/ reduced to c1200 + c1067 (40 MB). Folder total 722 MB (.git 467 MB). No repository content was removed.
 
-NEXT: read-only status of 56722176 only when owner asks; no further uploads without a new explicit owner instruction.
+NEXT: results and retrospective documented; no active competition work. Read-only
+follow-up or further work only for a new owner request; no further Kaggle uploads
+without a new explicit owner instruction.

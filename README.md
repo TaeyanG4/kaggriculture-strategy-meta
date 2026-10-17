@@ -13,8 +13,8 @@ gated every change along the way.
 | Final agent | [`agent/c1200_final.py`](agent/c1200_final.py) (byte-identical to the validated `c1064`) |
 | Kaggle submissions of the final lineage | `c1054` (2026-09-30, id 56719658) and `c1200` (2026-10-01, id 56722176) |
 | Research span | 2026-09-11 → 2026-10-01, ~1,100 candidate ids (`c001`–`c1068`, `o001`–`o403`, planner `p`, `g`, `r` series), 20+ Kaggle submissions |
-| Results | _to be added after the competition's final evaluation_ |
-| Retrospective | _to be added_ |
+| Final result | **557th · 4498.3**, team **Taeyang**, represented by `c1200` / submission **56722176** ([evidence](reports/final-results-2026-10-18.json)) |
+| Retrospective | [Final results, published strategies and project review · 2026-10-18 (한국어)](reports/final-results-and-retrospective-2026-10-18.ko.md) |
 
 ## Contents
 
@@ -97,8 +97,12 @@ submissions (c111 reached 2350.6 after 56 games). Read
 
 **Sep 14–19 · Planner (o-series).** Built a planner (`base19`) and compared it
 with public V46/V47/V48 and our own tapes on a 12-opponent panel and head-to-head.
-Learned that the local panel saturates above the live top, that live strength came
-from tape routers, and that the gap to the top was herd scale, not labour. Read
+Found that the local panel could not distinguish stronger public versions;
+direct matches exposed differences it missed. Herd scale was one working
+diagnosis of the then-leading opponent, not a complete explanation of final
+strength. Replay patterns did not establish private agents' architectures:
+the [September 19 audit](reports/c308-majkel-architecture-evidence-2026-09-19.ko.md)
+withdrew the earlier planner-only inference. Read
 `reports/o-index-2026-09-19.ko.md`, `reports/o-policy-compare-results-2026-09-19.ko.md`.
 
 **Sep 21 · Local public-notebook league.** Built a service that collects every
@@ -262,11 +266,73 @@ hand-picked panel, we built a local league around the public notebooks
 
 ## 6. Results
 
-_To be added after the competition's final evaluation._
+Kaggle's verified final team leaderboard was checked on **2026-10-18 KST**
+(2026-10-17 15:55 UTC). The final submission ID in [HANDOFF.md](HANDOFF.md)
+matches the official row below.
+
+| Item | Final result |
+|---|---|
+| Team | **Taeyang** |
+| Rank | **557** |
+| Score | **4498.3** |
+| Submission representing the team | **56722176 — `c1200`**, byte-identical to qualified `c1064` |
+| Winner | **M & M & P & Q — 5890.3** |
+
+Sources: [official final leaderboard](https://www.kaggle.com/competitions/kaggriculture/leaderboard),
+[compact result snapshot and retrieval provenance](reports/final-results-2026-10-18.json).
+The snapshot records the official final team row; it does not assert a separate
+final score for `c1054`. Final ratings, earlier live ratings, game cash and local
+win rates are different measurements.
+
+The **118 wins / 8 losses / 2 draws** reported for `c1200` are its 128 games
+against eight ancestor versions on eight fresh seeds with both seats. They
+demonstrate improvement within that lineage, not a leaderboard-wide win rate.
+The final qualification separately recorded **108 valid games and 38,826 exact
+policy calls**. These are preserved research results, not newly rerun games.
+See [the retained lineage results](reports/c1200-chain-ladder-results-2026-10-01.json)
+and [the final handoff](HANDOFF.md).
 
 ## 7. Review
 
-_To be added._
+The final agent combined **public tapes/routers, observation-based corrections,
+public-policy hypothesis tracking and limited exact simulation/search**. Its
+engineering and evaluation improved considerably, while the main policy family
+remained close to the public route and economic routines it inherited.
+
+The published solutions make a broader comparison possible: the winner used
+repeated BC and PPO, with a final-day planner in only one of its two final
+variants; **4th, 5th and 7th used BC/SFT without RL in their final policies**.
+26th combined learned daily intentions with a C++ planner, and 32nd combined a
+replay opening book with daily replanning. Sources and the unverified top-team
+architectures are listed in the [full review](reports/final-results-and-retrospective-2026-10-18.ko.md).
+
+Four lessons follow from our own records:
+
+- **Keep architectural claims proportional to evidence.** The September 14
+  claim that our architecture need not change and the later planner-only
+  inference were too strong. The September 19 correction is part of the record.
+- **Choose small learning experiments that test the intended policy.** We tried
+  market imitation, route selection and value/forecast models. Those experiments
+  did not establish the viability or limits of a full-action BC policy. Making
+  narrow-task success a prerequisite for broader learning deserves reconsideration.
+- **Define labels and joint execution precisely.** The September 19 audit found
+  timing and provenance problems in an older shadow dataset, then built aligned
+  data. Requested quantities and actual fills must be distinguished. This does
+  not invalidate every earlier experiment or the repaired dataset.
+- **Measure coverage of opponent styles as well as game count.** The early panel
+  was saturated and was repaired. The later public league was substantial, but
+  its size alone did not establish coverage of the strongest private policies.
+
+Keep the source/engine identity checks, paired seeds and seats, execution
+accounting, explicit failure records and separation of qualification from
+submission. Add full-action imitation and learned-goal/planner hybrids as
+independent policy families to compare in a future project. This is a research
+lesson, not evidence that a different choice would have guaranteed a particular
+rank, and it does not restart the completed competition work.
+
+The [detailed Korean retrospective](reports/final-results-and-retrospective-2026-10-18.ko.md)
+separates official results, published author claims, dated project evidence and
+retrospective interpretations, including publication timing and archival limits.
 
 ## 8. Repository map
 
@@ -289,8 +355,11 @@ AGENTS.md, CLAUDE.md   operating rules for the coding agents that worked in this
 ```
 
 Local, non-committed material (`state/`, replays, league databases, build
-artifacts) is excluded by `.gitignore`; the committed sources, configs and
-reports are sufficient to regenerate it.
+artifacts) is excluded by `.gitignore`. The October 1 cleanup removed many raw
+artifacts and the league database; the retained code and configs support new
+runs, but do not by themselves restore every historical input or record.
+See [the cleanup record](HANDOFF.md) and the
+[retrospective's evidence limits](reports/final-results-and-retrospective-2026-10-18.ko.md).
 
 ## 9. Reproduce
 

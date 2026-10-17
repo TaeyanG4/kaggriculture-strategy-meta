@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-17T15:55:29+00:00",
+  "competition": "kaggriculture",
+  "competition_id": 147734,
+  "leaderboard_url": "https://www.kaggle.com/competitions/kaggriculture/leaderboard",
+  "leaderboard_field": "privateLeaderboard",
+  "final_leaderboard_verified": true,
+  "official_reported_total_teams": 10148,
+  "ranked_rows": 10148,
+  "our_submission": {
+    "candidate": "c1200",
+    "source": "agent/c1200_final.py",
+    "submission_id": 56722176,
+    "team_id": 16870986,
+    "team": "Taeyang",
+    "final_rank": 557,
+    "final_score": "4498.3"
+  },
+  "selected_final_rows": [
+    {
+      "rank": 1,
+      "team_id": 16681125,
+      "team": "M & M & P & Q",
+      "score": "5890.3",
+      "submission_id": 56711476
+    },
+    {
+      "rank": 2,
+      "team_id": 16621497,
+      "team": "Victor @ Tufa Labs",
+      "score": "5823.4",
+      "submission_id": 56722220
+    },
+    {
+      "rank": 3,
+      "team_id": 16732748,
+      "team": "DSM",
+      "score": "5580.3",
+      "submission_id": 56720722
+    },
+    {
+      "rank": 4,
+      "team_id": 16891902,
+      "team": "Farmcore",
+      "score": "5487.4",
+      "submission_id": 56721212
+    },
+    {
+      "rank": 5,
+      "team_id": 16624026,
+      "team": "有辣条有权",
+      "score": "5473.7",
+      "submission_id": 56721478
+    },
+    {
+      "rank": 6,
+      "team_id": 16736435,
+      "team": "CDE",
+      "score": "5465.0",
+      "submission_id": 56721686
+    },
+    {
+      "rank": 7,
+      "team_id": 16623559,
+      "team": "DECEM",
+      "score": "5459.9",
+      "submission_id": 56716576
+    },
+    {
+      "rank": 8,
+      "team_id": 16628664,
+      "team": "Anton Tikhonov",
+      "score": "5395.7",
+      "submission_id": 56718362
+    },
+    {
+      "rank": 9,
+      "team_id": 16623716,
+      "team": "tetsuya & yuanzhe & guoqin",
+      "score": "5338.7",
+      "submission_id": 56719821
+    },
+    {
+      "rank": 10,
+      "team_id": 16654697,
+      "team": "KawattaTaido",
+      "score": "5334.0",
+      "submission_id": 56721382
+    },
+    {
+      "rank": 12,
+      "team_id": 16730612,
+      "team": "Unknown Mother-Goose",
+      "score": "5294.9",
+      "submission_id": 56721459
+    },
+    {
+      "rank": 13,
+      "team_id": 16714162,
+      "team": "MarvinTMB",
+      "score": "5285.0",
+      "submission_id": 56721015
+    },
+    {
+      "rank": 17,
+      "team_id": 16698308,
+      "team": "Gemini IS ALL YOU NEED",
+      "score": "5226.9",
+      "submission_id": 56708721
+    },
+    {
+      "rank": 18,
+      "team_id": 16718819,
+      "team": "Majkel1337",
+      "score": "5221.6",
+      "submission_id": 56721466
+    },
+    {
+      "rank": 26,
+      "team_id": 16730357,
+      "team": "My second life",
+      "score": "5135.9",
+      "submission_id": 56720831
+    },
+    {
+      "rank": 32,
+      "team_id": 16758882,
+      "team": "mtmr_s1",
+      "score": "5089.3",
+      "submission_id": 56708594
+    },
+    {
+      "rank": 557,
+      "team_id": 16870986,
+      "team": "Taeyang",
+      "score": "4498.3",
+      "submission_id": 56722176
+    }
+  ],
+  "provenance": [
+    {
+      "service_method": "competitions.CompetitionService/GetCompetition",
+      "request": {
+        "competitionName": "kaggriculture"
+      },
+      "response_sha256": "164c1037ecfc6f24c78cfa4d3600d33e7b32331f5f09d6ddb60cfed09f42a390"
+    },
+    {
+      "service_method": "competitions.LeaderboardService/GetLeaderboard",
+      "request": {
+        "competitionId": 147734
+      },
+      "response_sha256": "9ceebff46e5c28fee78cd27531380d712d1fcccdb60386a0815cd8b5271c22cf"
+    }
+  ],
+  "scope_notes": [
+    "Selected aggregate final-leaderboard facts only; raw service responses, competition episodes and account data are not included.",
+    "This is the final team leaderboard; no separate final score is asserted for c1054.",
+    "The official total-team field and the number of ranked rows may differ; no percentile is inferred.",
+    "Source response hashes identify the read-only responses retained during preparation; those responses are not committed."
+  ]
+}
