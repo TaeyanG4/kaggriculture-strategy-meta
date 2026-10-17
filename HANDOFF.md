@@ -6,6 +6,9 @@ submission 56722176 to Taeyang, rank557, score4498.3. Summary and query provenan
 reports/final-results-2026-10-18.json. Detailed sourced review:
 reports/final-results-and-retrospective-2026-10-18.ko.md. README en/ko sections6–7
 and docs/INDEX now link the results, top-solution types and dated corrections.
+README language follow-up: README.md remains the English primary document;
+README.ko.md provides the matching Korean translation, with reciprocal language
+links. Both clarify archive retention and the public opponent pool's scope.
 This is documentation of the completed competition; no agent logic, campaign,
 service or submission was changed. Historical qualification numbers below were
 not rerun. Earlier records remain dated evidence, including the October1 cleanup.

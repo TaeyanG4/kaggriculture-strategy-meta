@@ -1,10 +1,12 @@
 # Kaggriculture Strategy Meta
 
+[English (primary)](README.md) · **한국어 번역**
+
 Kaggle **Kaggriculture** 시뮬레이션 대회(2인 농장 경제, 720턴, kaggle-environments 1.32.7)
 연구 저장소입니다. 전략 지문 데이터셋 작업, 최종 제출본 `c1200`을 만든 에이전트 연구,
 그리고 모든 변경을 걸러낸 검증 인프라가 들어 있습니다.
 
-[English README](README.md) · [문서 색인](docs/INDEX.md) · [작업 로그](HANDOFF.md)
+[문서 색인](docs/INDEX.md) · [작업 로그](HANDOFF.md)
 
 | | |
 |---|---|
@@ -36,9 +38,10 @@ Kaggle **Kaggriculture** 시뮬레이션 대회(2인 농장 경제, 720턴, kagg
   파이프라인(`src/kaggriculture_meta/`). 스키마, 데이터 사전, 품질 게이트 포함.
   `docs/v1-schema.md`, `docs/data-dictionary.md` 참고.
 - **에이전트 연구와 검증 (2026-09-12 → 2026-10-01).** 정확한 공개 베이스라인 위에
-  작고 감사 가능한 변경을 하나씩 얹은 수백 개의 후보 에이전트를, 건강성·통계 규칙이
-  고정된 공용 검증 러너로 평가했습니다. 모든 후보·설정·보고서를 보존하며 실패도
-  채택과 같은 수준으로 기록했습니다.
+  작고 검토 가능한 변경을 하나씩 얹은 수백 개의 후보 에이전트를, 실행 유효성·통계
+  규칙이 고정된 공용 검증 러너로 평가했습니다. 연구 중 후보 코드·설정·보고서의
+  버전을 관리하고 실패도 채택과 함께 기록했습니다. 10월 1일 정리에서는 미추적
+  실패 후보와 원자료가 삭제됐습니다. [보존 범위의 한계](#8-저장소-구조)를 참고하십시오.
 
 전 과정의 원칙은 **변경 전에 증거**입니다. 후보와 검증 규칙은 경기 전에 고정하고,
 후보와 부모는 같은 월드를 플레이하며, 채택과 Kaggle 제출은 항상 소유자의 명시적
@@ -55,7 +58,7 @@ Kaggle **Kaggriculture** 시뮬레이션 대회(2인 농장 경제, 720턴, kagg
 | v27 "Midgame Meta Reset" (Kaito Fukami; 경로 골격은 Ezzzzzekki 출처) | 첫 공개 챔피언, `agent/public_v27_kaito.py` |
 | V37 "More Yield, Smarter Labor" (Ahmed Berat Özer) | 두 번째 베이스라인, `agent/public_v37_more_yield.py`; 첫 제출 `c110`/`c111`의 부모 |
 | "Master Engine V2" (Guru Prasaath S) | 정확한 공개 반응형 상대, `agent/public_master_engine_v2.py` |
-| "Local Best" (공개 v9 계보에 market portfolio, frontload, adaptive market, sale-advance, sell-impact 연산자를 포장) | 최종 계보의 베이스 tape와 시장 스택(`c358`부터 임베드) |
+| "Local Best" (공개 v9 계보에 market portfolio, frontload, adaptive market, sale-advance, sell-impact 연산자를 결합) | 최종 계보의 기본 테이프와 시장 스택(`c358`부터 임베드) |
 | V54 "Productive Wheat and Patient" (Ahmed Berat Özer) + shop-aware herd 레이어 (Seyit Kaan Gunes) | 오프닝과 가축 대체 레이어(`c358`, `c369`) |
 | "More Wheat, Smarter Sales" (Dmitrii Gluzdov) | 예측 궤적(`c387`) |
 | "Terminal Recovery v4" (xox787) | 종반 회복 레이어(`c447`) |
@@ -70,7 +73,7 @@ Kaggle **Kaggriculture** 시뮬레이션 대회(2인 농장 경제, 720턴, kagg
 ```mermaid
 flowchart LR
     A[공개 v27<br/>09-11] --> B[공개 V37<br/>c110 / c111<br/>09-12..13]
-    B --> C[플래너 작업<br/>base19 vs 공개 V46/V47/V48<br/>tape o238 / o239<br/>09-14..19]
+    B --> C[플래너 작업<br/>base19 vs 공개 V46/V47/V48<br/>테이프 o238 / o239<br/>09-14..19]
     C --> D[Local Best + V54 하이브리드<br/>c358<br/>09-21]
     D --> E[공개 정책 상태 추적<br/>c396 / c414<br/>09-23..24]
     E --> F[누적 회복·시장 레이어<br/>c447..c544<br/>09-25..28]
@@ -89,9 +92,9 @@ Kaggle 공식 로더, 소스·엔진 지문, 분리 시드 단계를 갖춘 시�
 참고: `docs/public-v37-adoption.md`, `docs/simulation-league.md`.
 
 **9월 14–19일 · 플래너(o-시리즈).** 플래너(`base19`)를 만들어 공개 V46/V47/V48,
-자체 tape와 12상대 패널·상호 대전으로 비교. 로컬 패널이 강한 공개 버전들의
+자체 테이프와 12상대 패널·상호 대전으로 비교. 로컬 패널이 강한 공개 버전들의
 차이를 구분하지 못했고, 직접 대전에서 그 차이를 확인했습니다. 당시 선두와의
-축군 규모 차이는 작업 가설이었으며 최종 격차의 완전한 설명은 아닙니다.
+가축 수 차이는 작업 가설이었으며 최종 격차의 완전한 설명은 아닙니다.
 리플레이만으로 비공개 구조를 확정할 수 없고, 앞선 플래너 필수론은
 [9월 19일 재감사](reports/c308-majkel-architecture-evidence-2026-09-19.ko.md)에서
 철회했습니다. 참고: `reports/o-index-2026-09-19.ko.md`,
@@ -135,7 +138,7 @@ Kaggle 공식 로더, 소스·엔진 지문, 분리 시드 단계를 갖춘 시�
 
 ![c1200과 c947의 전 채택 버전 상대 직접 대결](docs/images/c900_chain_ladder_2026-10-01.png)
 
-부정적 결과도 같은 비중으로 중요했습니다. 판매 보류, 추가 고용, tape→플래너
+부정적 결과도 같은 비중으로 중요했습니다. 판매 보류, 추가 고용, 테이프→플래너
 하이브리드, 시장 타이밍 단독 변경, 소 한 마리 추가, 가격 게이트 전환, 경로 교체,
 판매 창은 모두 시도했고 증거와 함께 기각했습니다. 원장은
 `docs/experiment-history-and-lessons.ko.md`입니다.
@@ -150,7 +153,7 @@ Kaggle 공식 로더, 소스·엔진 지문, 분리 시드 단계를 갖춘 시�
 
 ```mermaid
 flowchart TD
-    O[관측 + 설정] --> T[임베드 베이스 tape<br/>Local Best 경로 + 시장 스택]
+    O[관측 + 설정] --> T[임베드 기본 테이프<br/>Local Best 경로 + 시장 스택]
     T --> M[시장 연산자<br/>sell-impact reorder]
     M --> L1[통합 레이어 c358..c833<br/>오프닝, 가축, 비료, 화물,<br/>수확·종자 서비스]
     L1 --> S[c396 공개 정책 상태 추적기<br/>임베드된 상대 가설:<br/>예측 → 관측과 대조 → 불일치 폐기]
@@ -159,7 +162,7 @@ flowchart TD
     L2 --> V{정확한 자기 농장<br/>전이 검사}
     V -- 확인 --> A[행동]
     V -- 불일치 --> P[부모 행동 유지]
-    A --> X[레이어별 telemetry 카운터]
+    A --> X[레이어별 실행 계측 카운터]
 ```
 
 모든 레이어가 지키는 설계 규칙:
@@ -185,7 +188,7 @@ flowchart LR
     H[라이브·로컬 패배에서 가설] --> P[프리플라이트:<br/>저장 경로에서 OFF/ON 동일성,<br/>새 경기 없음]
     P --> S1[1단계: 36경기<br/>분리 시드, 양 좌석]
     S1 --> S2[2단계: 72경기<br/>같은 소스, 새 시드]
-    S2 --> R[리뷰: 건강성, 경제성,<br/>조건별 거래]
+    S2 --> R[검토: 실행 유효성, 경제성,<br/>조건별 손익]
     R -- 적격 --> AD[연구 베이스라인으로 채택]
     R -- 실패 --> L[교훈 원장에 기록]
     AD --> OW{소유자 결정}
@@ -198,7 +201,7 @@ flowchart LR
 - **단계별 분리 시드.** screen·confirm·final 단계는 실행 전에 고정한 서로 겹치지 않는
   정수 시드를 쓰고, 튜닝에 쓴 시드는 최종 검사에서 제외합니다. 블라인드 시드는
   소유자용으로 남겨두었습니다.
-- **건강성 게이트.** 720상태, 719정책 호출, 양 좌석 `DONE`, `ERROR`/`INVALID`/`TIMEOUT`
+- **실행 유효성 기준.** 720상태, 719정책 호출, 양 좌석 `DONE`, `ERROR`/`INVALID`/`TIMEOUT`
   없음, 소스·엔진 해시 일치, 공식 actTimeout과 잔여 overage 회계(러너 v3/v4)를
   만족한 경기만 집계합니다. 실패 경기는 덮어쓰지 않고 보존합니다.
 - **통계.** 승점·격차 차이를 시드 묶음으로 군집화하고 상대 계열별 동일 가중을 적용,
@@ -214,8 +217,8 @@ flowchart LR
 
 ### 로컬 공개 노트북 리그
 
-후보가 손으로 고른 패널이 아니라 실제 라이브 인구를 상대로 어떤지 알기 위해
-공개 노트북을 중심으로 로컬 리그를 구축했습니다(`tools/public_league.py`,
+실행 가능한 공개 정책을 더 넓게 모아 후보를 비교하기 위해 공개 노트북을 중심으로
+로컬 리그를 구축했습니다(`tools/public_league.py`,
 `src/kaggriculture_meta/public_league.py`, `configs/public_league_v2.json`).
 
 - **수집.** Kaggle API로 모든 공개 Kaggriculture 노트북을 점수순·최신순·검색으로
@@ -223,13 +226,13 @@ flowchart LR
   셀, 압축 파일맵에서 실행 가능한 에이전트를 추출합니다. 다중 파일 산출물은
   정렬된 멤버 경로와 바이트로 해시합니다.
 - **입장 QA.** 컴파일, Kaggle last-callable 로더 적재, 공식 관측으로 실제 첫 행동
-  호출까지 통과한 에이전트만 리그에 들어갑니다. 실패는 오류와 함께 격리하고
-  삭제하지 않습니다.
+  호출까지 통과한 에이전트만 리그에 들어갑니다. 수집 과정에서 실패는 오류 기록과
+  함께 격리합니다.
 - **경기.** 고정 엔진에서 native 반응형 경기, 양 좌석, 8워커, 엔진·규칙·러너·
   산출물·시드·좌석으로 키를 잡은 SQLite 캐시. 신규 에이전트는 catch-up 매칭을
   받고, 상위 120–150개가 `active`, 나머지는 전적을 보존한 `archived`가 됩니다.
 - **평점.** 정규화 Bradley–Terry를 1500 + 400/ln10 스케일로 표시하고 Wilson 95%
-  구간을 함께 둡니다. 우리 후보도 공개 풀과 같이 등록되므로, 라이브 인구 상대
+  구간을 함께 둡니다. 우리 후보도 공개 풀과 같이 등록되므로, 공개 상대 풀과의
   500경기 "집중 측정"이 약 한 시간에 끝납니다.
 - **운영.** 로컬 웹 UI(8791 포트)에서 수동·예약 수집, 연속 대결, 에이전트별 전적과
   소스 보기를 제공하고, 로그인 게이트웨이와 Cloudflare 임시 터널로 팀원이 읽기
@@ -278,6 +281,9 @@ flowchart LR
 **4·5·7위의 최종 정책은 RL 없는 BC/SFT**였습니다. 26위는 학습한 하루 목표와
 C++ 플래너를, 32위는 리플레이 오프닝과 일일 재계획을 결합했습니다.
 각 팀의 출처와 구조 미확인 팀은 [상세 회고](reports/final-results-and-retrospective-2026-10-18.ko.md)에 정리했습니다.
+
+여기서 **BC**(행동 복제)와 **SFT**(지도 미세조정)는 시범 데이터에서 행동을
+학습하는 방식이고, **PPO**는 게임 보상을 통해 정책을 개선하는 강화학습 알고리즘입니다.
 
 우리 기록에서 확인한 교훈은 네 가지입니다.
 

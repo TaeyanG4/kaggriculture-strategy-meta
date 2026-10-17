@@ -1,12 +1,14 @@
 # Kaggriculture Strategy Meta
 
+**English (primary)** · [한국어 번역](README.ko.md)
+
 Research repository for the Kaggle **Kaggriculture** simulation competition
 (two-player farming economy, 720 turns, kaggle-environments 1.32.7).
 It contains the dataset work on strategy fingerprints, the agent research that
 produced the final submission `c1200`, and the validation infrastructure that
 gated every change along the way.
 
-[한국어 README](README.ko.md) · [Documentation index](docs/INDEX.md) · [Work log](HANDOFF.md)
+[Documentation index](docs/INDEX.md) · [Work log](HANDOFF.md)
 
 | | |
 |---|---|
@@ -41,8 +43,10 @@ Two workstreams share this repository.
 - **Agent research and validation (2026-09-12 → 2026-10-01).** Hundreds of
   candidate agents, each a small, auditable change on top of an exact public
   baseline, evaluated by a shared validation runner with fixed health and
-  statistics rules. Every candidate, config and report is kept; failures are
-  recorded as carefully as adoptions.
+  statistics rules. Candidate code, configs and reports were versioned during
+  research, with failures recorded alongside adoptions. The October 1 cleanup
+  removed untracked failed candidates and raw artifacts; see the
+  [archival limits](#8-repository-map).
 
 The guiding rule throughout was **evidence before change**: a candidate is
 defined and its validation rules are frozen before any game is played, the
@@ -233,8 +237,8 @@ flowchart LR
 
 ### Local public-notebook league
 
-To know how a candidate fares against the actual live population, not just a
-hand-picked panel, we built a local league around the public notebooks
+To compare candidates with a broader pool of runnable public policies, we built
+a local league around the public notebooks
 (`tools/public_league.py`, `src/kaggriculture_meta/public_league.py`,
 `configs/public_league_v2.json`).
 
@@ -245,14 +249,14 @@ hand-picked panel, we built a local league around the public notebooks
   their sorted member paths and bytes.
 - **Admission QA.** An agent enters only if it compiles, loads through Kaggle's
   last-callable loader and returns a real first action under the official
-  observation; failures are quarantined with their error, never deleted.
+  observation; during collection, failures are quarantined with their error.
 - **Matches.** Native reacting games on the pinned engine, both seats, eight
   workers, SQLite-cached by engine, rules, runner, artifacts, seed and seat.
   New agents get catch-up matchmaking; the top 120–150 stay `active`, the rest
   are `archived` with full history.
 - **Rating.** Regularized Bradley–Terry displayed on a 1500 + 400/ln10 scale with
   Wilson 95% intervals. Our own candidates are registered alongside the public
-  pool, so a "focus measurement" of 500 games against the live population takes
+  pool, so a "focus measurement" of 500 games against the public pool takes
   about an hour.
 - **Operation.** A local web UI (port 8791) with manual and scheduled collection,
   continuous battles, per-agent histories and source views; a login gateway plus a
@@ -305,6 +309,10 @@ variants; **4th, 5th and 7th used BC/SFT without RL in their final policies**.
 26th combined learned daily intentions with a C++ planner, and 32nd combined a
 replay opening book with daily replanning. Sources and the unverified top-team
 architectures are listed in the [full review](reports/final-results-and-retrospective-2026-10-18.ko.md).
+
+Here, **BC** (behavioral cloning) and **SFT** (supervised fine-tuning) learn
+actions from demonstration data; **PPO** is a reinforcement-learning algorithm
+that improves a policy through game rewards.
 
 Four lessons follow from our own records:
 
